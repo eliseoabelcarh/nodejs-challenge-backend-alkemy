@@ -4,8 +4,17 @@
   "description": "Challenge Backend for Alkemy Disney ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tdd": "nodemon --exec mocha --recursive --timeout 0 --reporter min"
   },
   "author": "Eliseo Carhuanca\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D Abel Carhuanca",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.19"
+  }
 }
