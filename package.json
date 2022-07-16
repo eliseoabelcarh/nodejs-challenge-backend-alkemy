@@ -1,0 +1,11 @@
+{
+  "name": "nodejs-challenge-backend-alkemy",
+  "version": "1.0.0",
+  "description": "Challenge Backend for Alkemy Disney ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eliseo Carhuanca\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D Abel Carhuanca",
+  "license": "ISC"
+}
