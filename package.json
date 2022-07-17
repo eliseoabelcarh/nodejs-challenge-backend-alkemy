@@ -2,9 +2,10 @@
   "name": "nodejs-challenge-backend-alkemy",
   "version": "1.0.0",
   "description": "Challenge Backend for Alkemy Disney ",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "tdd": "nodemon --exec mocha --recursive --timeout 0 --reporter min"
+    "tdd": "nodemon --exec mocha --recursive --timeout 0 --reporter min",
+    "build": "node app.js"
   },
   "author": "Eliseo Carhuanca\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D Abel Carhuanca",
   "license": "ISC",
