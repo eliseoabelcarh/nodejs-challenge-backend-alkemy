@@ -1,7 +1,11 @@
 const { crearErrorArgumentosInvalidos } = require("../errors/errorsHandler");
+const { v4: uuidv4 } = require('uuid');
+  // How to use: uuidv4(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a' 
+ 
 
 class CharacterModel {
   constructor({ imagen, nombre, edad, peso, historia }) {
+    this.id = uuidv4();
     this.imagen = imagen;
     this.nombre = nombre;
     this.edad = edad;
@@ -11,15 +15,18 @@ class CharacterModel {
   }
   addMovieOrSerieId(id) {
     validateMovieOrSerieId(id);
-   
+   // this.peliculasOSeriesIds.push(id)
   }
 }
 function validateMovieOrSerieId(id) {
   const argumentReceived = arguments[0];
-  if (!argumentReceived) {
+  if (argumentReceived === undefined) {
     throw crearErrorArgumentosInvalidos(
       "empty movie or serie id","no arguments provided"
     );
+  }
+  if(!id){
+    throw crearErrorArgumentosInvalidos("Movie/Serie Id", "required field")
   }
    //TODO import DAO to check if exists ID
 }
@@ -43,6 +50,7 @@ function createCharacterModel(data) {
   if (!data.historia) {
     throw crearErrorArgumentosInvalidos("historia", "required field");
   }
+
   return new CharacterModel(data);
 }
 

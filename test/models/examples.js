@@ -13,10 +13,16 @@ const baseMovie = {
     calificacion:3,
 }
 const baseGenero = {
-
+    nombre:"e",
+    imagen:"ss"
+}
+const baseUser = {
+    username:"da",
+    password:"asf"
 }
 module.exports = {
     baseCharacter,
     baseMovie,
-    baseGenero
+    baseGenero,
+    baseUser
 }
