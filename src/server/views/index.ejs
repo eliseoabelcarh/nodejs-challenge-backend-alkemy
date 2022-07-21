@@ -1,0 +1,11 @@
+<% layout('main') -%>
+<h1>I am the <%= what %> template</h1>
+<form action= "/api/auth/register" + method="POST">
+    <input type="email" name="username" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit">
+      SignUp
+    </button>
+  </form>
+
+  

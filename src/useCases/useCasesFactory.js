@@ -1,12 +1,18 @@
+const { crearSearcher } = require("../searcher")
 const { crearStorer } = require("../storer/index")
 const useCaseRegisterUser = require("./useCaseRegisterUser")
+const useCaseSearchElement = require("./useCaseSearchElement")
 const storer = crearStorer()
+const searcher = crearSearcher()
 
 const useCasesFactory = {
 
     cuRegister: () => {
         return useCaseRegisterUser.getInstance(storer)
     },
+    cuSearchElement:() =>{
+        return useCaseSearchElement.getInstance(searcher)
+    }
  
     
 }

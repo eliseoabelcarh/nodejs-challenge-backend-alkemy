@@ -4,23 +4,13 @@ const axios = require('axios').default
 function crearclienteREST(port) {
     return {
         register: async (user) => {
-            return await sendRequest({ url: crearURLBase(port) + `/auth/register`, method: 'post', data: user })
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/auth/register`, method: 'post', data: user, headers:{ Authorization: "Bearer YOUR_JWT_TOKEN_HERE"},withCredentials:true,})
         },
-        // cargarPhotoId: async (id, data) => {
-        //     return await sendRequest({ url: crearURLBase(port) + `/photos/${id}`, method: 'post', data })
-        // },
-        // solicitarVerificacion: async (id, data) => {
-        //     return await sendRequest({ url: crearURLBase(port) + `/verifications/${id}`, method: 'post', data })
-        // },
-        // compartirDatos: async (id, data) => {
-        //     return await sendRequest({ url: crearURLBase(port) + `/shares/${id}`, method: 'post', data })
-        // },
-        // verDatosCompartidos: async (idView) => {
-        //     return await sendRequest({ url: crearURLBase(port) + `/identities`, method: 'get', params: { idView } })
-        // },
-
+        testProfileRoute: async (cookie) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/auth/perfil`, method: 'get', headers:{ Authorization: "Bearer YOUR_JWT_TOKEN_HERE", Cookie: cookie},withCredentials:true,})
+        },
         testApiRoute: async () => {
-            return await sendRequest({ url: crearURLBase(port) + `/test`, method: 'get' })
+            return await sendRequest({ url: crearURLBase(port) + `/test`, method: 'get' ,withCredentials:true,})
         }
     }
 }
@@ -29,6 +19,14 @@ function crearclienteREST(port) {
 function crearURLBase(port) {
     return `http://localhost:${port}/api`
 }
+function crearURLBaseWithoutAPI(port) {
+    return `http://localhost:${port}`
+}
+function crearURLNroWithoutAPI(port) {
+    return `http://192.168.0.123:80`
+}
+
+
 
 // envío de request
 // dependencia con axios
@@ -37,6 +35,7 @@ async function sendRequest(req) {
         const result = await axios(req)
         return result
     } catch (error) {
+        console.log("ERRRRR:", error)
         if (error.response) {
             const NE = new Error(`error ${error.response.status} enviado desde el servidor: ${error.response.data.message}`)
             NE.status = error.response.status

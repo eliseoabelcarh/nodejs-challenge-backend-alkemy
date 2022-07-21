@@ -10,6 +10,7 @@ const storerNewUser = (function () {
             save: async (id, data) => {
                 //id llega null
                 console.log("EN storerNewUser:", data)
+                //TODO chekar si existe antes no guardar otravez
                 return await dao.addUser(data)
             }
         }

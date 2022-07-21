@@ -9,10 +9,8 @@ const useCaseRegisterUser = (function () {
 
         return {
             // se utiliza para dar de alta un usuario nuevo
-            register: async (req) => {
-                const data = req.body;
-                console.log("REQ.BODY es:", data)
-                const newUser = createUserModel(data)
+            register: async ({username,password}) => {
+                const newUser = createUserModel({username,password})
                 console.log("NEW USER es:", newUser)
                 return await storer.storeData({id:null, type:"newUser", data:newUser})
                // const userModel = getUserModelFromRequest(req)
