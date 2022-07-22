@@ -2,12 +2,15 @@ require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
+const flash = require("connect-flash");
 const bodyParser = require("body-parser");
 const { crearRouterHandler } = require("./routerHandler");
 const { serverErrorHandler } = require("../errors/serverErrorHandler");
-const {crearErrorAlConectarAServidorExpress} = require("../errors/errorsHandler");
+const {
+  crearErrorAlConectarAServidorExpress,
+} = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
-const moongose = require("../auth/connection");
+const moongose = require("../database/connection");
 const MongoStore = require("connect-mongo");
 
 /**
@@ -36,7 +39,7 @@ function createServer({ port = 0 }) {
   app.set("views", __dirname + "/views");
   app.set("view engine", "ejs");
 
-    /**
+  /**
    *  ------------------ EXTRA SETTINGS FOR SERVER -------------------
    */
   app.use(bodyParser.json({ limit: "50mb" }));
@@ -51,6 +54,7 @@ function createServer({ port = 0 }) {
   app.use(express.urlencoded({ extended: true }));
   app.use(require("cors")());
   app.use(require("morgan")("dev"));
+  app.set("trust proxy", 1);
 
   const sessionStore = MongoStore.create({
     client: moongose.connection.getClient(),
@@ -60,8 +64,6 @@ function createServer({ port = 0 }) {
     autoRemove: "interval",
     autoRemoveInterval: 1,
   });
-
-  app.set("trust proxy", 1);
 
   app.use(
     session({
@@ -76,11 +78,13 @@ function createServer({ port = 0 }) {
       //cookie: { maxAge: 24 * 60 * 60 * 1000, secure: true, sameSite: true },
     })
   );
+  app.use(flash());
 
   app.use(passport.initialize());
   app.use(passport.session());
 
   app.use(crearRouterHandler());
+  
 
   app.use(serverErrorHandler);
 

@@ -1,6 +1,7 @@
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 const useCasesFactory = require("../useCases/useCasesFactory");
+const validPassword = require("../utils/passwordUtils");
 
 /**
  * ------------------ PASSPORT SERIALIZE -------------------
@@ -33,19 +34,30 @@ passport.deserializeUser(async (userId, done) => {
 const registerCallBack = async (req, username, password, done) => {
   try {
     console.log("EN registerCallBack...username Recibido:", username);
+    console.log("EN registerCallBack...password Recibido:", password);
     const cu = useCasesFactory.cuRegister();
     const newUser = await cu.register({ username, password });
     if (!newUser) {
-      return done(null, false, { message: "Incorrect username or password." });
+      return done(null, false, { message: "Couldnt register user" });
     }
-    // const isValid = await validPassword(password,user.hash,user.salt)
-    const isValid = true;
-    if (isValid && newUser) {
-      console.log("all validdd");
-      return done(null, newUser);
-    } else {
-      return done(null, false);
+    return done(null, newUser);
+  } catch (error) {
+    return done(error);
+  }
+};
+
+/**
+ * ---------------------------- PASSPORT LOGIN CALLBACK -----------------------
+ */
+const loginCallBack = async (req, username, password, done) => {
+  try {
+    console.log("EN LOGINCallBack...username Recibido:", username);
+    const cu = useCasesFactory.cuLogin();
+    const newUser = await cu.login({ username, password });
+    if (!newUser) {
+      return done(null, false, { message: "Incorrect password." });
     }
+    return done(null, newUser);
   } catch (error) {
     return done(error);
   }
@@ -62,5 +74,7 @@ const customFields = {
 /**
  * ------------------ CONFIGURE PASSPORT STRATEGY-------------------
  */
-const strategy = new LocalStrategy(customFields, registerCallBack);
-passport.use("local-signup", strategy);
+const strategyRegister = new LocalStrategy(customFields, registerCallBack);
+const strategyLogin = new LocalStrategy(customFields, loginCallBack);
+passport.use("local-signup", strategyRegister);
+passport.use("local-signin", strategyLogin);

@@ -10,6 +10,7 @@ const UserSchema = new Schema({
     id: String,
     username: String,
     password: String,
+    salt:String,
 
 })
 

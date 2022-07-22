@@ -1,0 +1,9 @@
+<% layout('main') -%>
+<h1><%= what %> form</h1>
+<form action= "/api/auth/login" + method="POST">
+    <input type="email" name="username" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit">
+      SignIn
+    </button>
+  </form>

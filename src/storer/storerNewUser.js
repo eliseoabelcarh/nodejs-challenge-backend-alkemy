@@ -7,10 +7,9 @@ const storerNewUser = (function () {
 
 
         return {
-            save: async (id, data) => {
-                //id llega null
+            save: async (data) => {
                 console.log("EN storerNewUser:", data)
-                //TODO chekar si existe antes no guardar otravez
+                //DAO verify if username already exits
                 return await dao.addUser(data)
             }
         }

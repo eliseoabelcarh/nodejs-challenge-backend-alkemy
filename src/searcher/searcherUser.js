@@ -11,6 +11,9 @@ const searcherUser = (function () {
                 if(field === "id"){
                     return await dao.getUserById(value)
                 }
+                if(field === "username"){
+                    return await dao.getUserByUsername(value)
+                }
                 
             }
         }

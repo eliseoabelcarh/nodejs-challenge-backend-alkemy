@@ -8,6 +8,12 @@ require("chai").use(require("chai-as-promised")).should();
 require("dotenv").config();
 const { crearclienteREST } = require("./clientREST");
 
+
+const genRandValue = (len) => {
+    return Math.random().toString(36).substring(2,len+2);
+  }
+  
+
 describe("Server APIs", async () => {
   const emptyObject = {};
   let server;
@@ -30,52 +36,68 @@ describe("Server APIs", async () => {
     assert.deepStrictEqual("okay", response.data);
   });
 
-  xit("POST request without username or password throws error", async () => {
+  it("POST request without username or password throws error", async () => {
     await assert.rejects(
       async () => {
-        const user = {};
+        const user = { otherProperty: "other" };
         await clienteRest.register(user);
       },
       (err) => {
-        assert.strictEqual(err.message, "empty data: no arguments provided");
+        assert.strictEqual(err.message,"bad credentials: no username or password");
         assert.strictEqual(err.status, 400);
         return true;
       }
     );
   });
-  xit("POST request without username or empty value throws error", async () => {
+  it("POST request without username or empty value throws error", async () => {
     await assert.rejects(
       async () => {
         const user = { password: "pass" }; //works with username:""
         await clienteRest.register(user);
       },
       (err) => {
-        assert.strictEqual(err.message, "username: required field");
+        assert.strictEqual(err.message, "bad credentials: username missing");
         assert.strictEqual(err.status, 400);
         return true;
       }
     );
   });
-  xit("POST request without password throws error", async () => {
+  it("POST request without password throws error", async () => {
     await assert.rejects(
       async () => {
         const user = { username: "usernam" }; //works with password:""
         await clienteRest.register(user);
       },
       (err) => {
-        assert.strictEqual(err.message, "password: required field");
+        assert.strictEqual(err.message, "bad credentials: password missing");
         assert.strictEqual(err.status, 400);
         return true;
       }
     );
   });
+  it("POST request with username already exists throw error", async () => {
+    await assert.rejects(
+        async () => {
+          const user = { username: "username" , password:"pass"};
+          await clienteRest.register(user);
+          await clienteRest.register(user);
+        },
+        (err) => {
+          assert.strictEqual(err.message, "username: usuario con username ya existe");
+          assert.strictEqual(err.status, 400);
+          return true;
+        }
+      );
+  });
   it("POST request with correct data", async () => {
-    const user = { username: "usernam", password: "daasf" };
+    const randString = genRandValue(8)
+    const user = { username: `username${randString}`, password: "daasf" };
     const response = await clienteRest.register(user);
-    const cookie = response.headers["set-cookie"][0]
+    const cookie = response.headers["set-cookie"][0];
     console.log("Rspta POST register:", cookie);
     const response2 = await clienteRest.testProfileRoute(cookie);
-    console.log("Rspta GET profile:", response2.data);
+    console.log("Rspta GET profile visits:", response2.data.visits);
+    assert.strictEqual(response2.data.visits, 2);
+    assert.strictEqual(response2.status, 200);
   });
- 
 });

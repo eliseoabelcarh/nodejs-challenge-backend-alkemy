@@ -1,6 +1,6 @@
 const { crearErrorRecursoNoEncontrado, crearErrorDeBaseDeDatos, crearErrorArgumentosInvalidos } = require('../../src/errors/errorsHandler')
-const { createUserModel } = require('../models/userModel')
-//const mongoose = require('../auth/connection');
+const { createUserModel, recoverUserModel } = require('../models/userModel')
+//const mongoose = require('../database/connection');
 const userSchemaModel = require('./userSchema')
 
 
@@ -15,9 +15,13 @@ let daoUsersMongo = (function () {
               // await conectar(config)
                 console.log("en Adduser", user)
                 //const usuarioCreado = createUserModel(datos)
-                const userMongo = await userSchemaModel.findOne({ id: user.id }).exec();
+                var userMongo = await userSchemaModel.findOne({ id: user.id }).exec();
                 if (userMongo) {
                     throw crearErrorArgumentosInvalidos('id', 'usuario con id ya existe')
+                }
+                userMongo = await userSchemaModel.findOne({ username: user.username }).exec();
+                if (userMongo) {
+                    throw crearErrorArgumentosInvalidos('username', 'usuario con username ya existe')
                 }
                 const userNew = new userSchemaModel(user)
                 await userNew.save()
@@ -38,6 +42,19 @@ let daoUsersMongo = (function () {
                 return usuario
 
             },
+            getUserByUsername: async (username) => {
+                //  await conectar(config)
+                console.log("en getUserByUsername", username)
+                  const userMongo = await userSchemaModel.findOne({username }).exec();
+                  if (!userMongo) {
+                      throw crearErrorRecursoNoEncontrado('usuario', username)
+                  }
+                  const usuario = recoverUserModel(userMongo)
+                //await desconectar()
+                  return usuario
+  
+              },
+            
        
             cleanAll: async () => {
                 await conectar(config)

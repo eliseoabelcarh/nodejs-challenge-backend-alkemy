@@ -10,6 +10,12 @@ function crearErrorDeBaseDeDatos(operacion) {
     err.type = 'INTERNAL_ERROR'
     return err
 }
+function crearErrorUnauthorizedResource(operacion) {
+    const errMsg = 'Youre not authorized to view this resource'
+    const err = new Error(`${operacion} - ${errMsg}`)
+    err.type = 'UNAUTHORIZED_RESOURCE'
+    return err
+}
 
 function crearErrorArgumentosInvalidos(campo, regla) {
     const errMsg = `${campo}: ${regla}`
@@ -36,6 +42,7 @@ module.exports = {
     crearErrorDeBaseDeDatos,
     crearErrorArgumentosInvalidos,
     crearErrorRecursoNoEncontrado,
-    crearErrorEnModulo
+    crearErrorEnModulo,
+    crearErrorUnauthorizedResource
 
 }
