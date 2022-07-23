@@ -3,26 +3,13 @@ const fs = require("fs");
 const path = require("path");
 const mime = require("mime");
 
-function validFileObject(objeto) {
-  let file = {};
-  if (!objeto.content) {
-    throw crearErrorArgumentosInvalidos("content", "campo requerido");
-  }
-  if (!objeto.filename) {
-    throw crearErrorArgumentosInvalidos("filename", "campo requerido");
-  }
-  if (!objeto.type) {
-    throw crearErrorArgumentosInvalidos("type", "campo requerido");
-  }
-  if (!objeto.disposition) {
-    throw crearErrorArgumentosInvalidos("disposition", "campo requerido");
-  }
-  file.content = objeto.content;
-  file.filename = objeto.filename;
-  file.type = objeto.type;
-  file.disposition = objeto.disposition;
-  return file;
-}
+/**
+ * 
+ *------------------- ATACHMENT FILE --------------------------
+ * 
+ * @param {*} ruta Relative Path from file to attach in email 
+ * @returns file - Prepared for email sender Service
+ */
 
 function generateFileObjectFromPath(rutaDeArchivo) {
   try {
@@ -43,11 +30,34 @@ function generateFileObjectFromPath(rutaDeArchivo) {
     return fileObject;
   } catch (error) {
     throw crearErrorArgumentosInvalidos(
-      "generando File Object",
-      "error en ruta de archivo"
+      "Creating File Object",
+      "error in path file"
     );
   }
 }
+/**
+ *------------------ validate Fields before return File Object ---------------- 
+ */
+function validFileObject(objeto) {
+    let file = {};
+    if (!objeto.content) {
+      throw crearErrorArgumentosInvalidos("content", "required field");
+    }
+    if (!objeto.filename) {
+      throw crearErrorArgumentosInvalidos("filename", "required field");
+    }
+    if (!objeto.type) {
+      throw crearErrorArgumentosInvalidos("type", "required field");
+    }
+    if (!objeto.disposition) {
+      throw crearErrorArgumentosInvalidos("disposition", "required field");
+    }
+    file.content = objeto.content;
+    file.filename = objeto.filename;
+    file.type = objeto.type;
+    file.disposition = objeto.disposition;
+    return file;
+  }
 
 module.exports = {
   validFileObject,

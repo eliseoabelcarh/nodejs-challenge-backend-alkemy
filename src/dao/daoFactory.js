@@ -1,10 +1,8 @@
-const { getDaoConfig } = require("./daoConfig")
+const { configurations } = require("../configurations/configs")
 const daoUsersMemory = require("./daoUsersMemory")
 const daoUsersMongo = require("./daoUsersMongo")
 
-
-
-const { typeDaoConfig } = getDaoConfig()
+const typeDaoConfig = configurations.daoConfig()
 
 let daoUsers
 if(typeDaoConfig === "mongo"){
@@ -17,18 +15,13 @@ else{
 
 let daoFactory = (function () {
     let daoInstance
-
     //función que devuelve base de datos para usuarios
     function create(type) {
         if(type === "users"){
             return daoUsers.getInstance({cnxString: process.env.CNX_STRING_MONGO})
         }
-
         throw new Error('tipo de DaoUsers no encontrado')
     }
-
-    
-
     return {
         getDao: function (type) {
             if (!daoInstance) {
@@ -36,9 +29,6 @@ let daoFactory = (function () {
             }
             return daoInstance
         },
-
-        
-
     }
 
 })()

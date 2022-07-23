@@ -10,7 +10,7 @@ const {
   crearErrorAlConectarAServidorExpress,
 } = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
-const moongose = require("../database/connection");
+const moongose = require("../database/connectionMongo");
 const MongoStore = require("connect-mongo");
 
 /**

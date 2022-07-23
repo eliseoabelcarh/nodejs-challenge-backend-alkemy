@@ -2,37 +2,23 @@ let { crearErrorArgumentosInvalidos } = require("../../errors/errorsHandler");
 const { generateFileObjectNodemailer } = require("../nodemailer/fieObject");
 const { generateFileObjectFromPath } = require("../sendGrid/fileObject");
 
-function crearObjetoEmail({ from, to, subject, text }) {
-  let email = {};
-  if (!from) {
-    throw crearErrorArgumentosInvalidos("from", "campo requerido");
-  }
-  if (!to) {
-    throw crearErrorArgumentosInvalidos("to", "campo requerido");
-  }
-  if (!subject) {
-    throw crearErrorArgumentosInvalidos("subject", "campo requerido");
-  }
-  if (!text) {
-    throw crearErrorArgumentosInvalidos("html", "campo requerido");
-  }
-  email.from = from;
-  email.to = to;
-  email.subject = subject;
-  email.html = text;
-  return email;
-}
 
+/**
+ * 
+ * -------------------- BASE EMAIL SENDGRID MODELS -----------------------
+ * 
+ * Different options to create Email and field validations
+ */
 function crearEmailBase(objeto) {
   let email = {};
   if (!objeto.from) {
-    throw crearErrorArgumentosInvalidos("from", "campo requerido");
+    throw crearErrorArgumentosInvalidos("from", "required field");
   }
   if (!objeto.to) {
-    throw crearErrorArgumentosInvalidos("to", "campo requerido");
+    throw crearErrorArgumentosInvalidos("to", "required field");
   }
   if (!objeto.subject) {
-    throw crearErrorArgumentosInvalidos("subject", "campo requerido");
+    throw crearErrorArgumentosInvalidos("subject", "required field");
   }
   email.from = objeto.from;
   email.to = objeto.to;
@@ -44,7 +30,7 @@ function crearEmailConTextoPlano(objeto) {
   let email = {};
   const base = crearEmailBase(objeto);
   if (!objeto.text) {
-    throw crearErrorArgumentosInvalidos("text", "campo requerido");
+    throw crearErrorArgumentosInvalidos("text", "required field");
   }
   email.text = objeto.text;
   email = { ...base, ...email };
@@ -56,7 +42,7 @@ function crearEmailConTextoPlanoYHtml(objeto) {
   let email = {};
   const base = crearEmailConTextoPlano(objeto);
   if (!objeto.html) {
-    throw crearErrorArgumentosInvalidos("html", "campo requerido");
+    throw crearErrorArgumentosInvalidos("html", "required field");
   }
   email.html = objeto.html;
   email = { ...base, ...email };
@@ -67,7 +53,7 @@ function crearEmailConTextoPlanoYHtmlYAttachmentVacio(objeto) {
   let email = {};
   const base = crearEmailConTextoPlanoYHtml(objeto);
   if (!objeto.attachments) {
-    throw crearErrorArgumentosInvalidos("attachments", "campo requerido");
+    throw crearErrorArgumentosInvalidos("attachments", "required field");
   }
   email.attachments = objeto.attachments;
   email = { ...base, ...email };
@@ -82,7 +68,7 @@ function crearEmailConTextoPlanoYHtmlYAttachmentConFiles(
   email.attachments = [];
   const base = crearEmailConTextoPlanoYHtmlYAttachmentVacio(objeto);
   if (!arrayConPathDeArchivos.length) {
-    throw crearErrorArgumentosInvalidos("fileObject", "campo requerido");
+    throw crearErrorArgumentosInvalidos("fileObject", "required field");
   }
   for (let i = 0; i < arrayConPathDeArchivos.length; i++) {
     const rutaElemento = arrayConPathDeArchivos[i];
@@ -108,6 +94,10 @@ function crearEmailConCamposOpcionales(from, to, subject, text, attachments) {
   return email;
 }
 
+/**
+ * ------------------   NODEMAILER BASE EMAIL MODEL -------------------
+ * 
+ */
 function crearEmailNodemailer({ from, to, subject, text, attachments }) {
   let email = {};
   const base = crearObjetoEmail({ from, to, subject, text });
@@ -122,6 +112,30 @@ function crearEmailNodemailer({ from, to, subject, text, attachments }) {
   email = { ...base, ...email };
   return email;
 }
+/** 
+ * -------------------- VALIDATE FIELDS WITH REQUIRED FIELDS -----------------------------
+ */
+function crearObjetoEmail({ from, to, subject, text }) {
+    let email = {};
+    if (!from) {
+      throw crearErrorArgumentosInvalidos("from", "required field");
+    }
+    if (!to) {
+      throw crearErrorArgumentosInvalidos("to", "required field");
+    }
+    if (!subject) {
+      throw crearErrorArgumentosInvalidos("subject", "required field");
+    }
+    if (!text) {
+      throw crearErrorArgumentosInvalidos("html", "required field");
+    }
+    email.from = from;
+    email.to = to;
+    email.subject = subject;
+    email.html = text;
+    return email;
+  }
+  
 
 module.exports = {
   crearEmailConTextoPlano,

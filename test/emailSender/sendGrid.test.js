@@ -146,7 +146,7 @@ describe("CON API KEY VALIDA", () => {
         },
         (error) => {
           const esperadoType = "INVALID_ARGS";
-          const esperadoMsg = "generando File Object: error en ruta de archivo";
+          const esperadoMsg = "Creating File Object: error in path file";
           assert.deepStrictEqual(error.message, esperadoMsg);
           assert.deepStrictEqual(error.type, esperadoType);
           return true;

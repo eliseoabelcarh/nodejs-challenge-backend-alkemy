@@ -2,7 +2,7 @@ require("dotenv").config();
 const assert = require("assert");
 const { crearEmailSender } = require("../../src/emailSender/emailSender");
 
-describe.only("---- PARA NODEMAILER", () => {
+describe("---- PARA NODEMAILER", () => {
   it("envío mail recibo respuesta exitosa", async () => {
     //reemplace variables de entorno creando un archivo .env
     const config = {
@@ -24,7 +24,7 @@ describe.only("---- PARA NODEMAILER", () => {
   });
 });
 
-describe.only("---- PARA SENDGRID", () => {
+describe("---- PARA SENDGRID", () => {
   it("envío de email con campos mínimos y archivo adjunto opcionales", async () => {
     //regístrate en la página de Sendgrid/Twilio para obtener una Apikey
     //reemplace variables de entorno creando un archivo .env
@@ -51,3 +51,27 @@ describe.only("---- PARA SENDGRID", () => {
     assert.deepStrictEqual(respuesta1, esperado);
   });
 });
+
+describe("WITH DEFAULT SENDER EMAIL SERVICE", () => {
+    it("envío de email con campos mínimos y archivo adjunto opcionales", async () => {
+      const email = {
+        to: "eliseoabelcarh1@gmail.com",
+        subject: "dEFAULT:Service",
+        html: "<strong>Esto es un mensaje</strong>",
+      };
+      const arrayConPathDeArchivos = ["./test/emailSender/ejemplo.pdf"];
+      const esperado = true;
+      const sender = await crearEmailSender();
+      const respuesta1 = await sender.sendEmail({
+        to: email.to,
+        subject: email.subject,
+        text: email.html,
+        attachments: arrayConPathDeArchivos,
+      });
+      assert.deepStrictEqual(respuesta1, esperado);
+    });
+    
+  
+  
+  
+  });

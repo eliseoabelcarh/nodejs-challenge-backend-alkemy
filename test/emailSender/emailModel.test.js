@@ -12,13 +12,13 @@ const {
 } = require("../../src/emailSender/sendGrid/fileObject");
 
 describe("CON MODELOS DE EMAILS INVÁLIDOS Y CAMPOS FALTANTES", () => {
-  describe("----PRUEBA MÚLTIPLE:---- se crea email sin algún campo requerido", () => {
+  describe("----PRUEBA MÚLTIPLE:---- se crea email sin algún required field", () => {
     it("se recibe error de acuerdo al campo faltante", () => {
       const erroresARecibir = [
-        "from: campo requerido",
-        "to: campo requerido",
-        "subject: campo requerido",
-        "text: campo requerido",
+        "from: required field",
+        "to: required field",
+        "subject: required field",
+        "text: required field",
       ];
       const camposInvalidos = [
         emailExample.sinSender,
@@ -53,7 +53,7 @@ describe("CON MODELOS DE EMAILS INVÁLIDOS Y CAMPOS FALTANTES", () => {
           crearEmailConTextoPlanoYHtml(emailExample.sinHtml);
         },
         (error) => {
-          const esperado = "html: campo requerido";
+          const esperado = "html: required field";
           assert.deepStrictEqual(esperado, error.message);
           return true;
         }
@@ -70,7 +70,7 @@ describe("CON MODELOS DE EMAILS INVÁLIDOS Y CAMPOS FALTANTES", () => {
           );
         },
         (error) => {
-          const esperado = "attachments: campo requerido";
+          const esperado = "attachments: required field";
           assert.deepStrictEqual(esperado, error.message);
           return true;
         }
@@ -88,7 +88,7 @@ describe("CON MODELOS DE EMAILS INVÁLIDOS Y CAMPOS FALTANTES", () => {
           );
         },
         (error) => {
-          const esperado = "fileObject: campo requerido";
+          const esperado = "fileObject: required field";
           assert.deepStrictEqual(esperado, error.message);
           return true;
         }
@@ -96,13 +96,13 @@ describe("CON MODELOS DE EMAILS INVÁLIDOS Y CAMPOS FALTANTES", () => {
     });
   });
 
-  describe("----PRUEBA MÚLTIPLE:----- se crea objetoFile sin algún campo requerido", () => {
+  describe("----PRUEBA MÚLTIPLE:----- se crea objetoFile sin algún required field", () => {
     it("se recibe error de acuerdo al campo faltante", () => {
       const erroresARecibir = [
-        "content: campo requerido",
-        "filename: campo requerido",
-        "type: campo requerido",
-        "disposition: campo requerido",
+        "content: required field",
+        "filename: required field",
+        "type: required field",
+        "disposition: required field",
       ];
       const camposInvalidos = [
         emailExample.objetoFileSinContent,

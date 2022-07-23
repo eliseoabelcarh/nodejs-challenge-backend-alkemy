@@ -5,13 +5,13 @@ const { crearEmailSenderNodemailer } = require('../../src/emailSender/nodemailer
 
 describe('CON MODELOS DE EMAILS INVÁLIDOS Y CAMPOS FALTANTES', () => {
 
-    describe('----PRUEBA MÚLTIPLE:---- se crea email sin algún campo requerido', () => {
+    describe('----PRUEBA MÚLTIPLE:---- se crea email sin algún required field', () => {
         it('se recibe error de acuerdo al campo faltante', () => {
             const erroresARecibir = [
-                'from: campo requerido',
-                'to: campo requerido',
-                'subject: campo requerido',
-                'text: campo requerido'
+                'from: required field',
+                'to: required field',
+                'subject: required field',
+                'text: required field'
             ]
             const camposInvalidos = [
                 emailExample.sinSender,

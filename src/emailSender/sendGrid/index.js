@@ -10,6 +10,7 @@ const { crearEmailConTextoPlano,
 
 
 const crearEmailSenderSendgrid = async function (config) {
+    console.log("configgggg", config)
     if (!config) {
         throw crearErrorArgumentosInvalidos("Sendrgrid Config Object", "required object")
     }
