@@ -1,7 +1,71 @@
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
+var JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 const useCasesFactory = require("../useCases/useCasesFactory");
-const validPassword = require("../utils/passwordUtils");
+const path = require("path");
+const fs = require("fs");
+
+const pathTokey = path.join(__dirname, "..", "/utils/id_rsa_pub.pem");
+const PUB_KEY = fs.readFileSync(pathTokey, "utf8");
+
+
+/**
+ * 
+ * STARTS JWT PASSPORT STRATEGY
+ *   
+ */
+
+/**
+ * OPTIONS AVAILABLE IN CASE YOU NEED IT
+ */
+// const passportJWTOptions = {
+//     jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
+//     secretOrKey:PUB_KEY || "secret phrase",
+//     audience:"entre audience here",
+//     algorithms:["RS256"],
+//     ignoreExpiration:false,
+//     passReqToCallback: false,
+//     jsonWebTokenOptions:{
+//         complete:false,
+//         clockTolerance:"",
+//         maxAge:"2d",
+//         clockTimestamp:"100",
+//         nonce:"string here for OpenID"
+//     }
+// }
+
+const options = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: PUB_KEY,
+  algorithms: ["RS256"],
+};
+
+const jwtCallback = async (payload, done) => {
+  console.log("IN JWT Strategy ...");
+  const userId = payload.sub;
+  try {
+    const cu = useCasesFactory.cuSearchElement();
+    const user = await cu.search({ type: "user", field: "id", value: userId });
+    if (user) {
+      console.log("IN JWT Strategy user encontrado");
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  } catch (error) {
+    console.log("N JWT Strategy  error:", error);
+    return done(error);
+  }
+};
+
+
+
+/**
+ * 
+ * STARTS LOCAL PASSPORT STRATEGY
+ *   
+ */
 
 /**
  * ------------------ PASSPORT SERIALIZE -------------------
@@ -21,6 +85,8 @@ passport.deserializeUser(async (userId, done) => {
     if (user) {
       console.log("IN DESEARILZEUSER user encontrado");
       return done(null, user);
+    } else {
+      return done(null, false);
     }
   } catch (error) {
     console.log("IN DESEARILZEUSER error:", error);
@@ -63,7 +129,7 @@ const loginCallBack = async (req, username, password, done) => {
   }
 };
 /**
- * ------------------ CUSTOM FIELDS FOR PASSPORT -------------------
+ * ------------------ CUSTOM FIELDS FOR LOCAL PASSPORT STRATEGY -------------------
  */
 const customFields = {
   usernameField: "username",
@@ -72,9 +138,14 @@ const customFields = {
 };
 
 /**
- * ------------------ CONFIGURE PASSPORT STRATEGY-------------------
+ * ------------------ CONFIGURE PASSPORT LOCAL STRATEGY-------------------
  */
 const strategyRegister = new LocalStrategy(customFields, registerCallBack);
 const strategyLogin = new LocalStrategy(customFields, loginCallBack);
 passport.use("local-signup", strategyRegister);
 passport.use("local-signin", strategyLogin);
+/**
+ * ------------------ CONFIGURE PASSPORT JWT STRATEGY-------------------
+ */
+const jwtStrategy = new JwtStrategy(options, jwtCallback);
+passport.use("jwt-token", jwtStrategy);

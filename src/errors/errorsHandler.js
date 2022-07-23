@@ -37,12 +37,24 @@ function crearErrorEnModulo(modulo) {
     return err
 }
 
+function crearErrorAlEnviarEmail(operacion) {
+    const errMsg = 'error al enviar email'
+    const err = new Error(`${operacion} - ${errMsg}`)
+    err.type = 'INTERNAL_ERROR'
+    return err
+}
+
+
+
+
+
 module.exports = {
     crearErrorAlConectarAServidorExpress,
     crearErrorDeBaseDeDatos,
     crearErrorArgumentosInvalidos,
     crearErrorRecursoNoEncontrado,
     crearErrorEnModulo,
-    crearErrorUnauthorizedResource
+    crearErrorUnauthorizedResource,
+    crearErrorAlEnviarEmail
 
 }

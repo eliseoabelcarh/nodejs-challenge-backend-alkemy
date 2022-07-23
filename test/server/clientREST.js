@@ -6,8 +6,11 @@ function crearclienteREST(port) {
         register: async (user) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/auth/register`, method: 'post', data: user, headers:{ Authorization: "Bearer YOUR_JWT_TOKEN_HERE"},withCredentials:true,})
         },
-        testProfileRoute: async (cookie) => {
-            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/auth/perfil`, method: 'get', headers:{ Authorization: "Bearer YOUR_JWT_TOKEN_HERE", Cookie: cookie},withCredentials:true,})
+        login: async (user) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/auth/login`, method: 'post', data: user, headers:{ Authorization: "Bearer YOUR_JWT_TOKEN_HERE"},withCredentials:true,})
+        },
+        testProtectedRoute: async (bearerJwtToken) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/auth/protected`, method: 'post',  headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
         testApiRoute: async () => {
             return await sendRequest({ url: crearURLBase(port) + `/test`, method: 'get' ,withCredentials:true,})

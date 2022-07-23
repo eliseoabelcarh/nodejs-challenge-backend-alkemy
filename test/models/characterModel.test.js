@@ -1,6 +1,4 @@
 const { assert, expect } = require("chai");
-require("chai").use(require("chai-as-promised")).should();
-
 const { baseCharacter } = require("./examples");
 const { createCharacterModel } = require("../../src/models/characterModel");
 

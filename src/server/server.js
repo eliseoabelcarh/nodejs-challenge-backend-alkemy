@@ -26,7 +26,10 @@ require("../auth/passport");
  */
 function createServer({ port = 0 }) {
   const app = express();
-
+  const cors = require("cors")
+  app.use(cors({
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+}));
   //Getting arguments receive in CreateServer Function
   // and set custom port
   const received = arguments[0];
@@ -52,7 +55,6 @@ function createServer({ port = 0 }) {
   );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(require("cors")());
   app.use(require("morgan")("dev"));
   app.set("trust proxy", 1);
 

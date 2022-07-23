@@ -1,6 +1,4 @@
 const { assert, expect } = require("chai");
-require("chai").use(require("chai-as-promised")).should();
-
 const { baseUser } = require("./examples");
 const { createUserModel } = require("../../src/models/userModel");
 

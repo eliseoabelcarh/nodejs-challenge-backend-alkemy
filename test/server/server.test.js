@@ -1,10 +1,7 @@
 const { createServer } = require("../../src/server/server");
 const { assert, expect } = require("chai");
-const {
-  crearErrorAlConectarAServidorExpress,
-  crearErrorArgumentosInvalidos,
-} = require("../../src/errors/errorsHandler");
-require("chai").use(require("chai-as-promised")).should();
+const { crearErrorAlConectarAServidorExpress} = require("../../src/errors/errorsHandler");
+
 require("dotenv").config();
 
 describe("Create Server Function", async () => {

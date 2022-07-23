@@ -1,23 +1,23 @@
 const { createServer } = require("../../src/server/server");
 var chai = require("chai"),
   chaiHttp = require("chai-http");
-
 chai.use(chaiHttp);
 const assert = require("assert");
-require("chai").use(require("chai-as-promised")).should();
 require("dotenv").config();
 const { crearclienteREST } = require("./clientREST");
-
+const { getStrategyAuth } = require("../../src/auth/strategyConfig");
 
 const genRandValue = (len) => {
-    return Math.random().toString(36).substring(2,len+2);
-  }
-  
+  return Math.random()
+    .toString(36)
+    .substring(2, len + 2);
+};
 
 describe("Server APIs", async () => {
   const emptyObject = {};
   let server;
   let clienteRest;
+  const strategyAuth = getStrategyAuth();
 
   beforeEach(async () => {
     server = await createServer(emptyObject);
@@ -43,7 +43,10 @@ describe("Server APIs", async () => {
         await clienteRest.register(user);
       },
       (err) => {
-        assert.strictEqual(err.message,"bad credentials: no username or password");
+        assert.strictEqual(
+          err.message,
+          "bad credentials: no username or password"
+        );
         assert.strictEqual(err.status, 400);
         return true;
       }
@@ -77,27 +80,52 @@ describe("Server APIs", async () => {
   });
   it("POST request with username already exists throw error", async () => {
     await assert.rejects(
-        async () => {
-          const user = { username: "username" , password:"pass"};
-          await clienteRest.register(user);
-          await clienteRest.register(user);
-        },
-        (err) => {
-          assert.strictEqual(err.message, "username: usuario con username ya existe");
-          assert.strictEqual(err.status, 400);
-          return true;
-        }
-      );
+      async () => {
+        const user = { username: "username", password: "pass" };
+        await clienteRest.register(user);
+        await clienteRest.register(user);
+      },
+      (err) => {
+        assert.strictEqual(
+          err.message,
+          "username: usuario con username ya existe"
+        );
+        assert.strictEqual(err.status, 400);
+        return true;
+      }
+    );
   });
-  it("POST request with correct data", async () => {
-    const randString = genRandValue(8)
+
+  it("POST request REGISTER correctly", async () => {
+    const randString = genRandValue(8);
     const user = { username: `username${randString}`, password: "daasf" };
     const response = await clienteRest.register(user);
-    const cookie = response.headers["set-cookie"][0];
-    console.log("Rspta POST register:", cookie);
-    const response2 = await clienteRest.testProfileRoute(cookie);
-    console.log("Rspta GET profile visits:", response2.data.visits);
-    assert.strictEqual(response2.data.visits, 2);
-    assert.strictEqual(response2.status, 200);
+    console.log("Rspta POST register:", response.data);
+    assert.strictEqual(response.status, 200);
+    assert.strictEqual(response.data.success, true);
+  });
+  it("POST request LOGIN CORRECTLY", async () => {
+    const randString = genRandValue(8);
+    const user = { username: `username${randString}`, password: "daasf" };
+    await clienteRest.register(user);
+    const response = await clienteRest.login(user);
+    console.log("Rspta POST login:", response.data);
+    assert.strictEqual(response.status, 200);
+    assert.strictEqual(response.data.success, true);
+  });
+
+  //Only for JWT authentication
+  it("POST request PROTECTED JWT ROUTE", async () => {
+    if (strategyAuth === "jwt") {
+      const randString = genRandValue(8);
+      const user = { username: `username${randString}`, password: "daasf" };
+      await clienteRest.register(user);
+      const response = await clienteRest.login(user);
+      const token = response.data.token;
+      console.log("Rspta POST login:", response.data.token);
+      const response2 = await clienteRest.testProtectedRoute(token);
+      console.log("Rspta2:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true)
+    }
   });
 });
