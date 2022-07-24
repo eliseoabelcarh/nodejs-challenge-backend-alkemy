@@ -2,14 +2,14 @@ const useCaseSearchElement = (function () {
 
     let instance
 
-    function create(searcher) {
+    function create(finder) {
 
         return {
             
-            search: async (data) => {
+            find: async (data) => {
                 const {type, field, value} = data
                 //check si existe datos
-                return await searcher.searchData({type, field, value})
+                return await finder.findData({type, field, value})
                 
         
             }
@@ -17,9 +17,9 @@ const useCaseSearchElement = (function () {
     }
 
     return {
-        getInstance: function (searcher) {
+        getInstance: function (finder) {
             if (!instance) {
-                instance = create(searcher)
+                instance = create(finder)
             }
             return instance
         }

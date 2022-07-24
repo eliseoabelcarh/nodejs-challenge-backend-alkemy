@@ -89,15 +89,14 @@ describe("Server APIs", async () => {
       (err) => {
         assert.strictEqual(
           err.message,
-          "username: usuario con username ya existe"
+          "username: username alredy exists"
         );
         assert.strictEqual(err.status, 400);
         return true;
       }
     );
   });
-
-  it.only("POST request REGISTER correctly", async () => {
+  it("POST request REGISTER correctly", async () => {
     const randString = genRandValue(8);
     const user = { username: `username${randString}`, password: "daasf" };
     const response = await clienteRest.register(user);
@@ -105,6 +104,9 @@ describe("Server APIs", async () => {
     assert.strictEqual(response.status, 200);
     assert.strictEqual(response.data.success, true);
   });
+
+
+
   it("POST request LOGIN CORRECTLY", async () => {
     const randString = genRandValue(8);
     const user = { username: `username${randString}`, password: "daasf" };

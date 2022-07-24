@@ -1,10 +1,10 @@
-const { crearSearcher } = require("../searcher")
+const { crearFinder } = require("../finder")
 const { crearStorer } = require("../storer/index")
 const useCaseLoginUser = require("./useCaseLoginUser")
 const useCaseRegisterUser = require("./useCaseRegisterUser")
-const useCaseSearchElement = require("./useCaseSearchElement")
+const useCaseSearchElement = require("./useCaseFindElement")
 const storer = crearStorer()
-const searcher = crearSearcher()
+const finder = crearFinder()
 
 const useCasesFactory = {
 
@@ -12,10 +12,10 @@ const useCasesFactory = {
         return useCaseRegisterUser.getInstance(storer)
     },
     cuLogin:() =>{
-        return useCaseLoginUser.getInstance(searcher)
+        return useCaseLoginUser.getInstance(finder)
     },
     cuSearchElement:() =>{
-        return useCaseSearchElement.getInstance(searcher)
+        return useCaseSearchElement.getInstance(finder)
     }
  
     

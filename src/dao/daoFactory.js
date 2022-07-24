@@ -1,6 +1,8 @@
 const { configurations } = require("../configurations/configs")
 const daoUsersMemory = require("./daoUsersMemory")
 const daoUsersMongo = require("./daoUsersMongo")
+const daoUsersSequelize = require("./daoUsersSequelize")
+
 
 const typeDaoConfig = configurations.daoConfig()
 
@@ -8,6 +10,10 @@ let daoUsers
 if(typeDaoConfig === "mongo"){
     console.log("typeDaoCinfig", typeDaoConfig)
     daoUsers = daoUsersMongo
+}
+if(typeDaoConfig === "sequelize"){
+    console.log("typeDaoConfigggg", typeDaoConfig)
+    daoUsers = daoUsersSequelize
 }
 else{
     daoUsers = daoUsersMemory

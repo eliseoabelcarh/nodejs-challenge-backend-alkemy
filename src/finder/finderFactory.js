@@ -1,16 +1,16 @@
 const daoFactory = require("../dao/daoFactory")
-const searcherUser = require("./searcherUser")
+const finderUser = require("./finderUser")
 
 
 const daoUsers = daoFactory.getDao("users")
 
-const searcherFactory = {
+const finderFactory = {
 
     
     getInstance: function (type) {
 
         if (type === 'user') {
-            return searcherUser.getInstance(daoUsers)
+            return finderUser.getInstance(daoUsers)
         }
   
  
@@ -18,4 +18,4 @@ const searcherFactory = {
 }
 
 
-module.exports = searcherFactory
+module.exports = finderFactory

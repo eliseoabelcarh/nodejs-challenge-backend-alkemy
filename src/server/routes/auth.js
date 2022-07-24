@@ -169,7 +169,7 @@ function authHandler() {
       return wrap(async function (req, res, next) {
         try {
           const { username, password } = req.body;
-          console.log(` recibidos login: ${req.body.username} ${password}`);
+          console.log(` recibidos login: ${username} ${password}`);
           const cu = useCasesFactory.cuLogin();
           const newUser = await cu.login({ username, password });
           if (newUser) {

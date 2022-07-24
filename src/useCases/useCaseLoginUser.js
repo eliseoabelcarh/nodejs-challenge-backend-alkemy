@@ -5,12 +5,12 @@ const useCaseLoginUser = (function () {
 
     let instance
 
-    function create(searcher) {
+    function create(finder) {
 
         return {
             // se utiliza para dar de alta un usuario nuevo
             login: async ({username,password}) => {
-                const userDB = await searcher.searchData({ type:"user", field:"username", value:username })
+                const userDB = await finder.findData({ type:"user", field:"username", value:username })
                 if(passwordIsValid({plainTextPassword:password, hashedPassword:userDB.password, salt:userDB.salt})){
                     return userDB
                 }
@@ -20,9 +20,9 @@ const useCaseLoginUser = (function () {
     }
 
     return {
-        getInstance: function (searcher) {
+        getInstance: function (finder) {
             if (!instance) {
-                instance = create(searcher)
+                instance = create(finder)
             }
             return instance
         }

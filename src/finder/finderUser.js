@@ -1,5 +1,5 @@
 
-const searcherUser = (function () {
+const finderUser = (function () {
 
     let instance
 
@@ -31,4 +31,4 @@ const searcherUser = (function () {
 }
 )()
 
-module.exports = searcherUser
+module.exports = finderUser
