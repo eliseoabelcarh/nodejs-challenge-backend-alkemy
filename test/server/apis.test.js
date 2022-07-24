@@ -69,7 +69,7 @@ describe("Server APIs", async () => {
   it("POST request without password throws error", async () => {
     await assert.rejects(
       async () => {
-        const user = { username: "usernam" }; //works with password:""
+        const user = { username: "usernam@test.com" }; //works with password:""
         await clienteRest.register(user);
       },
       (err) => {
@@ -82,7 +82,7 @@ describe("Server APIs", async () => {
   it("POST request with username already exists throw error", async () => {
     await assert.rejects(
       async () => {
-        const user = { username: "username", password: "pass" };
+        const user = { username: "username@test.com", password: "pass" };
         await clienteRest.register(user);
         await clienteRest.register(user);
       },
@@ -98,7 +98,7 @@ describe("Server APIs", async () => {
   });
   it("POST request REGISTER correctly", async () => {
     const randString = genRandValue(8);
-    const user = { username: `username${randString}`, password: "daasf" };
+    const user = { username: `username${randString}@test.com`, password: "daasf" };
     const response = await clienteRest.register(user);
     console.log("Rspta POST register:", response.data);
     assert.strictEqual(response.status, 200);
@@ -109,7 +109,7 @@ describe("Server APIs", async () => {
 
   it("POST request LOGIN CORRECTLY", async () => {
     const randString = genRandValue(8);
-    const user = { username: `username${randString}`, password: "daasf" };
+    const user = { username: `username${randString}@test.com`, password: "daasf" };
     await clienteRest.register(user);
     const response = await clienteRest.login(user);
     console.log("Rspta POST login:", response.data);
@@ -121,7 +121,7 @@ describe("Server APIs", async () => {
   it("POST request PROTECTED JWT ROUTE", async () => {
     if (strategyAuth === "jwt") {
       const randString = genRandValue(8);
-      const user = { username: `username${randString}`, password: "daasf" };
+      const user = { username: `username${randString}@test.com`, password: "daasf" };
       await clienteRest.register(user);
       const response = await clienteRest.login(user);
       const token = response.data.token;

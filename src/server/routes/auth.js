@@ -11,10 +11,10 @@ const router = require("express").Router();
 function authHandler() {
   /**
    * -------------------- GETTING STRATEGY AUTHENTICATION ----------------------
-   * Defined in folder: 
+   * Defined in folder:
    */
- 
-  const strategyAuth = configurations.getStrategyAuth()
+
+  const strategyAuth = configurations.getStrategyAuth();
 
   /**
    * ------------------------------ SUCCESS ROUTE --------------------------
@@ -104,8 +104,12 @@ function authHandler() {
   }
   /**
    * -------------------------- REGISTER STRATEGY -------------------------------
+   *  According Configurations File, determine what stratregy will use
    */
   function getRegisterAuthenticationStrategy(strategy) {
+    /**
+     * ------------- AUTHENTICATES WITH LOCAL STRATEGY ----------
+     */
     if (strategy === "local") {
       return passport.authenticate("local-signup", {
         failureRedirect: "/error",
@@ -115,6 +119,9 @@ function authHandler() {
         failureMessage: true,
       });
     }
+     /**
+     * ------------- AUTHENTICATES WITH JWT STRATEGY -------------
+     */
     if (strategy === "jwt") {
       return wrap(async function (req, res, next) {
         console.log("en registerrrrr post");
@@ -127,6 +134,21 @@ function authHandler() {
           if (newUser) {
             //generate JWT Token and send it to new user
             const { token, expiresIn } = issueJWT(newUser);
+            /**
+             * ------------ SEND EMAIL TO USER ---------------------------
+             * If JWT is authentication method, we send a email with Token
+             * else: Just welcome message
+             */
+            const textEmail = `<strong>Your Authentication TOKEN is:</strong> ${token}`
+            const email = {
+              //TODO validate username is a VALID @EMAIL 
+              to: newUser.username,// HARDCODED WARNING! 
+              subject: `-Success Register ${newUser.username}`,
+              text: textEmail,
+              attachments: [/**"./test/emailSender/ejemplo.pdf"*/],
+            };
+            const cuEmail = await useCasesFactory.cuSendEmail(email);
+            await cuEmail.send(email)
             res.json({ success: true, user: newUser, token, expiresIn });
           }
         } catch (error) {

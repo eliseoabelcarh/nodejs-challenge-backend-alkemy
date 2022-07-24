@@ -2,11 +2,10 @@ let { crearErrorArgumentosInvalidos } = require("../../errors/errorsHandler");
 const { generateFileObjectNodemailer } = require("../nodemailer/fieObject");
 const { generateFileObjectFromPath } = require("../sendGrid/fileObject");
 
-
 /**
- * 
+ *
  * -------------------- BASE EMAIL SENDGRID MODELS -----------------------
- * 
+ *
  * Different options to create Email and field validations
  */
 function crearEmailBase(objeto) {
@@ -20,6 +19,17 @@ function crearEmailBase(objeto) {
   if (!objeto.subject) {
     throw crearErrorArgumentosInvalidos("subject", "required field");
   }
+  //VALIDATE IF TO AND FROM IS VALID EMAILS
+  const emailRegexp =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  if (!emailRegexp.test(objeto.from)) {
+    throw crearErrorArgumentosInvalidos("email FROM:", "invalid format");
+  }
+  if (!emailRegexp.test(objeto.to)) {
+    throw crearErrorArgumentosInvalidos("email TO:", "invalid format");
+  }
+
   email.from = objeto.from;
   email.to = objeto.to;
   email.subject = objeto.subject;
@@ -96,7 +106,7 @@ function crearEmailConCamposOpcionales(from, to, subject, text, attachments) {
 
 /**
  * ------------------   NODEMAILER BASE EMAIL MODEL -------------------
- * 
+ *
  */
 function crearEmailNodemailer({ from, to, subject, text, attachments }) {
   let email = {};
@@ -112,30 +122,40 @@ function crearEmailNodemailer({ from, to, subject, text, attachments }) {
   email = { ...base, ...email };
   return email;
 }
-/** 
+/**
  * -------------------- VALIDATE FIELDS WITH REQUIRED FIELDS -----------------------------
  */
 function crearObjetoEmail({ from, to, subject, text }) {
-    let email = {};
-    if (!from) {
-      throw crearErrorArgumentosInvalidos("from", "required field");
-    }
-    if (!to) {
-      throw crearErrorArgumentosInvalidos("to", "required field");
-    }
-    if (!subject) {
-      throw crearErrorArgumentosInvalidos("subject", "required field");
-    }
-    if (!text) {
-      throw crearErrorArgumentosInvalidos("html", "required field");
-    }
-    email.from = from;
-    email.to = to;
-    email.subject = subject;
-    email.html = text;
-    return email;
+  let email = {};
+  if (!from) {
+    throw crearErrorArgumentosInvalidos("from", "required field");
   }
-  
+  if (!to) {
+    throw crearErrorArgumentosInvalidos("to", "required field");
+  }
+  if (!subject) {
+    throw crearErrorArgumentosInvalidos("subject", "required field");
+  }
+  if (!text) {
+    throw crearErrorArgumentosInvalidos("html", "required field");
+  }
+  //VALIDATE IF TO AND FROM IS VALID EMAILS
+  const emailRegexp =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  console.log("EMAIL FROM VALIDOOO?? ", emailRegexp.test(from));
+  console.log("EMAIL TO VALIDOOO?? ", emailRegexp.test(to));
+  if (!emailRegexp.test(from)) {
+    throw crearErrorArgumentosInvalidos("email FROM:", "invalid format");
+  }
+  if (!emailRegexp.test(to)) {
+    throw crearErrorArgumentosInvalidos("email TO:", "invalid format");
+  }
+  email.from = from;
+  email.to = to;
+  email.subject = subject;
+  email.html = text;
+  return email;
+}
 
 module.exports = {
   crearEmailConTextoPlano,
