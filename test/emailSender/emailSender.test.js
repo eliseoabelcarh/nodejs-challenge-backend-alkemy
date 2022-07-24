@@ -2,7 +2,7 @@ require("dotenv").config();
 const assert = require("assert");
 const { crearEmailSender } = require("../../src/emailSender/emailSender");
 
-describe("---- PARA NODEMAILER", () => {
+xdescribe("---- PARA NODEMAILER", () => {
   it("envío mail recibo respuesta exitosa", async () => {
     //reemplace variables de entorno creando un archivo .env
     const config = {
@@ -24,7 +24,7 @@ describe("---- PARA NODEMAILER", () => {
   });
 });
 
-describe("---- PARA SENDGRID", () => {
+xdescribe("---- PARA SENDGRID", () => {
   it("envío de email con campos mínimos y archivo adjunto opcionales", async () => {
     //regístrate en la página de Sendgrid/Twilio para obtener una Apikey
     //reemplace variables de entorno creando un archivo .env
@@ -52,7 +52,7 @@ describe("---- PARA SENDGRID", () => {
   });
 });
 
-describe("WITH DEFAULT SENDER EMAIL SERVICE", () => {
+xdescribe("WITH DEFAULT SENDER EMAIL SERVICE", () => {
     it("envío de email con campos mínimos y archivo adjunto opcionales", async () => {
       const email = {
         to: "eliseoabelcarh1@gmail.com",

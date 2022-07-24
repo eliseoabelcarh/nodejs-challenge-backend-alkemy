@@ -4,14 +4,6 @@ const { crearErrorAlConectarAServidorExpress} = require("../../src/errors/errors
 
 require("dotenv").config();
 
-describe("Create Server Function", async () => {
-  it("If No object argument provide to create server should throws error", async () => {
-    expect(function () {
-      createServer();
-    }).to.throws("Cannot read property 'port' of undefined");
-  });
-});
-
 describe("Create Server", async () => {
   const emptyObject = {};
   let server;

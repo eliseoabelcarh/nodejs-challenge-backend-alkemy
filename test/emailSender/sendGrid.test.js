@@ -1,6 +1,8 @@
 const assert = require("assert");
 const fs = require("fs");
-const { crearEmailSenderSendgrid } = require("../../src/emailSender/sendGrid/index");
+const {
+  crearEmailSenderSendgrid,
+} = require("../../src/emailSender/sendGrid/index");
 const emailExample = require("./examples");
 require("dotenv").config();
 
@@ -98,7 +100,7 @@ describe("con ApiKey inválida", () => {
   });
 });
 
-describe("CON API KEY VALIDA", () => {
+xdescribe("CON API KEY VALIDA", () => {
   const config = {
     apiKey: process.env.SENDGRID_API_KEY,
     user: process.env.SENDGRID_USER_EMAIL,
@@ -120,7 +122,7 @@ describe("CON API KEY VALIDA", () => {
   describe("envío de email con archivo adjunto OBLIGATORIO", () => {
     it("se recibe mensaje de envío exitoso", async () => {
       const emailValido1 = emailExample.validoTextoPlanoYHtmlYAttachmentVacio;
-      const arrayConPathDeArchivos = ['./test/emailSender/ejemplo.pdf']
+      const arrayConPathDeArchivos = ["./test/emailSender/ejemplo.pdf"];
       const esperado = true;
       const sender = await crearEmailSenderSendgrid(config);
       const respuesta1 =
@@ -157,21 +159,26 @@ describe("CON API KEY VALIDA", () => {
 
   describe("envío de email con campos mínimos y archivo adjunto", () => {
     it("se recibe mensaje de envío exitoso", async () => {
-        const config = {
-            apiKey: process.env.SENDGRID_API_KEY,
-            user: process.env.SENDGRID_USER_EMAIL,
-        }
-        const email = {
-            to: 'eliseoabelcarh1@gmail.com',
-            subject: 'Holaaa!! Sendgrid Con aRCHIVO AdJUNTO ',
-            html: '<strong>Esto es un mensaje</strong>'
-        }
-        //arrayConPathDeArchivos opcional
-        const arrayConPathDeArchivos = ['./test/emailSender/ejemplo.pdf']
-        const esperado = true
-        const sender = await crearEmailSenderSendgrid(config)
-        const respuesta1 = await sender.sendEmail({ to: email.to, subject: email.subject, text: email.html, attachments: arrayConPathDeArchivos })
-        assert.deepStrictEqual(respuesta1, esperado)
+      const config = {
+        apiKey: process.env.SENDGRID_API_KEY,
+        user: process.env.SENDGRID_USER_EMAIL,
+      };
+      const email = {
+        to: "eliseoabelcarh1@gmail.com",
+        subject: "Holaaa!! Sendgrid Con aRCHIVO AdJUNTO ",
+        html: "<strong>Esto es un mensaje</strong>",
+      };
+      //arrayConPathDeArchivos opcional
+      const arrayConPathDeArchivos = ["./test/emailSender/ejemplo.pdf"];
+      const esperado = true;
+      const sender = await crearEmailSenderSendgrid(config);
+      const respuesta1 = await sender.sendEmail({
+        to: email.to,
+        subject: email.subject,
+        text: email.html,
+        attachments: arrayConPathDeArchivos,
+      });
+      assert.deepStrictEqual(respuesta1, esperado);
     });
   });
 });
