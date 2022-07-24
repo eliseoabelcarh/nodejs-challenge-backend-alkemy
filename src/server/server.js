@@ -11,7 +11,8 @@ const {
 } = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
 const MongoStore = require("connect-mongo");
-const {connectMongoose} = require("../database/connectionMongo");
+const {connectMongoose} = require("../database/connectionMongoose");
+const { connectSequelize } = require("../database/connectionSequelize");
 /**
  * ------------------- GET PASSPORT MODULE CONFIGURATION -------------------
  */
@@ -61,6 +62,7 @@ async function createServer({ port = 0 }) {
 
 
   const mongooseConected = await connectMongoose()
+  //await connectSequelize()
   
   const sessionStore = MongoStore.create({
     client: mongooseConected.connection.getClient(),

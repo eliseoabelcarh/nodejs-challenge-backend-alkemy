@@ -8,13 +8,6 @@ async function connectMongoose() {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
-      // mongoose.connection
-      //   .on("open", () => console.log("The goose is open"))
-      //   .on("close", () => console.log("The goose is closed"))
-      //   .on("error", (error) => {
-      //     console.log(error);
-      //     process.exit();
-      //   });
       resolve(mongoose);
     } catch (error) {
       reject(error);

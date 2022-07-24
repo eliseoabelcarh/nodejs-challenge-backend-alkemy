@@ -97,7 +97,7 @@ describe("Server APIs", async () => {
     );
   });
 
-  it("POST request REGISTER correctly", async () => {
+  it.only("POST request REGISTER correctly", async () => {
     const randString = genRandValue(8);
     const user = { username: `username${randString}`, password: "daasf" };
     const response = await clienteRest.register(user);

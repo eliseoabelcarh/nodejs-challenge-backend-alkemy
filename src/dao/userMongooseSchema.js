@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
-const userSchemaColection = 'users'
+const userSchemaCollection = 'users'
 
 // schema modelo para base de datos de usuarios
 const UserSchema = new Schema({
@@ -14,6 +14,6 @@ const UserSchema = new Schema({
 
 })
 
-const userSchemaModel = mongoose.model(userSchemaColection, UserSchema)
+const userSchemaModel = mongoose.model(userSchemaCollection, UserSchema)
 
 module.exports = userSchemaModel

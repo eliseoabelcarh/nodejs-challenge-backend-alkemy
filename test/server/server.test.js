@@ -6,7 +6,7 @@ const {
 require("dotenv").config();
 
 describe("Create Server Function", async () => {
-  it.only("If No object argument provide to create server should throws error", async () => {
+  it("If No object argument provide to create server should throws error", async () => {
     try {
       await createServer();
     } catch (err) {
