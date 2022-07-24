@@ -1,13 +1,14 @@
 const Sequelize = require("sequelize");
-const connectionSequelize = require("../database/connectionSequelize");
+const connectSequelize = require("../database/connectionSequelize");
 
 
 
 
-
-async function getUserModel() {
+async function userSequelizeModel() {
     
-  const sequelize = await connectionSequelize
+  //const sequelize = await (await connectionSequelize).getInstance()
+  const seq = await connectSequelize
+  const sequelize = await seq.getInstance()
   //Define model
   const userSequelizeModel = sequelize.define("users", {
     id: { type: Sequelize.STRING, primaryKey: true },
@@ -18,7 +19,7 @@ async function getUserModel() {
   //The call to userSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
   await userSequelizeModel.sync();
   return userSequelizeModel;
-  
+
 }
 
-module.exports = { getUserModel };
+module.exports = { userSequelizeModel };

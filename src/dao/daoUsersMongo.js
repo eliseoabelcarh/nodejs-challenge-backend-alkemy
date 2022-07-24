@@ -5,7 +5,7 @@ const {
 } = require("../../src/errors/errorsHandler");
 const { createUserModel, recoverUserModel } = require("../models/userModel");
 const userSchemaModel = require("./userMongooseSchema");
-const {getUserModel} = require("./userSequelizeModel");
+const {userSequelizeModel} = require("./userSequelizeModel");
 
 let daoUsersMongo = (function () {
   let instance;
@@ -32,8 +32,8 @@ let daoUsersMongo = (function () {
 
    
         
-        const model = await getUserModel()
-        const newUser = model.create({
+        const userSeqModel = await userSequelizeModel()
+        const newUser = userSeqModel.create({
           id: user.id,
           username: user.username,
           password: user.password,
