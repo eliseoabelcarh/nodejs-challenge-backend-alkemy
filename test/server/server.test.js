@@ -1,14 +1,18 @@
 const { createServer } = require("../../src/server/server");
 const { assert, expect } = require("chai");
-const { crearErrorAlConectarAServidorExpress} = require("../../src/errors/errorsHandler");
-
+const {
+  crearErrorAlConectarAServidorExpress,
+} = require("../../src/errors/errorsHandler");
 require("dotenv").config();
 
 describe("Create Server Function", async () => {
   it.only("If No object argument provide to create server should throws error", async () => {
-    expect(function () {
-      createServer();
-    }).to.throws("Cannot read property 'port' of undefined");
+    try {
+      await createServer();
+    } catch (err) {
+      console.log(err.message);
+      expect(err.message).to.equal("Cannot read property 'port' of undefined");
+    }
   });
 });
 
