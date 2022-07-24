@@ -13,8 +13,6 @@ const useCaseRegisterUser = (function () {
                 const newUser = createUserModel({username,password})
                 console.log("NEW USER es:", newUser)
                 return await storer.storeData({type:"newUser", data:newUser})
-               // const userModel = getUserModelFromRequest(req)
-                //return await storer.storeData({ id: null, type: 'newUser', data: userModel })
             }
         }
     }
