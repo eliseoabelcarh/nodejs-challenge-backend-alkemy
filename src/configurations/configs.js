@@ -1,8 +1,4 @@
-
 require("dotenv").config()
-
-
-
 
 
 const configNodemailer = {
@@ -22,6 +18,7 @@ module.exports.configurations = {
     emailSenderServiceDefault: () => process.EMAIL_SENDER_SERVICE_FAULT || "nodemailer",
     emailSenderSendgridConfigs: () => configSendgrid,
     emailSenderNodemailerConfigs:() => configNodemailer,
-    daoConfig:() => process.env.DAO_TYPE || 'memory'
+    daoConfig:() => process.env.DAO_TYPE || 'memory',
+    getStrategyAuth:()=> process.env.STRATEGY_AUTH || 'jwt'
     
 }

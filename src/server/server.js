@@ -10,9 +10,8 @@ const {
   crearErrorAlConectarAServidorExpress,
 } = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
-const moongose = require("../database/connectionMongo");
 const MongoStore = require("connect-mongo");
-
+const {connectMongoose} = require("../database/connectionMongo");
 /**
  * ------------------- GET PASSPORT MODULE CONFIGURATION -------------------
  */
@@ -24,7 +23,9 @@ require("../auth/passport");
  *
  *  ------------------ CREATE SERVER EXPRESS FUNCTION -------------------
  */
-function createServer({ port = 0 }) {
+async function createServer({ port = 0 }) {
+
+  console.log("porttttt", port)
   const app = express();
   const cors = require("cors")
   app.use(cors({
@@ -58,8 +59,11 @@ function createServer({ port = 0 }) {
   app.use(require("morgan")("dev"));
   app.set("trust proxy", 1);
 
+
+  const mongooseConected = await connectMongoose()
+  
   const sessionStore = MongoStore.create({
-    client: moongose.connection.getClient(),
+    client: mongooseConected.connection.getClient(),
     collectionName: "sessions",
     dbName: process.env.MONGO_DB_NAME,
     stringify: false,

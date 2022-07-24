@@ -1,6 +1,5 @@
 const { crearErrorRecursoNoEncontrado, crearErrorDeBaseDeDatos, crearErrorArgumentosInvalidos } = require('../../src/errors/errorsHandler')
 const { createUserModel, recoverUserModel } = require('../models/userModel')
-//const mongoose = require('../database/connection');
 const userSchemaModel = require('./userSchema')
 
 
@@ -56,11 +55,11 @@ let daoUsersMongo = (function () {
               },
             
        
-            cleanAll: async () => {
-                await conectar(config)
-                await userSchemaModel.deleteMany({});
-                await desconectar()
-            },
+            // cleanAll: async () => {
+            //     await conectar(config)
+            //     await userSchemaModel.deleteMany({});
+            //     await desconectar()
+            // },
          
 
         }
@@ -78,28 +77,18 @@ let daoUsersMongo = (function () {
 })()
 
 
-async function conectar(config) {
-    try {
-     await mongoose.connection.getClient().connect()
-        console.log('...connected')
-    } catch (error) {
-        throw crearErrorDeBaseDeDatos(error.message)
-    }
-}
-async function desconectar() {
-    console.log('.Mongo Desconectado')
-    await mongoose.connection.getClient().close()
-    //await mongoose.connection.close()
-}
+// async function conectar(config) {
+//     try {
+//      await mongoose.connection.getClient().connect()
+//         console.log('...connected')
+//     } catch (error) {
+//         throw crearErrorDeBaseDeDatos(error.message)
+//     }
+// }
+// async function desconectar() {
+//     console.log('.Mongo Desconectado')
+//     await mongoose.connection.getClient().close()
+// }
 
-
-async function getUserById(id) {
-    const idBuscado = Number.parseInt(id)
-    const userMongo = await userSchemaModel.findOne({ id: idBuscado }).exec();
-    if (!userMongo) {
-        throw crearErrorRecursoNoEncontrado('usuario', idBuscado)
-    }
-    return crearUserModel(userMongo)
-}
 
 module.exports = daoUsersMongo

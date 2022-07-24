@@ -1,5 +1,5 @@
 const passport = require("passport");
-const { getStrategyAuth } = require("../../auth/strategyConfig");
+const { configurations } = require("../../configurations/configs");
 const {
   crearErrorArgumentosInvalidos,
   crearErrorUnauthorizedResource,
@@ -13,7 +13,8 @@ function authHandler() {
    * -------------------- GETTING STRATEGY AUTHENTICATION ----------------------
    * Defined in folder: 
    */
-  const strategyAuth = getStrategyAuth();
+ 
+  const strategyAuth = configurations.getStrategyAuth()
 
   /**
    * ------------------------------ SUCCESS ROUTE --------------------------

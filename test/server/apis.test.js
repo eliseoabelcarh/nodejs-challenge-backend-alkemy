@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 const assert = require("assert");
 require("dotenv").config();
 const { crearclienteREST } = require("./clientREST");
-const { getStrategyAuth } = require("../../src/auth/strategyConfig");
+const { configurations } = require("../../src/configurations/configs");
 
 const genRandValue = (len) => {
   return Math.random()
@@ -17,7 +17,8 @@ describe("Server APIs", async () => {
   const emptyObject = {};
   let server;
   let clienteRest;
-  const strategyAuth = getStrategyAuth();
+  
+  const strategyAuth = configurations.getStrategyAuth()
 
   beforeEach(async () => {
     server = await createServer(emptyObject);
