@@ -30,9 +30,10 @@ describe("Server APIs for Character", async () => {
       clienteRest = crearclienteREST(port);
       const randString = genRandValue(8);
       user = { username: `username${randString}@test.com`, password: "daasf" };
-      await clienteRest.register(user);
-      const response = await clienteRest.login(user);
+      const response = await clienteRest.register(user);
+      //const response = await clienteRest.login(user);
       token = response.data.token;
+      console.log("token recibidoo en test::::: ", token)
     }
   });
 

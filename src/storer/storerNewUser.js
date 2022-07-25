@@ -1,3 +1,4 @@
+const { createUserModel } = require("../models/userModel")
 
 const storerNewUser = (function () {
 
@@ -9,7 +10,9 @@ const storerNewUser = (function () {
         return {
             save: async (data) => {
                 console.log("EN storerNewUser:", data)
-                //DAO verify if username already exits
+                //DAO alredy verify if username already exits
+                // const newUser = createUserModel(data)
+                // console.log("NEW USER es:", newUser)
                 return await dao.addUser(data)
             }
         }

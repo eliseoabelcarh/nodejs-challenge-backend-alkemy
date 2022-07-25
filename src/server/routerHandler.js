@@ -7,9 +7,8 @@ function crearRouterHandler() {
   /**
    * ------------------------ SETTING HANDLE ROUTES --------------------------
    */
-  const routeAPI = "/api";
-  router.use(`${routeAPI}/auth`, authHandler());
-  router.use(`${routeAPI}/characters`, charactersHandler());
+  router.use(`/api/auth`, authHandler());
+  router.use(`/api`, charactersHandler());
   /**
    * ------------------------------ ERROR ROUTE ----------------------------
    */
@@ -20,15 +19,7 @@ function crearRouterHandler() {
       res.status(404).send("error page");
     })
   );
-  /**
-   * ------------------------ TESTING ROUTE --------------------------
-   */
-  router.get(
-    `${routeAPI}/test`,
-    wrap(async (req, res) => {
-      res.status(200).send("okay");
-    })
-  );
+  
 
   return router;
 }
