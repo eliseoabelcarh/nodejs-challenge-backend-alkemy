@@ -1,7 +1,7 @@
 const { crearFinder } = require("../finder")
 const { crearStorer } = require("../storer/index")
 const useCaseLoginUser = require("./useCaseLoginUser")
-const useCaseRegisterUser = require("./useCaseRegisterUser")
+const useCaseSaveElement = require("./useCaseSaveElement")
 const useCaseSearchElement = require("./useCaseFindElement")
 const { crearEmailSender } = require("../emailSender/emailSender")
 const useCaseSendEmail = require("./useCaseSendEmail")
@@ -10,8 +10,8 @@ const finder = crearFinder()
 
 const useCasesFactory = {
 
-    cuRegister: () => {
-        return useCaseRegisterUser.getInstance(storer)
+    cuSaveElement: () => {
+        return useCaseSaveElement.getInstance(storer)
     },
     cuLogin:() =>{
         return useCaseLoginUser.getInstance(finder)

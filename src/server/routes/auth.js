@@ -129,8 +129,8 @@ function authHandler() {
         try {
           const { username, password } = req.body;
           console.log(` recibidos body : ${req.body.username} ${password}`);
-          const cu = useCasesFactory.cuRegister();
-          const newUser = await cu.register({ username, password });
+          const cu = useCasesFactory.cuSaveElement();
+          const newUser = await cu.saveElement({type: "newUser",value: {username, password} });
           console.log("USERCREAADO", newUser)
           if (newUser) {
             //generate JWT Token and send it to new user

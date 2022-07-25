@@ -5,9 +5,12 @@ const crearStorer = () => {
 
     return {
 
-        storeData: async ({ type, data }) => {
+        storeData: async ({ type, value }) => {
+
             let storer = storerFactory.getInstance(type)
-            return await storer.save(data)
+
+
+            return await storer.save(value)
         }
     }
 }

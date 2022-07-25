@@ -47,6 +47,7 @@ const jwtCallback = async (payload, done) => {
   try {
     const cu = useCasesFactory.cuSearchElement();
     const user = await cu.find({ type: "user", field: "id", value: userId });
+    console.log("userrr ene JWTTT", user)
     if (user) {
       console.log("IN JWT Strategy user encontrado");
       return done(null, user);
@@ -101,8 +102,8 @@ const registerCallBack = async (req, username, password, done) => {
   try {
     console.log("EN registerCallBack...username Recibido:", username);
     console.log("EN registerCallBack...password Recibido:", password);
-    const cu = useCasesFactory.cuRegister();
-    const newUser = await cu.register({ username, password });
+    const cu = useCasesFactory.cuSaveElement();
+    const newUser = await cu.saveElement({type: "newUser",value: {username, password} });
     if (!newUser) {
       return done(null, false, { message: "Couldnt register user" });
     }

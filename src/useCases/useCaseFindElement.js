@@ -1,30 +1,23 @@
 const useCaseSearchElement = (function () {
+  let instance;
 
-    let instance
-
-    function create(finder) {
-
-        return {
-            
-            find: async (data) => {
-                const {type, field, value} = data
-                //check si existe datos
-                return await finder.findData({type, field, value})
-                
-        
-            }
-        }
-    }
-
+  function create(finder) {
     return {
-        getInstance: function (finder) {
-            if (!instance) {
-                instance = create(finder)
-            }
-            return instance
-        }
-    }
-}
-)()
+      find: async (data) => {
+        const { type, field, value } = data;
+        return await finder.findData({ type, field, value });
+      },
+    };
+  }
 
-module.exports = useCaseSearchElement
+  return {
+    getInstance: function (finder) {
+      if (!instance) {
+        instance = create(finder);
+      }
+      return instance;
+    },
+  };
+})();
+
+module.exports = useCaseSearchElement;

@@ -2,18 +2,18 @@ const { configurations } = require("../configurations/configs")
 const daoUsersMemory = require("./daoUsersMemory")
 const daoUsersMongo = require("./daoUsersMongo")
 const daoUsersSequelize = require("./daoUsersSequelize")
-
+const daoElementsSequelize = require("./daoElementsSequelize")
 
 const typeDaoConfig = configurations.daoConfig()
 
 let daoUsers
+let daoElements
 if(typeDaoConfig === "mongo"){
-    console.log("typeDaoCinfig", typeDaoConfig)
     daoUsers = daoUsersMongo
 }
 if(typeDaoConfig === "sequelize"){
-    console.log("typeDaoConfigggg", typeDaoConfig)
     daoUsers = daoUsersSequelize
+    daoElements = daoElementsSequelize
 }
 else{
     daoUsers = daoUsersMemory
@@ -24,7 +24,10 @@ let daoFactory = (function () {
     //función que devuelve base de datos para usuarios
     function create(type) {
         if(type === "users"){
-            return daoUsers.getInstance({cnxString: process.env.CNX_STRING_MONGO})
+            return daoUsers.getInstance()
+        }
+        if(type === "elements"){
+            return daoElements.getInstance()
         }
         throw new Error('tipo de DaoUsers no encontrado')
     }
