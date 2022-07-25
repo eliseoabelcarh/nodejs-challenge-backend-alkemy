@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { authHandler } = require("./routes/auth");
+const { charactersHandler } = require("./routes/characters");
 
 function crearRouterHandler() {
 
@@ -8,7 +9,7 @@ function crearRouterHandler() {
    */
   const routeAPI = "/api";
   router.use(`${routeAPI}/auth`, authHandler());
-
+  router.use(`${routeAPI}/characters`, charactersHandler());
   /**
    * ------------------------------ ERROR ROUTE ----------------------------
    */

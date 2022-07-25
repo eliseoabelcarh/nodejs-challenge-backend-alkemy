@@ -119,7 +119,7 @@ function authHandler() {
         failureMessage: true,
       });
     }
-     /**
+    /**
      * ------------- AUTHENTICATES WITH JWT STRATEGY -------------
      */
     if (strategy === "jwt") {
@@ -131,24 +131,19 @@ function authHandler() {
           console.log(` recibidos body : ${req.body.username} ${password}`);
           const cu = useCasesFactory.cuRegister();
           const newUser = await cu.register({ username, password });
+          console.log("USERCREAADO", newUser)
           if (newUser) {
             //generate JWT Token and send it to new user
             const { token, expiresIn } = issueJWT(newUser);
+            console.log("tokeeeen", token)
             /**
              * ------------ SEND EMAIL TO USER ---------------------------
-             * If JWT is authentication method, we send a email with Token
-             * else: Just welcome message
+             * we send a email with Token
              */
-            const textEmail = `<strong>Your Authentication TOKEN is:</strong> ${token}`
-            const email = {
-              //TODO validate username is a VALID @EMAIL 
-              to: newUser.username,// HARDCODED WARNING! 
-              subject: `-Success Register ${newUser.username}`,
-              text: textEmail,
-              attachments: [/**"./test/emailSender/ejemplo.pdf"*/],
-            };
-            const cuEmail = await useCasesFactory.cuSendEmail(email);
-            await cuEmail.send(email)
+           // await sendEmailOnJWTAuthenticationSuccess(newUser.username,token);
+            //
+            //
+            console.log("emaillllllll")
             res.json({ success: true, user: newUser, token, expiresIn });
           }
         } catch (error) {
@@ -156,6 +151,23 @@ function authHandler() {
         }
       });
     }
+  }
+  /**
+   * SEND EMAIL FUNCTION ON JWT AUTHENTICATION SUCCESS ----------
+   */
+  async function sendEmailOnJWTAuthenticationSuccess(emailTo,token) {
+    const textEmail = `<strong>Your Authentication TOKEN is:</strong> ${token}`;
+    const email = {
+      to: emailTo,
+      subject: `-Success Register ${emailTo}`,
+      text: textEmail,
+      attachments: [
+        /**"./test/emailSender/ejemplo.pdf"*/
+      ],
+    };
+    console.log("prearpando emaillll")
+    const cuEmail = await useCasesFactory.cuSendEmail(email);
+    await cuEmail.send(email);
   }
   /**
    * -------------------------- REGISTER ROUTE -------------------------------
@@ -197,6 +209,13 @@ function authHandler() {
           if (newUser) {
             //generate JWT Token and send it to new user
             const { token, expiresIn } = issueJWT(newUser);
+             /**
+             * ------------ SEND EMAIL TO USER ---------------------------
+             * we send a email with Token
+             */
+             // await sendEmailOnJWTAuthenticationSuccess(newUser.username,token);
+              //
+              //
             res.json({ success: true, user: newUser, token, expiresIn });
           }
         } catch (error) {

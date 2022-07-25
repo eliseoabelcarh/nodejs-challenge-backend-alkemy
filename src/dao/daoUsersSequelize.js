@@ -28,7 +28,7 @@ let daoUsersSequelize = (function () {
           );
         }
         //if everything is ok, we save it in db
-        const newUser = userSeqModel.create({
+        const newUser =await userSeqModel.create({
           id: user.id,
           username: user.username,
           password: user.password,

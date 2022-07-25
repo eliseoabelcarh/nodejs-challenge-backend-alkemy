@@ -14,7 +14,10 @@ function crearclienteREST(port) {
         },
         testApiRoute: async () => {
             return await sendRequest({ url: crearURLBase(port) + `/test`, method: 'get' ,withCredentials:true,})
-        }
+        },
+        addCharacter: async (bearerJwtToken, character) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/auth/protected`, method: 'post', data: character, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
     }
 }
 
