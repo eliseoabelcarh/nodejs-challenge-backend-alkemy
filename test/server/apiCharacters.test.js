@@ -12,10 +12,10 @@ const genRandValue = (len) => {
     .substring(2, len + 2);
 };
 const {baseCharacter} = require("../models/examples");
-const { createCharacterModel } = require("../../src/models/characterModel");
+const { buildCharacterModel } = require("../../src/models/characterModel");
 
 
-describe.only("Server APIs for Character", async () => {
+describe("Server APIs for Character", async () => {
   const emptyObject = {};
   let server;
   let clienteRest;
@@ -44,7 +44,7 @@ describe.only("Server APIs for Character", async () => {
 
   it("POST request /addCharacter Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-       const characterValido = createCharacterModel(baseCharacter)
+       const characterValido = buildCharacterModel(baseCharacter)
       const response = await clienteRest.addCharacter( token,characterValido);
       console.log("Rspta2:", response.data);
       assert.deepStrictEqual(response.data.success, true);

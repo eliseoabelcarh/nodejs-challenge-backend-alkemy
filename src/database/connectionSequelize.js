@@ -1,26 +1,23 @@
 const Sequelize = require("sequelize");
 const { crearErrorDeBaseDeDatos } = require("../errors/errorsHandler");
+const { applyExtraSetup } = require("./extraSetupSequelize");
+
 
 const connectSequelize = (async function () {
   let instance;
   async function create() {
     try {
-      const database = "mydatabase";
-      const userDB = "abel";
+       //option1: "postgres" - option2: "mydatabase"
+      const database = "postgres";
+      //option1: "postgres" - option2: "abel"
+      const userDB = "postgres";
       const passwordDB = "alpaca2462";
       //Define database connection params
       const sequelize = new Sequelize(database, userDB, passwordDB, {
         host: "localhost",
-        dialect: "mysql",
-      });
-
-      //You can use the .authenticate() function to test if the connection is OK:
-      await sequelize.authenticate();
-      console.log("Connection has been established successfully.");
-
-      //You can use sequelize.sync() to automatically synchronize all models. Example:
-      await sequelize.sync({ force: false });
-
+        //option1: "postgres" - option2: "mysql"
+        dialect: "postgres", 
+      })
       return sequelize;
     } catch (error) {
       console.log("Errro conectando a MysQL", error);
@@ -32,6 +29,10 @@ const connectSequelize = (async function () {
     getInstance: async function () {
       if (!instance) {
         instance = await create();
+        //Create models asociations and relationships
+        await applyExtraSetup(instance);
+        //You can use sequelize.sync() to automatically synchronize all models. Example:
+        await instance.sync({ force: false });
       }
       return instance;
     },

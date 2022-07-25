@@ -13,6 +13,7 @@ const { v4: uuidv4 } = require("uuid");
 const MongoStore = require("connect-mongo");
 const {connectMongoose} = require("../database/connectionMongoose");
 
+
 /**
  * ------------------- GET PASSPORT MODULE CONFIGURATION -------------------
  */
@@ -61,9 +62,13 @@ async function createServer({ port = 0 }) {
   app.set("trust proxy", 1);
 
 
-  const mongooseConected = await connectMongoose()
+
 
   
+
+
+  const mongooseConected = await connectMongoose()
+ 
   const sessionStore = MongoStore.create({
     client: mongooseConected.connection.getClient(),
     collectionName: "sessions",

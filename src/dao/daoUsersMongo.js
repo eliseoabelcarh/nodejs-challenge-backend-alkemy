@@ -3,9 +3,8 @@ const {
   crearErrorDeBaseDeDatos,
   crearErrorArgumentosInvalidos,
 } = require("../../src/errors/errorsHandler");
-const { createUserModel, recoverUserModel } = require("../models/userModel");
-const userSchemaModel = require("./userMongooseSchema");
-const {userSequelizeModel} = require("./userSequelizeModel");
+const { recoverUserModel } = require("../models/userModel");
+const userSchemaModel = require("./daoModels/userMongooseSchema");
 
 let daoUsersMongo = (function () {
   let instance;

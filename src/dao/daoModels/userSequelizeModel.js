@@ -1,14 +1,14 @@
 const Sequelize = require("sequelize");
-const connectSequelize = require("../database/connectionSequelize");
+const connectSequelize = require("../../database/connectionSequelize");
 
 
 
 
-async function userSequelizeModel() {
+async function userSequelizeModel(sequelize) {
     
   //const sequelize = await (await connectionSequelize).getInstance()
-  const seq = await connectSequelize
-  const sequelize = await seq.getInstance()
+//   const seq = await connectSequelize
+//  const sequelize = await seq.getInstance()
   //Define model
   const userSequelizeModel = sequelize.define("users", {
     id: { type: Sequelize.STRING, primaryKey: true },

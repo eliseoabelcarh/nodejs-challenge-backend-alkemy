@@ -1,14 +1,10 @@
 const Sequelize = require("sequelize");
-const connectSequelize = require("../database/connectionSequelize");
-
-
-
-
-async function characterSequelizeModel() {
+const connectSequelize = require("../../database/connectionSequelize")
+async function characterSequelizeModel(sequelize) {
     
   //const sequelize = await (await connectionSequelize).getInstance()
-  const seq = await connectSequelize
-  const sequelize = await seq.getInstance()
+  // const seq = await connectSequelize
+  // const sequelize = await seq.getInstance()
   //Define model
   const characterSequelizeModel = sequelize.define("characters", {
     id: { type: Sequelize.STRING, primaryKey: true },
@@ -17,7 +13,7 @@ async function characterSequelizeModel() {
     edad: Sequelize.STRING,
     peso:Sequelize.STRING,
     historia:Sequelize.STRING,
-    peliculasOSeriesIds:Sequelize.ARRAY
+    peliculasIds:Sequelize.ARRAY(Sequelize.STRING)
   });
   //The call to characterSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
   await characterSequelizeModel.sync();

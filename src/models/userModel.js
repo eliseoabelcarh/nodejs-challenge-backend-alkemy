@@ -13,13 +13,11 @@ class UserModel {
 }
 
 function createUserModel(data) {
-  validData(data);
+  validDataUsernameYPassword(data);
   const { username, password } = data;
   const id = uuidv4();
   const { salt, hash } = genPassword(password);
-  console.log("creando..",{  salt, hash } )
   const userModel = new UserModel({ id, username, passwordHashed:hash, salt });
-  console.log("createee", userModel);
   return userModel;
 }
 
@@ -28,7 +26,7 @@ function passwordIsValid({ plainTextPassword, hashedPassword, salt }) {
 }
 
 function recoverUserModel(data) {
-  validData(data);
+  validDataUsernameYPassword(data);
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
   }
@@ -40,7 +38,7 @@ function recoverUserModel(data) {
   return userModel;
 }
 
-function validData(data) {
+function validDataUsernameYPassword(data) {
   if (!data || Object.keys(data).length === 0) {
     throw crearErrorArgumentosInvalidos("empty data", "no arguments provided");
   }

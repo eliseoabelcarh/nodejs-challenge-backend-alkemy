@@ -1,5 +1,6 @@
 
 const baseCharacter = {
+    id:"df",
     imagen: "A",
     nombre: "W",
     edad: "W",
@@ -7,12 +8,14 @@ const baseCharacter = {
     historia: "W",
   };
 const baseMovie = {
+    id:"df",
     imagen:"e",
     titulo:"s",
     fechaDeCreacion: Date.now(),
     calificacion:3,
 }
 const baseGenero = {
+    id:"df",
     nombre:"e",
     imagen:"ss"
 }
