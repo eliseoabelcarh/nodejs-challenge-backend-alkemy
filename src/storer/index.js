@@ -1,19 +1,13 @@
-const storerFactory = require("./storerFactory")
-
+const storerFactory = require("./storerFactory");
 
 const crearStorer = () => {
+  return {
+    storeData: async ({ type, value }) => {
+      let storer = storerFactory.getInstance(type);
 
-    return {
+      return await storer.save(value);
+    },
+  };
+};
 
-        storeData: async ({ type, value }) => {
-
-            let storer = storerFactory.getInstance(type)
-
-
-            return await storer.save(value)
-        }
-    }
-}
-
-
-module.exports = { crearStorer }
+module.exports = { crearStorer };

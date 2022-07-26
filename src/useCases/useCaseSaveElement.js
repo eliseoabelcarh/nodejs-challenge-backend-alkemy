@@ -4,6 +4,7 @@ const useCaseSaveElement = (function () {
   function create(storer) {
     return {
       saveElement: async (data) => {
+        console.log("EN USECASE SAVE ELEMENT")
         const {type, value} = data
         return await storer.storeData({ type, value });
       },

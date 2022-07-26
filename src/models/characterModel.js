@@ -3,8 +3,8 @@ const { v4: uuidv4 } = require("uuid");
 // How to use: uuidv4(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
 
 class CharacterModel {
-  constructor({ imagen, nombre, edad, peso, historia, peliculasIds }) {
-    this.id = uuidv4();
+  constructor({ id, imagen, nombre, edad, peso, historia, peliculasIds }) {
+    this.id = id;
     this.imagen = imagen;
     this.nombre = nombre;
     this.edad = edad;
@@ -31,22 +31,33 @@ function validateMovieId(id) {
 }
 
 function buildCharacterModel(data) {
-  validFields(data);
+  validRequiredFields(data);
+  if (!data.id) {
+    data.id = uuidv4();
+  } 
+  // else {
+  //   throw crearErrorArgumentosInvalidos("id", "you cant provide id");
+  // }
   if (!data.peliculasIds || Object.keys(data.peliculasIds).length === 0) {
-    console.log("NO HAY PELICULASID --------- DSFFFDFDFDFDFDFDFDFDFDFDFDFDFD----------------------------")
-    const {id,imagen,nombre,edad,peso,historia} = data
-    return new CharacterModel({id,imagen,nombre,edad,peso,historia,peliculasIds:[]});
-  }else{
+    data.peliculasIds = [];
+    return new CharacterModel(data);
+  } else {
     return new CharacterModel(data);
   }
 }
-
-function validFields(data) {
-  if (!data || Object.keys(data).length === 0) {
-    throw crearErrorArgumentosInvalidos("empty data", "no arguments provided");
-  }
+function recoverCharacterModel(data) {
+  validRequiredFields(data);
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
+  }
+  if (!data.peliculasIds) {
+    throw crearErrorArgumentosInvalidos("peliculasIds", "required field");
+  }
+  return new CharacterModel(data);
+}
+function validRequiredFields(data) {
+  if (!data || Object.keys(data).length === 0) {
+    throw crearErrorArgumentosInvalidos("empty data", "no arguments provided");
   }
   if (!data.imagen) {
     throw crearErrorArgumentosInvalidos("imagen", "required field");
@@ -65,5 +76,6 @@ function validFields(data) {
   }
 }
 module.exports = {
-  buildCharacterModel
+  buildCharacterModel,
+  recoverCharacterModel,
 };

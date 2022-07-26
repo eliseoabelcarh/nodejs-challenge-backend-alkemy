@@ -10,7 +10,7 @@ async function userSequelizeModel(sequelize) {
 //   const seq = await connectSequelize
 //  const sequelize = await seq.getInstance()
   //Define model
-  const userSequelizeModel = sequelize.define("users", {
+  const userSequelizeModel = sequelize.define("user", {
     id: { type: Sequelize.STRING, primaryKey: true },
     username: Sequelize.STRING,
     password: Sequelize.STRING,

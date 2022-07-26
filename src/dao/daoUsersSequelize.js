@@ -67,9 +67,9 @@ let daoUsersSequelize = (function () {
   }
 
   return {
-    getInstance: function (config) {
+    getInstance: function () {
       if (!instance) {
-        instance = create(config);
+        instance = create();
       }
       return instance;
     },

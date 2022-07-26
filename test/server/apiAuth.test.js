@@ -24,8 +24,6 @@ describe("Server APIs", async () => {
     server = await createServer(emptyObject);
     port = server.address().port;
     clienteRest = crearclienteREST(port);
-    // dao = await daoFactory.getDao()
-    // await dao.cleanAll()
   });
   afterEach(async () => {
     await server.close();

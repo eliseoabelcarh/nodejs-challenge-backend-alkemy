@@ -1,15 +1,15 @@
-const finderUser = (function () {
+const finderCharacter = (function () {
   let instance;
 
   function create(dao) {
     return {
       searchByField: async ({ field, value }) => {
         if (field === "id") {
-          return await dao.getUserById(value);
+          return await dao.getCharacterById(value);
         }
-        if (field === "username") {
-          return await dao.getUserByUsername(value);
-        }
+        // if (field === "username") {
+        //   return await dao.getUserByUsername(value);
+        // }
       },
     };
   }
@@ -24,4 +24,4 @@ const finderUser = (function () {
   };
 })();
 
-module.exports = finderUser;
+module.exports = finderCharacter;

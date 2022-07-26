@@ -18,6 +18,9 @@ function crearclienteREST(port) {
         addCharacter: async (bearerJwtToken, character) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters`, method: 'post', data: character, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
+        getCharacterWithId: async (bearerJwtToken, characterId) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters/${characterId}`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
     }
 }
 

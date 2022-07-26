@@ -11,8 +11,9 @@ const genRandValue = (len) => {
     .toString(36)
     .substring(2, len + 2);
 };
-const {baseCharacter} = require("../models/examples");
+const {baseCharacter, baseMovie} = require("../models/examples");
 const { buildCharacterModel } = require("../../src/models/characterModel");
+const { buildMovieModel } = require("../../src/models/movieModel");
 
 
 describe("Server APIs for Character", async () => {
@@ -45,27 +46,37 @@ describe("Server APIs for Character", async () => {
 
   it("POST request /addCharacter Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-       const characterValido = buildCharacterModel(baseCharacter)
-      const response = await clienteRest.addCharacter( token,characterValido);
+       //const characterValido = buildCharacterModel(baseCharacter)
+      const response = await clienteRest.addCharacter( token,baseCharacter);
       console.log("Rspta2:", response.data);
       assert.deepStrictEqual(response.data.success, true);
     }
   });
+  it("POST request /addCharacter without movieIds Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+       //const characterValido = buildCharacterModel(baseCharacter)
+      const response = await clienteRest.addCharacter( token,baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const response2 = await clienteRest.getCharacterWithId(token,response.data.character.id)
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it.only("POST request /addCharacter WITH movie Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+       //const characterValido = buildCharacterModel(baseCharacter)
+      const movieModel = buildMovieModel(baseMovie)
 
-  //   it("POST /characters ", async () => {
-  //     await assert.rejects(
-  //       async () => {
-  //         const characterEmpty = {};
-  //         const bearerJwtToken = validToken;
-  //         await clienteRest.addCharacter(characterEmpty, bearerJwtToken);
-  //       },
-  //       (err) => {
-  //         assert.strictEqual(err.message, "character: empty object");
-  //         assert.strictEqual(err.status, 400);
-  //         return true;
-  //       }
-  //     );
-  //   });
+      const response = await clienteRest.addCharacter( token,baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const response2 = await clienteRest.getCharacterWithId(token,response.data.character.id)
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+
 });
 
 const validToken =

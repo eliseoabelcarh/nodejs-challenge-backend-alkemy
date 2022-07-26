@@ -2,6 +2,9 @@ const {characterSequelizeModel} =require("../dao/daoModels/characterSequelizeMod
 const {movieGenreSequelizeModel} = require("../dao/daoModels/movieGenreSequelizeModel")
 const {movieSequelizeModel} = require("../dao/daoModels/movieSequelizeModel");
 const { userSequelizeModel } = require("../dao/daoModels/userSequelizeModel");
+const {DataTypes} = require("sequelize");
+const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovieSequelize");
+
 async function applyExtraSetup(sequelize) {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
@@ -10,14 +13,13 @@ async function applyExtraSetup(sequelize) {
     const characterSeqModel = await characterSequelizeModel(sequelize)
     const movieSeqModel = await movieSequelizeModel(sequelize)
     const movieGenreModel = await movieGenreSequelizeModel(sequelize)
+    const characterMovieSeqModel = await characterMovieSequelizeModel(sequelize)
     /**
      * One-To-Many associations are connecting one source with multiple targets,
      * while all these targets are connected only with this single source.
      * As default ON DELETE to SET NULL and ON UPDATE defaults to CASCADE.
      */
-    movieGenreModel.hasMany(movieSeqModel, {
-        foreignKey: 'genreId'
-    });
+    movieGenreModel.hasMany(movieSeqModel);
     movieSeqModel.belongsTo(movieGenreModel);
 
     /**
@@ -25,8 +27,15 @@ async function applyExtraSetup(sequelize) {
      * all these targets can in turn be connected to other sources beyond the first.
      * the defaults for both ON UPDATE and ON DELETE are CASCADE
      */
-     characterSeqModel.belongsToMany(movieSeqModel, { through: 'CharactersMovies' });
-     movieSeqModel.belongsToMany(characterSeqModel, { through: 'CharactersMovies' });
+    //Define model
+  
+    
+     characterSeqModel.belongsToMany(movieSeqModel, {as: 'Movies', through: characterMovieSeqModel });
+     movieSeqModel.belongsToMany(characterSeqModel, {as: 'Characters', through: characterMovieSeqModel });
+     await characterSeqModel.sync();
+     await movieSeqModel.sync();
+     await characterMovieSeqModel.sync();
+     return {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel }
 }
 
 module.exports = { applyExtraSetup };

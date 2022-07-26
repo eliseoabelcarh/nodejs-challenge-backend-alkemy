@@ -7,7 +7,8 @@ const storerNewCharacter = (function () {
         save: async (data) => {
           console.log("EN storerNewCharacter:", data);
           const newCharacter = buildCharacterModel(data)
-          console.log("NEW USER essssss:", newCharacter);
+          console.log("NEW Characterrr:", newCharacter);
+          console.log("EN storerNewCharacterDAOOO:::",dao)
           return await dao.addCharacter(newCharacter);
         },
       };

@@ -7,7 +7,7 @@ async function movieGenreSequelizeModel(sequelize) {
   // const seq = await connectSequelize
   // const sequelize = await seq.getInstance()
   //Define model
-  const movieGenreSequelizeModel = sequelize.define("movie_genres", {
+  const movieGenreSequelizeModel = sequelize.define("movieGenre", {
     id: { type: Sequelize.STRING, primaryKey: true },
     nombre: Sequelize.STRING,
     imagen: Sequelize.STRING,

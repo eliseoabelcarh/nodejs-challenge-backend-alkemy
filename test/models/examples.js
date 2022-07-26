@@ -1,6 +1,7 @@
-
+const { v4: uuidv4 } = require("uuid");
+// How to use: uuidv4(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
 const baseCharacter = {
-    id:"df",
+      id:uuidv4(),
     imagen: "A",
     nombre: "W",
     edad: "W",
@@ -8,14 +9,14 @@ const baseCharacter = {
     historia: "W",
   };
 const baseMovie = {
-    id:"df",
+      id:uuidv4(),
     imagen:"e",
     titulo:"s",
-    fechaDeCreacion: Date.now(),
+    fechaCreacion: Date.now().toString(),
     calificacion:3,
 }
 const baseGenero = {
-    id:"df",
+     id:uuidv4(),
     nombre:"e",
     imagen:"ss"
 }
