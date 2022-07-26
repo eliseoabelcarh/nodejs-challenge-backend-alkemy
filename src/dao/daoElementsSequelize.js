@@ -41,9 +41,9 @@ const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
             characterId:dbCharacter.id,
             movieId:dbMovie.id
           })
-          const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["Movies"] });
+          const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["movies"] });
           console.log("**********resullllCharcterrr", characterInDB)
-          const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["Characters"] });
+          const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["characters"] });
           console.log("**********resullllMovieeee", movieInDB)
           //dbCharacter.addMovies()
     
