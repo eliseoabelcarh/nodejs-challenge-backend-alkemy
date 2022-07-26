@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-async function characterSequelizeModel(sequelize) {
+ function characterSequelizeModel(sequelize) {
     
   //const sequelize = await (await connectionSequelize).getInstance()
   // const seq = await connectSequelize
@@ -16,7 +16,7 @@ async function characterSequelizeModel(sequelize) {
     peliculasIds:Sequelize.ARRAY(Sequelize.STRING)
   });
   //The call to characterSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
-  await characterSequelizeModel.sync();
+  //await characterSequelizeModel.sync();
   return characterSequelizeModel;
 
 }

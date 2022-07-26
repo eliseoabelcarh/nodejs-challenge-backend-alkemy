@@ -2,7 +2,7 @@ const { assert, expect } = require("chai");
 const { baseMovie } = require("./examples");
 const { buildMovieModel } = require("../../src/models/movieModel");
 
-describe.only("Movie Model", () => {
+describe("Movie Model", () => {
   let movieCreated;
 
   before(() => {

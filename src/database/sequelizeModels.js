@@ -5,15 +5,15 @@ const { userSequelizeModel } = require("../dao/daoModels/userSequelizeModel");
 const {DataTypes} = require("sequelize");
 const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovieSequelize");
 
-async function applyExtraSetup(sequelize) {
-    await sequelize.authenticate();
+ function getSequelizeModels(sequelize) {
+    //await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 
-    const userSeq = await userSequelizeModel(sequelize)
-    const characterSeqModel = await characterSequelizeModel(sequelize)
-    const movieSeqModel = await movieSequelizeModel(sequelize)
-    const movieGenreModel = await movieGenreSequelizeModel(sequelize)
-    const characterMovieSeqModel = await characterMovieSequelizeModel(sequelize)
+    const userSeqModel =  userSequelizeModel(sequelize)
+    const characterSeqModel =  characterSequelizeModel(sequelize)
+    const movieSeqModel =  movieSequelizeModel(sequelize)
+    const movieGenreModel =  movieGenreSequelizeModel(sequelize)
+    const characterMovieSeqModel =  characterMovieSequelizeModel(sequelize)
     /**
      * One-To-Many associations are connecting one source with multiple targets,
      * while all these targets are connected only with this single source.
@@ -32,10 +32,10 @@ async function applyExtraSetup(sequelize) {
     
      characterSeqModel.belongsToMany(movieSeqModel, {as: 'Movies', through: characterMovieSeqModel });
      movieSeqModel.belongsToMany(characterSeqModel, {as: 'Characters', through: characterMovieSeqModel });
-     await characterSeqModel.sync();
-     await movieSeqModel.sync();
-     await characterMovieSeqModel.sync();
-     return {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel }
+    //  await characterSeqModel.sync();
+    //  await movieSeqModel.sync();
+    //  await characterMovieSeqModel.sync();
+     return {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel , userSeqModel}
 }
 
-module.exports = { applyExtraSetup };
+module.exports = { getSequelizeModels };

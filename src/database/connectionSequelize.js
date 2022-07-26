@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const { crearErrorDeBaseDeDatos } = require("../errors/errorsHandler");
-const { applyExtraSetup } = require("./extraSetupSequelize");
+
+
 
 
 const connectSequelize = (async function () {
@@ -30,7 +31,7 @@ const connectSequelize = (async function () {
       if (!instance) {
         instance = await create();
         //Create models asociations and relationships
-        await applyExtraSetup(instance);
+        
         //You can use sequelize.sync() to automatically synchronize all models. Example:
         await instance.sync({ force: false });
       }

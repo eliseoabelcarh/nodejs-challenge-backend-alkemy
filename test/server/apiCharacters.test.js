@@ -63,7 +63,7 @@ describe("Server APIs for Character", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
-  it.only("POST request /addCharacter WITH movie Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request /addCharacter WITH movie Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
        //const characterValido = buildCharacterModel(baseCharacter)
       const movieModel = buildMovieModel(baseMovie)

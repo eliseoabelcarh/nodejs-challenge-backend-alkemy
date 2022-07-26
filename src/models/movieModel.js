@@ -73,9 +73,10 @@ function recoverMovieModel(data) {
 }
 function buildMovieModel(data) {
   validateRequiredFields(data)
-  if (!data.id) {
-    data.id = uuidv4();
-  }
+  data.id = uuidv4();
+  // if (!data.id) {
+  //   data.id = uuidv4();
+  // }
   //  else {
   //   throw crearErrorArgumentosInvalidos("Movie id", "you cant provide id");
   // }

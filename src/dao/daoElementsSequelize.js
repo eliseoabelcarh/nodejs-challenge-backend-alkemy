@@ -5,7 +5,7 @@ const {
   } = require("../../src/errors/errorsHandler");
 const { baseMovie } = require("../../test/models/examples");
   const connectSequelize = require("../database/connectionSequelize");
-const { applyExtraSetup } = require("../database/extraSetupSequelize");
+const { getSequelizeModels } = require("../database/sequelizeModels");
 const { buildCharacterModel,recoverCharacterModel } = require("../models/characterModel");
 const { buildMovieModel } = require("../models/movieModel");
   const { createUserModel, recoverUserModel } = require("../models/userModel");
@@ -24,22 +24,14 @@ const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
           console.log("-------------ENTRANTEEEEEEE:",character)
          
           const sequelize = await (await connectSequelize).getInstance()
-          const {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel } = await applyExtraSetup(sequelize)
-          // const characterSeqModel = await characterSequelizeModel(sequelize)
-          // const movieSeqModel = await movieSequelizeModel(sequelize)
-          // const characterMovieSeqModel = await characterMovieSequelizeModel(sequelize)
-
-          // characterSeqModel.belongsToMany(movieSeqModel, {as: 'Movies',  through: "CharactersMovies" });
-          // movieSeqModel.belongsToMany(characterSeqModel, {as: 'Characters', through: characterMovieSeqModel });
+          const {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel } =  getSequelizeModels(sequelize)
 
 
-          // await characterSeqModel.sync();
-          // await movieSeqModel.sync();
-          // await characterMovieSeqModel.sync();
-
-          console.log("-------------ENffffffffffE:",character)
+          console.log("-------------ENffffffffffE:",baseMovie)
 
           const movieModel = buildMovieModel(baseMovie)
+
+          console.log("//////MOVIE MODEL PARA CREAR:",movieModel)
 
 
           
@@ -50,7 +42,9 @@ const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
             movieId:dbMovie.id
           })
           const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["Movies"] });
-          console.log("**********resullll", characterInDB)
+          console.log("**********resullllCharcterrr", characterInDB)
+          const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["Characters"] });
+          console.log("**********resullllMovieeee", movieInDB)
           //dbCharacter.addMovies()
     
         //  characterSeqModel.addMovieSeqModels()

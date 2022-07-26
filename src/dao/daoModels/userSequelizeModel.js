@@ -4,7 +4,7 @@ const connectSequelize = require("../../database/connectionSequelize");
 
 
 
-async function userSequelizeModel(sequelize) {
+function userSequelizeModel(sequelize) {
     
   //const sequelize = await (await connectionSequelize).getInstance()
 //   const seq = await connectSequelize
@@ -17,7 +17,7 @@ async function userSequelizeModel(sequelize) {
     salt: Sequelize.STRING,
   });
   //The call to userSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
-  await userSequelizeModel.sync();
+  //await userSequelizeModel.sync();
   return userSequelizeModel;
 
 }
