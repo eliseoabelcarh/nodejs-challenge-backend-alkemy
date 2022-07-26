@@ -32,7 +32,7 @@ describe("Character Model", () => {
   });
 
   it("Empty Array of Series/Movies Ids must be created for character model", () => {
-    const listaPeliculasOSeriesIds = characterCreated.peliculasIds;
+    const listaPeliculasOSeriesIds = characterCreated.peliculas;
     const esUnArray = Array.isArray(listaPeliculasOSeriesIds);
     const arrayEstaVacio = listaPeliculasOSeriesIds.length === 0;
     assert.deepStrictEqual(esUnArray, true);
@@ -41,19 +41,19 @@ describe("Character Model", () => {
 
   it("If no argument provided for add Movie or Serie Id", () => {
     expect(() => {
-      characterCreated.addMovieId();
-    }).to.throws("empty movie or serie id: no arguments provided");
+      characterCreated.addMovie();
+    }).to.throws("empty movie or serie: no arguments provided");
   });
 
   it("If argument provided is Empty/Zero/False to add Movie or Serie Id throws error", () => {
     expect(() => {
-      characterCreated.addMovieId("");
-    }).to.throws("Movie Id: required field");
+      characterCreated.addMovie("");
+    }).to.throws("Movie: required field");
     expect(() => {
-      characterCreated.addMovieId(false);
-    }).to.throws("Movie Id: required field");
+      characterCreated.addMovie(false);
+    }).to.throws("Movie: required field");
     expect(() => {
-      characterCreated.addMovieId(0);
-    }).to.throws("Movie Id: required field");
+      characterCreated.addMovie(0);
+    }).to.throws("Movie: required field");
   });
 });

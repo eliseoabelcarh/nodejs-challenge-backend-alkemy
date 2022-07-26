@@ -30,20 +30,17 @@ const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
           console.log("-------------ENffffffffffE:",baseMovie)
 
           const movieModel = buildMovieModel(baseMovie)
-
           console.log("//////MOVIE MODEL PARA CREAR:",movieModel)
-
-
-          
           const dbMovie = await movieSeqModel.create(movieModel);
           const dbCharacter = await characterSeqModel.create(character)
+          
           const result = await characterMovieSeqModel.create({
             characterId:dbCharacter.id,
             movieId:dbMovie.id
           })
-          const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["movies"] });
+          const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["peliculas"] });
           console.log("**********resullllCharcterrr", characterInDB)
-          const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["characters"] });
+          const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["personajes"] });
           console.log("**********resullllMovieeee", movieInDB)
           //dbCharacter.addMovies()
     

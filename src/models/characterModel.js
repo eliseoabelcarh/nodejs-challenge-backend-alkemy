@@ -3,30 +3,30 @@ const { v4: uuidv4 } = require("uuid");
 // How to use: uuidv4(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
 
 class CharacterModel {
-  constructor({ id, imagen, nombre, edad, peso, historia, peliculasIds }) {
+  constructor({ id, imagen, nombre, edad, peso, historia, peliculas }) {
     this.id = id;
     this.imagen = imagen;
     this.nombre = nombre;
     this.edad = edad;
     this.peso = peso;
     this.historia = historia;
-    this.peliculasIds = peliculasIds;
+    this.peliculas = peliculas;
   }
-  addMovieId(id) {
-    validateMovieId(id);
-    this.peliculasIds.push(id);
+  addMovie(pelicula) {
+    validateMovie(pelicula);
+    this.peliculas.push(pelicula);
   }
 }
-function validateMovieId(id) {
+function validateMovie(pelicula) {
   const argumentReceived = arguments[0];
   if (argumentReceived === undefined) {
     throw crearErrorArgumentosInvalidos(
-      "empty movie or serie id",
+      "empty movie or serie",
       "no arguments provided"
     );
   }
-  if (!id) {
-    throw crearErrorArgumentosInvalidos("Movie Id", "required field");
+  if (!pelicula) {
+    throw crearErrorArgumentosInvalidos("Movie", "required field");
   }
 }
 
@@ -39,8 +39,8 @@ function buildCharacterModel(data) {
   // else {
   //   throw crearErrorArgumentosInvalidos("id", "you cant provide id");
   // }
-  if (!data.peliculasIds || Object.keys(data.peliculasIds).length === 0) {
-    data.peliculasIds = [];
+  if (!data.peliculas || Object.keys(data.peliculas).length === 0) {
+    data.peliculas = [];
     return new CharacterModel(data);
   } else {
     return new CharacterModel(data);
@@ -51,8 +51,8 @@ function recoverCharacterModel(data) {
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
   }
-  if (!data.peliculasIds) {
-    throw crearErrorArgumentosInvalidos("peliculasIds", "required field");
+  if (!data.peliculas) {
+    data.peliculas = []
   }
   return new CharacterModel(data);
 }

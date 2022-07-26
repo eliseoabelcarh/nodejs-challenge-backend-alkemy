@@ -33,35 +33,35 @@ describe("Movie Model", () => {
   });
 
   it("Empty Array of Personakes Ids must be created for movie model", () => {
-    const personajesIds = movieCreated.personajesIds;
-    const esUnArray = Array.isArray(personajesIds);
-    const arrayEstaVacio = personajesIds.length === 0;
+    const personajes = movieCreated.personajes;
+    const esUnArray = Array.isArray(personajes);
+    const arrayEstaVacio = personajes.length === 0;
     assert.deepStrictEqual(esUnArray, true);
     assert.deepStrictEqual(arrayEstaVacio, true);
   });
 
   it("If no argument provided for add PErsonaje or Serie Id", () => {
     expect(() => {
-      movieCreated.addPersonajeId();
-    }).to.throws("empty personaje id: no arguments provided");
+      movieCreated.addPersonaje();
+    }).to.throws("empty personaje: no arguments provided");
   });
 
   it("If argument provided is Empty/Zero/False to add Personaje or Serie Id throws error", () => {
     expect(() => {
-      movieCreated.addPersonajeId("");
-    }).to.throws("Personaje Id: required field");
+      movieCreated.addPersonaje("");
+    }).to.throws("Personaje: required field");
     expect(() => {
-      movieCreated.addPersonajeId(false);
-    }).to.throws("Personaje Id: required field");
+      movieCreated.addPersonaje(false);
+    }).to.throws("Personaje: required field");
     expect(() => {
-      movieCreated.addPersonajeId(0);
-    }).to.throws("Personaje Id: required field");
+      movieCreated.addPersonaje(0);
+    }).to.throws("Personaje: required field");
   });
 
   it("Build movie model", () => {
-    const personajesIds = movieCreated.personajesIds;
-    const esUnArray = Array.isArray(personajesIds);
-    const arrayEstaVacio = personajesIds.length === 0;
+    const personajes = movieCreated.personajes;
+    const esUnArray = Array.isArray(personajes);
+    const arrayEstaVacio = personajes.length === 0;
     assert.deepStrictEqual(esUnArray, true);
     assert.deepStrictEqual(arrayEstaVacio, true);
   });

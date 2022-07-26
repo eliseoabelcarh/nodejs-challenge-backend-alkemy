@@ -11,7 +11,7 @@ const connectSequelize = require("../../database/connectionSequelize");
     id: { type: Sequelize.STRING, primaryKey: true },
     nombre: Sequelize.STRING,
     imagen: Sequelize.STRING,
-    peliculasIds:Sequelize.ARRAY(Sequelize.STRING)
+    peliculas:Sequelize.ARRAY(Sequelize.STRING)
   });
   //The call to movieGenreSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
  // await movieGenreSequelizeModel.sync();

@@ -13,7 +13,7 @@ const connectSequelize = require("../../database/connectionSequelize");
     titulo: Sequelize.STRING,
     fechaCreacion: Sequelize.STRING,
     calificacion:Sequelize.INTEGER,
-    personajesIds:Sequelize.ARRAY(Sequelize.STRING),
+    //personajes:Sequelize.ARRAY(Sequelize.STRING),
     movieGenreId:Sequelize.STRING
   });
   //The call to movieSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.

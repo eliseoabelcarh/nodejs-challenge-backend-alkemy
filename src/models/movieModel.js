@@ -10,29 +10,30 @@ class MovieModel {
     titulo,
     fechaCreacion,
     calificacion,
-    personajesIds,
+    personajes,
   }) {
-    (this.id = id), (this.imagen = imagen);
+    this.id = id,
+    this.imagen = imagen;
     this.titulo = titulo;
     this.fechaCreacion = fechaCreacion;
     this.calificacion = calificacion;
-    this.personajesIds = personajesIds;
+    this.personajes = personajes;
   }
-  addPersonajeId(id) {
-    validatePersonajeId(id);
-    this.personajesIds.push(id);
+  addPersonaje(personaje) {
+    validatePersonaje(personaje);
+    this.personajes.push(personaje);
   }
 }
-function validatePersonajeId(id) {
+function validatePersonaje(personaje) {
   const argumentReceived = arguments[0];
   if (argumentReceived === undefined) {
     throw crearErrorArgumentosInvalidos(
-      "empty personaje id",
+      "empty personaje",
       "no arguments provided"
     );
   }
-  if (!id) {
-    throw crearErrorArgumentosInvalidos("Personaje Id", "required field");
+  if (!personaje) {
+    throw crearErrorArgumentosInvalidos("Personaje", "required field");
   }
 }
 function validateRequiredFields(data) {
@@ -66,22 +67,16 @@ function recoverMovieModel(data) {
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
   }
-  if (!data.personajesIds) {
-    throw crearErrorArgumentosInvalidos("peliculasIds", "required field");
+  if (!data.personajes) {
+    data.personajes = []
   }
   return new MovieModel(data);
 }
 function buildMovieModel(data) {
   validateRequiredFields(data)
   data.id = uuidv4();
-  // if (!data.id) {
-  //   data.id = uuidv4();
-  // }
-  //  else {
-  //   throw crearErrorArgumentosInvalidos("Movie id", "you cant provide id");
-  // }
-  if (!data.personajesIds) {
-    data.personajesIds = []
+  if (!data.personajes) {
+    data.personajes = []
     return new MovieModel(data)
   }else{
     return new MovieModel(data);

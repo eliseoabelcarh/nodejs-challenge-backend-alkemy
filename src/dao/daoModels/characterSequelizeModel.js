@@ -13,7 +13,7 @@ const Sequelize = require("sequelize");
     edad: Sequelize.STRING,
     peso:Sequelize.STRING,
     historia:Sequelize.STRING,
-    peliculasIds:Sequelize.ARRAY(Sequelize.STRING)
+    //peliculas:Sequelize.ARRAY(Sequelize.STRING)
   });
   //The call to characterSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
   //await characterSequelizeModel.sync();

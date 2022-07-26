@@ -7,23 +7,23 @@ class MovieGenreModel {
     this.id = uuidv4();
     this.nombre = nombre;
     this.imagen = imagen;
-    this.peliculasIds = [];
+    this.peliculas = [];
   }
-  addPeliculaId(id) {
-    validatePeliculaId(id);
-    this.personajesAsociadosIds.push(id);
+  addPelicula(pelicula) {
+    validatePelicula(pelicula);
+    this.peliculas.push(pelicula);
   }
 }
-function validatePeliculaId(id) {
+function validatePelicula(pelicula) {
   const argumentReceived = arguments[0];
   if (argumentReceived === undefined) {
     throw crearErrorArgumentosInvalidos(
-      "empty movie id",
+      "empty movie",
       "no arguments provided"
     );
   }
-  if (!id) {
-    throw crearErrorArgumentosInvalidos("Movie Id", "required field");
+  if (!pelicula) {
+    throw crearErrorArgumentosInvalidos("Movie", "required field");
   }
 }
 

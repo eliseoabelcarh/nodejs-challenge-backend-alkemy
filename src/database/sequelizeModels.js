@@ -30,8 +30,8 @@ const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovi
     //Define model
   
     
-     characterSeqModel.belongsToMany(movieSeqModel, {as: 'movies', through: characterMovieSeqModel });
-     movieSeqModel.belongsToMany(characterSeqModel, {as: 'characters', through: characterMovieSeqModel });
+     characterSeqModel.belongsToMany(movieSeqModel, {as: 'peliculas', through: characterMovieSeqModel });
+     movieSeqModel.belongsToMany(characterSeqModel, {as: 'personajes', through: characterMovieSeqModel });
     //  await characterSeqModel.sync();
     //  await movieSeqModel.sync();
     //  await characterMovieSeqModel.sync();
