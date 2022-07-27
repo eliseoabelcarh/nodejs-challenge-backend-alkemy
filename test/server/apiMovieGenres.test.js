@@ -43,14 +43,14 @@ describe("Server APIs for Movie Genres", async () => {
     }
   });
 
-  it.only("POST request /addMovieGenre without characters- Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request /addMovieGenre without characters- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovieGenre(token, baseGenero);
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
     }
   });
-  it.only("POST request /addMovieGenre and Recover with ID generated- Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request /addMovieGenre and Recover with ID generated- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovieGenre(token, baseGenero);
       console.log("Rspta111:", response.data);

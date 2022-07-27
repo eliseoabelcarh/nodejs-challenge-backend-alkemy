@@ -241,6 +241,16 @@ function authHandler() {
     getLoginAuthenticationStrategy(strategyAuth)
   );
 
+
+  /**
+   * ------------------------ TESTING ROUTE --------------------------
+   */
+   router.get(
+    `/test`,
+    wrap(async (req, res) => {
+      res.status(200).send("okay");
+    })
+  );
   return router;
 }
 
