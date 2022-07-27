@@ -77,6 +77,16 @@ describe("Server APIs", async () => {
       }
     );
   });
+ 
+  it("POST request REGISTER correctly", async () => {
+    const randString = genRandValue(8);
+    const user = { username: `username${randString}@test.com`, password: "daasf" };
+    const response = await clienteRest.register(user);
+    console.log("Rspta POST register:", response.data);
+    assert.strictEqual(response.status, 200);
+    assert.strictEqual(response.data.success, true);
+  });
+
   it("POST request with username already exists throw error", async () => {
     await assert.rejects(
       async () => {
@@ -94,16 +104,6 @@ describe("Server APIs", async () => {
       }
     );
   });
-  it("POST request REGISTER correctly", async () => {
-    const randString = genRandValue(8);
-    const user = { username: `username${randString}@test.com`, password: "daasf" };
-    const response = await clienteRest.register(user);
-    console.log("Rspta POST register:", response.data);
-    assert.strictEqual(response.status, 200);
-    assert.strictEqual(response.data.success, true);
-  });
-
-
 
   it("POST request LOGIN CORRECTLY", async () => {
     const randString = genRandValue(8);

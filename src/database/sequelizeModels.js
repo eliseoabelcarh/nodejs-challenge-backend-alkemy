@@ -5,7 +5,7 @@ const { userSequelizeModel } = require("../dao/daoModels/userSequelizeModel");
 const {DataTypes} = require("sequelize");
 const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovieSequelize");
 
- function getSequelizeModels(sequelize) {
+ async function getSequelizeModels(sequelize) {
     //await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 
@@ -19,8 +19,8 @@ const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovi
      * while all these targets are connected only with this single source.
      * As default ON DELETE to SET NULL and ON UPDATE defaults to CASCADE.
      */
-    movieGenreModel.hasMany(movieSeqModel);
-    movieSeqModel.belongsTo(movieGenreModel);
+    movieGenreModel.hasMany(movieSeqModel, {as:"peliculas"});
+    movieSeqModel.belongsTo(movieGenreModel, {as: "genero"});
 
     /**
      * Many-To-Many associations connect one source with multiple targets, while
@@ -32,9 +32,14 @@ const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovi
     
      characterSeqModel.belongsToMany(movieSeqModel, {as: 'peliculas', through: characterMovieSeqModel });
      movieSeqModel.belongsToMany(characterSeqModel, {as: 'personajes', through: characterMovieSeqModel });
-    //  await characterSeqModel.sync();
-    //  await movieSeqModel.sync();
-    //  await characterMovieSeqModel.sync();
+     // in case throws errors: ----no existe la relación «movieGenres»
+     //ORDER MATTERS // WARNING!!
+     await userSeqModel.sync()
+     await movieGenreModel.sync()
+     await characterSeqModel.sync();
+     await movieSeqModel.sync();
+     await characterMovieSeqModel.sync();
+     
      return {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel , userSeqModel}
 }
 

@@ -24,8 +24,8 @@ const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
           console.log("-------------ENTRANTEEEEEEE:",character)
          
           const sequelize = await (await connectSequelize).getInstance()
-          const {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel } =  getSequelizeModels(sequelize)
-
+          const {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel } = await getSequelizeModels(sequelize)
+          
 
           console.log("-------------ENffffffffffE:",baseMovie)
 
