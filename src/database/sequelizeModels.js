@@ -12,15 +12,15 @@ const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovi
     const userSeqModel =  userSequelizeModel(sequelize)
     const characterSeqModel =  characterSequelizeModel(sequelize)
     const movieSeqModel =  movieSequelizeModel(sequelize)
-    const movieGenreModel =  movieGenreSequelizeModel(sequelize)
+    const movieGenreSeqModel =  movieGenreSequelizeModel(sequelize)
     const characterMovieSeqModel =  characterMovieSequelizeModel(sequelize)
     /**
      * One-To-Many associations are connecting one source with multiple targets,
      * while all these targets are connected only with this single source.
      * As default ON DELETE to SET NULL and ON UPDATE defaults to CASCADE.
      */
-    movieGenreModel.hasMany(movieSeqModel, {as:"peliculas"});
-    movieSeqModel.belongsTo(movieGenreModel, {as: "genero"});
+    movieGenreSeqModel.hasMany(movieSeqModel );
+    movieSeqModel.belongsTo(movieGenreSeqModel);
 
     /**
      * Many-To-Many associations connect one source with multiple targets, while
@@ -35,12 +35,12 @@ const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovi
      // in case throws errors: ----no existe la relación «movieGenres»
      //ORDER MATTERS // WARNING!!
      await userSeqModel.sync()
-     await movieGenreModel.sync()
+     await movieGenreSeqModel.sync()
      await characterSeqModel.sync();
      await movieSeqModel.sync();
      await characterMovieSeqModel.sync();
      
-     return {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel , userSeqModel}
+     return {characterSeqModel,movieSeqModel,movieGenreSeqModel,characterMovieSeqModel , userSeqModel}
 }
 
 module.exports = { getSequelizeModels };

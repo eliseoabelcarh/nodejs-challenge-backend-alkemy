@@ -33,12 +33,6 @@ function validateMovie(pelicula) {
 function buildCharacterModel(data) {
   validRequiredFields(data);
   data.id = uuidv4();
-  // if (!data.id) {
-  //   data.id = uuidv4();
-  // } 
-  // else {
-  //   throw crearErrorArgumentosInvalidos("id", "you cant provide id");
-  // }
   if (!data.peliculas || Object.keys(data.peliculas).length === 0) {
     data.peliculas = [];
     return new CharacterModel(data);

@@ -3,10 +3,11 @@ const {
     crearErrorDeBaseDeDatos,
     crearErrorArgumentosInvalidos,
   } = require("../../src/errors/errorsHandler");
-const { baseMovie } = require("../../test/models/examples");
+const { baseMovie, baseGenero } = require("../../test/models/examples");
   const connectSequelize = require("../database/connectionSequelize");
 const { getSequelizeModels } = require("../database/sequelizeModels");
 const { buildCharacterModel,recoverCharacterModel } = require("../models/characterModel");
+const { buildMovieGenreModel } = require("../models/movieGenreModel");
 const { buildMovieModel } = require("../models/movieModel");
   const { createUserModel, recoverUserModel } = require("../models/userModel");
 const { characterMovieSequelizeModel } = require("./daoModels/characterMovieSequelize");
@@ -24,20 +25,29 @@ const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
           console.log("-------------ENTRANTEEEEEEE:",character)
          
           const sequelize = await (await connectSequelize).getInstance()
-          const {characterSeqModel,movieSeqModel,movieGenreModel,characterMovieSeqModel } = await getSequelizeModels(sequelize)
+          const {characterSeqModel,movieSeqModel,movieGenreSeqModel,characterMovieSeqModel } = await getSequelizeModels(sequelize)
           
 
           console.log("-------------ENffffffffffE:",baseMovie)
 
           const movieModel = buildMovieModel(baseMovie)
           console.log("//////MOVIE MODEL PARA CREAR:",movieModel)
+          const movieGenreModel = buildMovieGenreModel(baseGenero)
+          console.log("//////GENEROOO MODEL PARA CREAR:",movieGenreModel)
+
+          const dbMovieGenre = await movieGenreSeqModel.create(movieGenreModel)
           const dbMovie = await movieSeqModel.create(movieModel);
           const dbCharacter = await characterSeqModel.create(character)
           
-          const result = await characterMovieSeqModel.create({
-            characterId:dbCharacter.id,
-            movieId:dbMovie.id
-          })
+          // const result = await characterMovieSeqModel.create({
+          //   characterId:dbCharacter.id,
+          //   movieId:dbMovie.id
+          // })
+          dbCharacter.addPeliculas(dbMovie)
+
+          const movieGenreInDB = await dbMovieGenre.addMovie(dbMovie)
+          console.log("***AFAFAFAFAFAFAFFAFAA", movieGenreInDB)
+
           const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["peliculas"] });
           console.log("**********resullllCharcterrr", characterInDB)
           const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["personajes"] });
