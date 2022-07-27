@@ -23,42 +23,59 @@ const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
       return {
         addCharacter: async (character) => {
           console.log("-------------ENTRANTEEEEEEE:",character)
-         
           const sequelize = await (await connectSequelize).getInstance()
           const {characterSeqModel,movieSeqModel,movieGenreSeqModel,characterMovieSeqModel } = await getSequelizeModels(sequelize)
           
+          /**
+           * --------------------- SAVE MODELS IN DB -----------------
+           */
+          // GENERO
+          //const movieGenreModel = buildMovieGenreModel(baseGenero)
+         //const dbMovieGenre = await movieGenreSeqModel.create(movieGenreModel)
 
-          console.log("-------------ENffffffffffE:",baseMovie)
+          //MOVIE
+          //const movieModel = buildMovieModel(baseMovie)
+          //const dbMovie = await movieSeqModel.create(movieModel);
 
-          const movieModel = buildMovieModel(baseMovie)
-          console.log("//////MOVIE MODEL PARA CREAR:",movieModel)
-          const movieGenreModel = buildMovieGenreModel(baseGenero)
-          console.log("//////GENEROOO MODEL PARA CREAR:",movieGenreModel)
-
-          const dbMovieGenre = await movieGenreSeqModel.create(movieGenreModel)
-          const dbMovie = await movieSeqModel.create(movieModel);
+          //CHARACTER
           const dbCharacter = await characterSeqModel.create(character)
           
+          /**
+           * ------ 2 WAYS TO ADD MOVIES TO A CHARACTER --------
+           */
+          //option 1
           // const result = await characterMovieSeqModel.create({
           //   characterId:dbCharacter.id,
           //   movieId:dbMovie.id
           // })
-          dbCharacter.addPeliculas(dbMovie)
-
-          const movieGenreInDB = await dbMovieGenre.addMovie(dbMovie)
-          console.log("***AFAFAFAFAFAFAFFAFAA", movieGenreInDB)
-
-          const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["peliculas"] });
-          console.log("**********resullllCharcterrr", characterInDB)
-          const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["personajes"] });
-          console.log("**********resullllMovieeee", movieInDB)
-          //dbCharacter.addMovies()
-    
-        //  characterSeqModel.addMovieSeqModels()
+          //
+          //option 2 
+          //dbCharacter.addPeliculas(dbMovie)
 
 
+          /**
+           * -------- WAY TO ADD MOVIE A UN GENERO ----------------
+           */
+          // const movieGenreInDB = await dbMovieGenre.addMovie(dbMovie)
+          // console.log("***AFAFAFAFAFAFAFFAFAA", movieGenreInDB)
 
-          console.log("-------------db:", dbCharacter)
+          /**
+           * --------- WAY TO READ MOVIES FROM ESPECIFIC CHARACTER --------------
+           * This way we can get movies include in query call
+           */
+          // const characterInDB = await characterSeqModel.findOne({ where: { id:dbCharacter.id },include:["peliculas"] });
+          // console.log("**********resullllCharcterrr", characterInDB)
+         
+         /**
+           * --------- WAY TO READ CHARACTERS FROM ESPECIFIC MOVIE --------------
+           * This way we can get personajes include in query call
+           */
+          // const movieInDB = await movieSeqModel.findOne({ where: { id:dbMovie.id },include:["personajes"] });
+          // console.log("**********resullllMovieeee", movieInDB)
+         
+          /**
+           * ------- WE CONVERT ELEMENT DB TO OUR CUSTOM MODEL ------------------- 
+           */
           const newCharacter = recoverCharacterModel(dbCharacter)
           return newCharacter;
         },
