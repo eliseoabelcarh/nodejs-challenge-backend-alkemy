@@ -214,7 +214,7 @@ let daoElementsSequelize = (function () {
 
 
         //TODO TRAER CON LAS PELICULASSSSS
-       const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } ,include:["movies"]});
+       const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } ,include:["peliculas"]});
         console.log("CCAAeeeeeeeeeeS", movieGenreInDB);
 
 

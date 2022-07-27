@@ -23,7 +23,7 @@ const connectSequelize = require("./connectionSequelize");
      * while all these targets are connected only with this single source.
      * As default ON DELETE to SET NULL and ON UPDATE defaults to CASCADE.
      */
-    movieGenreSeqModel.hasMany(movieSeqModel );
+    movieGenreSeqModel.hasMany(movieSeqModel ,{as:"peliculas"});
     movieSeqModel.belongsTo(movieGenreSeqModel);
 
     /**
