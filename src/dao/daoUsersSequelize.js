@@ -46,7 +46,7 @@ let daoUsersSequelize = (function () {
         let userInDB;
         userInDB = await userSeqModel.findOne({ where: { id } });
         if (!userInDB) {
-          throw crearErrorRecursoNoEncontrado("usuario", idBuscado);
+          throw crearErrorRecursoNoEncontrado("usuario", id);
         }
         console.log("user ennnn:",userInDB)
         const usuario = recoverUserModel(userInDB);

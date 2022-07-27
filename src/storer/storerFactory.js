@@ -2,6 +2,7 @@ const daoFactory = require("../dao/daoFactory");
 const storerNewUser = require("./storerNewUser");
 const storerNewCharacter = require("./storerNewCharacter");
 const storerNewMovie = require("./storerNewMovie");
+const storerNewMovieGenre = require("./storerNewMovieGenre");
 
 const daoUsers = daoFactory.getDao("users");
 
@@ -16,6 +17,9 @@ const storerFactory = {
     }
     if (type === "movie") {
       return storerNewMovie.getInstance(daoElements);
+    }
+    if (type === "movieGenre") {
+      return storerNewMovieGenre.getInstance(daoElements);
     }
   },
 };

@@ -11,25 +11,31 @@ function charactersHandler() {
   /**
    * -------------------------- CHARACTERS ROUTE -------------------------------
    */
-  router.get("/characters", function (req, res, next) {
+  router.get("", function (req, res, next) {
     res.status(200).json("koakka");
   });
-  router.get("/characters/:characterId",async function (req, res, next) {
-    console.log("parammmmssss",req.params)
-    const {characterId} = req.params
-    const cu = useCasesFactory.cuSearchElement()
-    const character = await cu.find({type:"character",field:"id",value:characterId})
-    console.log("charactrerr", character)
-    res.status(200).json({
-      success: true,
-      msg: "You successfully request Character",
-      character: "resultado"
-    });
-  });
-
+  router.get(
+    "/:characterId",
+    wrap(async function (req, res, next) {
+      console.log("parammmmssss", req.params);
+      const { characterId } = req.params;
+      const cu = useCasesFactory.cuSearchElement();
+      const character = await cu.find({
+        type: "character",
+        field: "id",
+        value: characterId,
+      });
+      console.log("charactrerr", character);
+      res.status(200).json({
+        success: true,
+        msg: "You successfully request Character",
+        character: "resultado",
+      });
+    })
+  );
 
   router.post(
-    "/characters",
+    "",
     passport.authenticate("jwt-token", { session: false }),
 
     wrap(async (req, res, next) => {
@@ -41,20 +47,14 @@ function charactersHandler() {
         type: "character",
         value: character,
       });
-      console.log("-----------ANTES DE ENVIAR",newCharacter)
+      console.log("-----------ANTES DE ENVIAR", newCharacter);
       res.status(200).json({
         success: true,
         msg: "You successfully add a new Character",
-        character: newCharacter
+        character: newCharacter,
       });
     })
-    
-
-
   );
-
-
-
 
   /**
    * ------------------------ TESTING ROUTE --------------------------

@@ -7,24 +7,24 @@ const {
 const useCasesFactory = require("../../useCases/useCasesFactory");
 const router = require("express").Router();
 
-function moviesHandler() {
+function movieGenresHandler() {
   /**
-   * -------------------------- /MOVIES ROUTE -------------------------------
+   * -------------------------- /MOVIES GENRES ROUTE -------------------------------
    */
   router.get("", function (req, res, next) {
     res.status(200).json("koakka");
   });
-  router.get("/:movieId",
+  router.get("/:movieGenreId",
   wrap(async function (req, res, next) {
-    console.log("parammmmssss",req.params)
-    const {movieId} = req.params
+    console.log("parammmmGenreeeeessss",req.params)
+    const {movieGenreId} = req.params
     const cu = useCasesFactory.cuSearchElement()
-    const movie = await cu.find({type:"movie",field:"id",value:movieId})
-    console.log("moviesss", movie)
+    const movieGenre = await cu.find({type:"movieGenre",field:"id",value:movieGenreId})
+    console.log("movieGenreee", movieGenre)
     res.status(200).json({
       success: true,
       msg: "You successfully request movie",
-      movie: "resultado"
+      movieGenre: movieGenre
     });
   })
   
@@ -38,19 +38,20 @@ function moviesHandler() {
     passport.authenticate("jwt-token", { session: false }),
 
     wrap(async (req, res, next) => {
-      const movie = req.body;
-      console.log("moviee3e3", req.body);
+        console.log("asooooo----------------------------------------");
+      const movieGenre = req.body;
+      console.log("movieGenree3e3", req.body);
 
       const cu = useCasesFactory.cuSaveElement();
-      const newMovie = await cu.saveElement({
-        type: "movie",
-        value: movie,
+      const newMovieGenre = await cu.saveElement({
+        type: "movieGenre",
+        value: movieGenre,
       });
-      console.log("-----------ANTES DE ENVIAR",newMovie)
+      console.log("-----------ANTES DE ENVIAR",newMovieGenre)
       res.status(200).json({
         success: true,
         msg: "You successfully add a new movie",
-        movie: newMovie
+        movieGenre: newMovieGenre
       });
     })
     
@@ -67,12 +68,12 @@ function moviesHandler() {
   router.get(
     `/test`,// optional: empty
     wrap(async (req, res) => {
-      res.status(200).send("okayEnMoviesTest");
+      res.status(200).send("okayEnMovieGenreTest");
     })
   );
   return router;
 }
-module.exports = { moviesHandler };
+module.exports = { movieGenresHandler };
 
 /**
  * ------------------ EXPRESS ASYNC WRAPPER -------------------

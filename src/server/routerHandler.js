@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { authHandler } = require("./routes/auth");
 const { charactersHandler } = require("./routes/characters");
+const { movieGenresHandler } = require("./routes/movieGenres");
 const { moviesHandler } = require("./routes/movies");
 
 function crearRouterHandler() {
@@ -9,8 +10,10 @@ function crearRouterHandler() {
    * ------------------------ SETTING HANDLE ROUTES --------------------------
    */
   router.use(`/api/auth`, authHandler());
-  router.use(`/api`, charactersHandler());
+  router.use(`/api/characters`, charactersHandler());
   router.use(`/api/movies`, moviesHandler());
+  router.use(`/api/movieGenres`, movieGenresHandler());
+  
   /**
    * ------------------------------ ERROR ROUTE ----------------------------
    */
