@@ -15,9 +15,8 @@ let daoUsersSequelize = (function () {
     
     return {
       addUser: async (user) => {
-        const sequelize = await (await connectSequelize).getInstance()
-        //const userSeqModel =  userSequelizeModel(sequelize);
-        const {userSeqModel} =await  getSequelizeModels(sequelize)
+        const { userSeqModel } = await getSequelizeModels();
+       
         await userSeqModel.sync()
         console.log("en AdduserSequelize", user);
         let userInDB;
@@ -43,9 +42,7 @@ let daoUsersSequelize = (function () {
         return newUser;
       },
       getUserById: async (id) => {
-        const sequelize = await (await connectSequelize).getInstance()
-       // const userSeqModel =  userSequelizeModel(sequelize);
-       const {userSeqModel} =await getSequelizeModels(sequelize)
+        const { userSeqModel } = await getSequelizeModels();
         let userInDB;
         userInDB = await userSeqModel.findOne({ where: { id } });
         if (!userInDB) {
@@ -56,9 +53,7 @@ let daoUsersSequelize = (function () {
         return usuario
       },
       getUserByUsername: async (username) => {
-        const sequelize = await (await connectSequelize).getInstance()
-        //const userSeqModel =  userSequelizeModel(sequelize);
-        const {userSeqModel} = await getSequelizeModels(sequelize)
+        const { userSeqModel } = await getSequelizeModels();
         let userInDB;
         userInDB = await userSeqModel.findOne({ where: { username } });
         if (!userInDB) {

@@ -1,28 +1,23 @@
-const daoFactory = require("../dao/daoFactory")
-const storerNewUser = require("./storerNewUser")
-const storerNewCharacter = require("./storerNewCharacter")
+const daoFactory = require("../dao/daoFactory");
+const storerNewUser = require("./storerNewUser");
+const storerNewCharacter = require("./storerNewCharacter");
+const storerNewMovie = require("./storerNewMovie");
 
-const daoUsers = daoFactory.getDao("users")
-//const daoElements = daoFactory.getDao("elements")
+const daoUsers = daoFactory.getDao("users");
 
 const storerFactory = {
-
-    
-    getInstance: function (type) {
-
-        if (type === 'newUser') {
-            console.log("daooooo new user")
-            return storerNewUser.getInstance(daoUsers)
-        }
-        if (type === 'character') {
-            const daoElements = daoFactory.getDao("elements")
-            console.log("daooooo charatacterrrrrrrrrrrrrrrrrr", daoElements)
-            return storerNewCharacter.getInstance(daoElements)
-        }
-  
- 
+  getInstance: function (type) {
+    const daoElements = daoFactory.getDao("elements");
+    if (type === "newUser") {
+      return storerNewUser.getInstance(daoUsers);
     }
-}
+    if (type === "character") {
+      return storerNewCharacter.getInstance(daoElements);
+    }
+    if (type === "movie") {
+      return storerNewMovie.getInstance(daoElements);
+    }
+  },
+};
 
-
-module.exports = storerFactory
+module.exports = storerFactory;

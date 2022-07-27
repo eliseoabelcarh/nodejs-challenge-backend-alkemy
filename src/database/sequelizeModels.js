@@ -4,8 +4,12 @@ const {movieSequelizeModel} = require("../dao/daoModels/movieSequelizeModel");
 const { userSequelizeModel } = require("../dao/daoModels/userSequelizeModel");
 const {DataTypes} = require("sequelize");
 const { characterMovieSequelizeModel } = require("../dao/daoModels/characterMovieSequelize");
+const connectSequelize = require("./connectionSequelize");
 
- async function getSequelizeModels(sequelize) {
+ async function getSequelizeModels() {
+
+
+   const sequelize = await (await connectSequelize).getInstance()
     //await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 

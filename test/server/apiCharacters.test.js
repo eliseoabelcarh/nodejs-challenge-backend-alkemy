@@ -11,10 +11,9 @@ const genRandValue = (len) => {
     .toString(36)
     .substring(2, len + 2);
 };
-const {baseCharacter, baseMovie} = require("../models/examples");
+const { baseCharacter, baseMovie } = require("../models/examples");
 const { buildCharacterModel } = require("../../src/models/characterModel");
 const { buildMovieModel } = require("../../src/models/movieModel");
-
 
 describe("Server APIs for Character", async () => {
   const emptyObject = {};
@@ -34,7 +33,7 @@ describe("Server APIs for Character", async () => {
       const response = await clienteRest.register(user);
       //const response = await clienteRest.login(user);
       token = response.data.token;
-      console.log("token recibidoo en test::::: ", token)
+      console.log("token recibidoo en test::::: ", token);
     }
   });
 
@@ -44,36 +43,29 @@ describe("Server APIs for Character", async () => {
     }
   });
 
-  it("POST request /addCharacter Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request /addCharacter without movies - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-       //const characterValido = buildCharacterModel(baseCharacter)
-      const response = await clienteRest.addCharacter( token,baseCharacter);
+      const response = await clienteRest.addCharacter(token, baseCharacter);
       console.log("Rspta2:", response.data);
       assert.deepStrictEqual(response.data.success, true);
     }
   });
-  it("POST request /addCharacter without movieIds Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request /addCharacter and Recover with ID generated- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-       //const characterValido = buildCharacterModel(baseCharacter)
-      const response = await clienteRest.addCharacter( token,baseCharacter);
+      const response = await clienteRest.addCharacter(token, baseCharacter);
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
-      const response2 = await clienteRest.getCharacterWithId(token,response.data.character.id)
+      const idCharacterSavedInDB = response.data.character.id
+      const response2 = await clienteRest.getCharacterWithId(token,idCharacterSavedInDB);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
-  it("POST request /addCharacter WITH movie Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request /addMovie and Recover with ID generated- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-       //const characterValido = buildCharacterModel(baseCharacter)
-      const movieModel = buildMovieModel(baseMovie)
-
-      const response = await clienteRest.addCharacter( token,baseCharacter);
+      const response = await clienteRest.addMovie(token, baseMovie);
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
-      const response2 = await clienteRest.getCharacterWithId(token,response.data.character.id)
-      console.log("Rspta2222:", response2.data);
-      assert.deepStrictEqual(response2.data.success, true);
     }
   });
 

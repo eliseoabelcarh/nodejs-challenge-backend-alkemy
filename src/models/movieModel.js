@@ -36,7 +36,7 @@ function validatePersonaje(personaje) {
     throw crearErrorArgumentosInvalidos("Personaje", "required field");
   }
 }
-function validateRequiredFields(data) {
+function validRequiredFields(data) {
   if (!data) {
     throw crearErrorArgumentosInvalidos("empty data", "no arguments provided");
   }
@@ -63,7 +63,7 @@ function validateRequiredFields(data) {
   }
 }
 function recoverMovieModel(data) {
-  validRequiredFields(data);
+validRequiredFields(data);
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
   }
@@ -73,7 +73,7 @@ function recoverMovieModel(data) {
   return new MovieModel(data);
 }
 function buildMovieModel(data) {
-  validateRequiredFields(data)
+  validRequiredFields(data)
   data.id = uuidv4();
   if (!data.personajes) {
     data.personajes = []
