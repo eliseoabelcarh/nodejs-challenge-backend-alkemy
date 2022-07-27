@@ -1,5 +1,6 @@
 const { crearErrorArgumentosInvalidos } = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
+const { recoverBasicMovieModel } = require("./movieModel");
 // How to use: uuidv4(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
 
 class CharacterModel {
@@ -40,13 +41,24 @@ function buildCharacterModel(data) {
     return new CharacterModel(data);
   }
 }
+function recoverBasicViewCharacter(data) {
+  console.log("en recover basic character model")
+  const { imagen, nombre } = data;
+  return { imagen, nombre };
+}
 function recoverCharacterModel(data) {
   validRequiredFields(data);
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
   }
   if (!data.peliculas) {
-    data.peliculas = []
+    data.peliculas = [];
+  } else {
+    const newArray = data.peliculas.map((movieDB) =>
+      recoverBasicMovieModel(movieDB)
+    );
+    data.peliculas = newArray;
+    console.log("peliculallalalalalalass-------", data.peliculas);
   }
   return new CharacterModel(data);
 }
@@ -70,7 +82,12 @@ function validRequiredFields(data) {
     throw crearErrorArgumentosInvalidos("historia", "required field");
   }
 }
+function somesome(){
+  console.log("papapapapapapapappaapappapaappapapapapa")
+}
 module.exports = {
   buildCharacterModel,
   recoverCharacterModel,
+  recoverBasicViewCharacter,
+  somesome
 };

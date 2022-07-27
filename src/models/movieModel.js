@@ -1,19 +1,13 @@
 const { crearErrorArgumentosInvalidos } = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
+
+
 // How to use: uuidv4(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
 const CALIFICACION_MINIMA = 1;
 const CALIFICACION_MAXIMA = 5;
 class MovieModel {
-  constructor({
-    id,
-    imagen,
-    titulo,
-    fechaCreacion,
-    calificacion,
-    personajes,
-  }) {
-    this.id = id,
-    this.imagen = imagen;
+  constructor({ id, imagen, titulo, fechaCreacion, calificacion, personajes }) {
+    (this.id = id), (this.imagen = imagen);
     this.titulo = titulo;
     this.fechaCreacion = fechaCreacion;
     this.calificacion = calificacion;
@@ -62,27 +56,46 @@ function validRequiredFields(data) {
     throw crearErrorArgumentosInvalidos("calificacion", "wrong valuee");
   }
 }
+function recoverBasicMovieModel(data) {
+
+  const { imagen, titulo, fechaCreacion } = data;
+  return { imagen, titulo, fechaCreacion };
+}
 function recoverMovieModel(data) {
-validRequiredFields(data);
+  validRequiredFields(data);
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
   }
   if (!data.personajes) {
-    data.personajes = []
+    data.personajes = [];
+  } 
+  else{
+    console.log("DSFFSdfd99999999999999999999999999999", data)
+    some()
+    // const newArray = data.personajes.map((characterDB) =>
+    // recoverBasicViewCharacter(characterDB)
+    // )
+    // data.personajes = newArray
+    // console.log("personajes::-------", data.personajes);
   }
   return new MovieModel(data);
 }
+function some(){
+  console.log("aloogogogogogogogogogogogogoogogogogogogogogogog")
+}
 function buildMovieModel(data) {
-  validRequiredFields(data)
+  validRequiredFields(data);
   data.id = uuidv4();
   if (!data.personajes) {
-    data.personajes = []
-    return new MovieModel(data)
-  }else{
+    data.personajes = [];
+    return new MovieModel(data);
+  } else {
     return new MovieModel(data);
   }
 }
 
 module.exports = {
-  buildMovieModel,recoverMovieModel
+  buildMovieModel,
+  recoverMovieModel,
+  recoverBasicMovieModel,
 };

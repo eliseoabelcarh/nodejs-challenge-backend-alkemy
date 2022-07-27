@@ -34,10 +34,40 @@ let daoElementsSequelize = (function () {
         /**
          * ------- WE CONVERT ELEMENT DB TO OUR CUSTOM MODEL -------------------
          */
-        
         const result = recoverMovieModel(dbMovie);
         return result;
       },
+      addMovieToCharacter: async ({id,value}) => {
+        const {characterSeqModel ,movieSeqModel } = await getSequelizeModels();
+        const characterInDB = await characterSeqModel.findOne({ where: { id } });
+        console.log("encontrado en DBBB", characterInDB);
+        if (!characterInDB) {
+          throw crearErrorRecursoNoEncontrado("character", id);
+        }
+        const movieInDB = await movieSeqModel.create(value);
+        console.log("nueva mocvie creada: ", movieInDB)
+        await characterInDB.addPeliculas(movieInDB)//returns CharactersMovies Element
+        const characterUpdated = await characterSeqModel.findOne({ where: { id },include:["peliculas"] });
+        console.log("update character:moviesincludes????? ", characterUpdated)
+        const result = recoverCharacterModel(characterUpdated)
+        return result;
+      },
+      addCharacterToMovie: async ({id,value}) => {
+        const {characterSeqModel ,movieSeqModel } = await getSequelizeModels();
+        const movieInDB = await movieSeqModel.findOne({ where: { id } });
+        console.log("encontrado en DBBB", movieInDB);
+        if (!movieInDB) {
+          throw crearErrorRecursoNoEncontrado("movie", id);
+        }
+        const characterInDB = await characterSeqModel.create(value);
+        console.log("nueva characterInDB creada: ", characterInDB)
+        await movieInDB.addPersonajes(characterInDB)//returns CharactersMovies Element
+        const movieUpdated = await movieSeqModel.findOne({ where: { id },include:["personajes"] });
+        console.log("update ------  includes????? ", movieUpdated)
+        const result = recoverMovieModel(movieUpdated)
+        return result;
+      },
+
       addMovieGenre: async (movieGenre) => {
         console.log("-------------ENTRANTEEEEEEE:", movieGenre);
         const { movieGenreSeqModel } = await getSequelizeModels();
@@ -45,7 +75,6 @@ let daoElementsSequelize = (function () {
         /**
          * ------- WE CONVERT ELEMENT DB TO OUR CUSTOM MODEL -------------------
          */
-  
         const result = recoverMovieGenreModel(dbMovieGenre);
         return result;
       },
@@ -216,6 +245,7 @@ let daoElementsSequelize = (function () {
         //TODO TRAER CON LAS PELICULASSSSS
        const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } ,include:["peliculas"]});
         console.log("CCAAeeeeeeeeeeS", movieGenreInDB);
+        //chekar si ahora es addPeliculas()
 
 
 

@@ -43,14 +43,14 @@ describe("Server APIs for Character", async () => {
     }
   });
 
-  it("POST request /addCharacter without movies - Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request to create Character without movies - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addCharacter(token, baseCharacter);
       console.log("Rspta2:", response.data);
       assert.deepStrictEqual(response.data.success, true);
     }
   });
-  it("POST request /addCharacter and Recover with ID generated- Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request to create Character and Recover with ID generated- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addCharacter(token, baseCharacter);
       console.log("Rspta111:", response.data);
@@ -61,7 +61,19 @@ describe("Server APIs for Character", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
+  it("POST request to add Movie to Character - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+      // POST /characters/:idCharacter/movies   body = pelicula
+      const response2 = await clienteRest.addMovieToCharacter(token,idCharacterSavedInDB,baseMovie);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
 
+    }
+  });
 
 });
 

@@ -33,7 +33,15 @@ function crearclienteREST(port) {
         getMovieGenreWithId: async (bearerJwtToken, movieGenreId) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movieGenres/${movieGenreId}`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },  
-        
+
+        addMovieToCharacter: async (bearerJwtToken,characterId, movie) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters/${characterId}/movies`, method: 'post', data: movie, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        addCharacterToMovie: async (bearerJwtToken,movieId, character) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies/${movieId}/characters `, method: 'post', data: character, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+
+       
        
        
     }
