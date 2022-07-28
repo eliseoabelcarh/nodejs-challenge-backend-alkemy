@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 class MovieGenreModel {
   constructor({ id, nombre, imagen, peliculas }) {
     this.id = id,
-    this.nombre = nombre;
+      this.nombre = nombre;
     this.imagen = imagen;
     this.peliculas = peliculas;
   }
@@ -37,6 +37,12 @@ function buildMovieGenreModel(data) {
     return new MovieGenreModel(data);
   }
 }
+
+function getMyMoviesPretty(data) {
+  const { id, imagen, titulo, fechaCreacion } = data;
+  return { id, imagen, titulo, fechaCreacion };
+}
+
 function recoverMovieGenreModel(data) {
   validRequiredFields(data);
   if (!data.id) {
@@ -44,9 +50,17 @@ function recoverMovieGenreModel(data) {
   }
   if (!data.peliculas) {
     data.peliculas = []
+  } else {
+    const newArray = data.peliculas.map((movieDB) =>
+      getMyMoviesPretty(movieDB)
+    );
+    data.peliculas = newArray;
+    console.log("peliaasass-------", data.peliculas);
   }
   return new MovieGenreModel(data);
 }
+
+
 
 function validRequiredFields(data) {
   if (!data) {
@@ -61,5 +75,5 @@ function validRequiredFields(data) {
 }
 
 module.exports = {
-  buildMovieGenreModel,recoverMovieGenreModel
+  buildMovieGenreModel, recoverMovieGenreModel
 };

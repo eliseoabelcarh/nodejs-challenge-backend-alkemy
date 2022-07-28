@@ -56,11 +56,7 @@ function validRequiredFields(data) {
     throw crearErrorArgumentosInvalidos("calificacion", "wrong valuee");
   }
 }
-function recoverBasicMovieModel(data) {
 
-  const { imagen, titulo, fechaCreacion } = data;
-  return { imagen, titulo, fechaCreacion };
-}
 function recoverMovieModel(data) {
   validRequiredFields(data);
   if (!data.id) {
@@ -68,21 +64,25 @@ function recoverMovieModel(data) {
   }
   if (!data.personajes) {
     data.personajes = [];
-  } 
-  else{
+  }
+
+  else {
     console.log("DSFFSdfd99999999999999999999999999999", data)
-    some()
-    // const newArray = data.personajes.map((characterDB) =>
-    // recoverBasicViewCharacter(characterDB)
-    // )
-    // data.personajes = newArray
-    // console.log("personajes::-------", data.personajes);
+
+   const newArray = data.personajes.map((characterDB) =>
+    getMyCharactersPretty(characterDB)
+    )
+    data.personajes = newArray
+    console.log("personajes::-------", data.personajes);
   }
   return new MovieModel(data);
 }
-function some(){
-  console.log("aloogogogogogogogogogogogogoogogogogogogogogogog")
+
+function getMyCharactersPretty(characterDB) {
+  const {id, nombre,imagen} = characterDB
+  return {id, nombre,imagen}
 }
+
 function buildMovieModel(data) {
   validRequiredFields(data);
   data.id = uuidv4();
@@ -94,8 +94,8 @@ function buildMovieModel(data) {
   }
 }
 
+
 module.exports = {
   buildMovieModel,
-  recoverMovieModel,
-  recoverBasicMovieModel,
+  recoverMovieModel
 };

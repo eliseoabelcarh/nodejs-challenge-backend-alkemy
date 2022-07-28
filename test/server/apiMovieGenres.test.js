@@ -11,7 +11,7 @@ const genRandValue = (len) => {
     .toString(36)
     .substring(2, len + 2);
 };
-const {  baseGenero } = require("../models/examples");
+const {  baseGenero, baseMovie } = require("../models/examples");
 
 const { buildMovieGenreModel } = require("../../src/models/movieGenreModel");
 
@@ -59,6 +59,19 @@ describe("Server APIs for Movie Genres", async () => {
       const response2 = await clienteRest.getMovieGenreWithId(token,idMovieGenreSavedInDB);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("POST request to add Movie to a MovieGenre - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovieGenre(token, baseGenero);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieGenreSavedInDB = response.data.movieGenre.id
+      // POST /movieGenres/:idMovieGenre/movies   body = pelicula
+      const response2 = await clienteRest.addMovieToMovieGenre(token,idMovieGenreSavedInDB,baseMovie);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+
     }
   });
 

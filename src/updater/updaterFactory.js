@@ -2,6 +2,7 @@ const daoFactory = require("../dao/daoFactory");
 const { crearErrorEnModulo } = require("../errors/errorsHandler");
 const updaterCharacter = require("./updaterCharacter");
 const updaterMovie = require("./updaterMovie");
+const updaterMovieGenre = require("./updaterMovieGenre");
 const daoElements = daoFactory.getDao("elements");
 
 
@@ -13,9 +14,9 @@ const updaterFactory = {
     if (type === "movie") {
       return updaterMovie.getInstance(daoElements);
     }
-    // if (type === "movieGenre") {
-    //   return updaterMovieGenre.getInstance(daoElements);
-    // }
+    if (type === "movieGenre") {
+      return updaterMovieGenre.getInstance(daoElements);
+    }
     else{
       return crearErrorEnModulo("updaterFactory")
     }

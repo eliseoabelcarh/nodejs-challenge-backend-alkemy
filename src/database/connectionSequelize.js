@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 const { crearErrorDeBaseDeDatos } = require("../errors/errorsHandler");
-
+require("dotenv").config();
 
 
 
@@ -12,7 +12,7 @@ const connectSequelize = (async function () {
       const database = "postgres";
       //option1: "postgres" - option2: "abel"
       const userDB = "postgres";
-      const passwordDB = "alpaca2462";
+      const passwordDB = process.env.PASSWORD_DB_POSTGRES;
       //Define database connection params
       const sequelize = new Sequelize(database, userDB, passwordDB, {
         host: "localhost",

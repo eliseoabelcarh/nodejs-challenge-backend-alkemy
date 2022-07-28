@@ -59,7 +59,29 @@ function movieGenresHandler() {
 
   );
 
-
+  router.post(
+    "/:movieGenreId/movies",
+    wrap(async function (req, res, next) {
+      console.log("paprmamamammammsssssso", req.params);
+      const { movieGenreId } = req.params;
+      const movie = req.body
+      console.log("bodyEnviadooo", req.body);
+      const cu = useCasesFactory.cuUpdateElement()
+      const movieGenreUpdated = await cu.update({
+        type: "movieGenre",
+        id: movieGenreId,
+        action: "add",
+        field: "movie",
+        value: movie,
+      });
+      console.log("movieerreeGenreee--Atualizado", movieGenreUpdated);
+      res.status(200).json({
+        success: true,
+        msg: "You successfully add movie to a MovieGenre",
+        movie: movieGenreUpdated,
+      });
+    })
+  );
 
 
   /**

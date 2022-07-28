@@ -1,6 +1,5 @@
 const { crearErrorArgumentosInvalidos } = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
-const { recoverBasicMovieModel } = require("./movieModel");
 // How to use: uuidv4(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
 
 class CharacterModel {
@@ -41,11 +40,16 @@ function buildCharacterModel(data) {
     return new CharacterModel(data);
   }
 }
-function recoverBasicViewCharacter(data) {
-  console.log("en recover basic character model")
-  const { imagen, nombre } = data;
-  return { imagen, nombre };
+
+
+
+
+
+function getMyMoviesPretty(data) {
+  const { id, imagen, titulo, fechaCreacion } = data;
+  return { id, imagen, titulo, fechaCreacion };
 }
+
 function recoverCharacterModel(data) {
   validRequiredFields(data);
   if (!data.id) {
@@ -53,15 +57,19 @@ function recoverCharacterModel(data) {
   }
   if (!data.peliculas) {
     data.peliculas = [];
-  } else {
+  } 
+  else {
     const newArray = data.peliculas.map((movieDB) =>
-      recoverBasicMovieModel(movieDB)
+      getMyMoviesPretty(movieDB)
     );
     data.peliculas = newArray;
     console.log("peliculallalalalalalass-------", data.peliculas);
   }
+
   return new CharacterModel(data);
 }
+
+
 function validRequiredFields(data) {
   if (!data || Object.keys(data).length === 0) {
     throw crearErrorArgumentosInvalidos("empty data", "no arguments provided");
@@ -82,12 +90,8 @@ function validRequiredFields(data) {
     throw crearErrorArgumentosInvalidos("historia", "required field");
   }
 }
-function somesome(){
-  console.log("papapapapapapapappaapappapaappapapapapa")
-}
+
 module.exports = {
   buildCharacterModel,
-  recoverCharacterModel,
-  recoverBasicViewCharacter,
-  somesome
+  recoverCharacterModel
 };

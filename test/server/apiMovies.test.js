@@ -61,7 +61,7 @@ describe("Server APIs for Movies", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
-  it.only("POST request to add Character to a Movie - Success on (PROTECTED JWT ROUTE)", async () => {
+  it("POST request to add Character to a Movie - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovie(token, baseMovie);
       console.log("Rspta111:", response.data);

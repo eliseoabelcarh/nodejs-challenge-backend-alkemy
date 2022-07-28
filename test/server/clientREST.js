@@ -40,6 +40,10 @@ function crearclienteREST(port) {
         addCharacterToMovie: async (bearerJwtToken,movieId, character) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies/${movieId}/characters `, method: 'post', data: character, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
+        addMovieToMovieGenre: async (bearerJwtToken,movieGenreId, movie) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movieGenres/${movieGenreId}/movies`, method: 'post', data: movie, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        
 
        
        

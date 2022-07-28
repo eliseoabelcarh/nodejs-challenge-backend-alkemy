@@ -37,6 +37,23 @@ let daoElementsSequelize = (function () {
         const result = recoverMovieModel(dbMovie);
         return result;
       },
+      addMovieToMovieGenre: async ({id,value}) => {
+        const {movieSeqModel ,movieGenreSeqModel } = await getSequelizeModels();
+        const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } });
+        console.log("encontrado en DBBB", movieGenreInDB);
+        if (!movieGenreInDB) {
+          throw crearErrorRecursoNoEncontrado("movieGenre", id);
+        }
+        const movieInDB = await movieSeqModel.create(value);
+        console.log("nueva mocvie creada: ", movieInDB)
+        await movieGenreInDB.addPeliculas(movieInDB)//returns movieGenresMovies Element
+        const movieGenreUpdated = await movieGenreSeqModel.findOne({ where: { id },include:["peliculas"] });
+        console.log("update movieGenre:moviesincludes////*****????? ", movieGenreUpdated)
+        const result = recoverMovieGenreModel(movieGenreUpdated)
+        return result;
+      },
+
+
       addMovieToCharacter: async ({id,value}) => {
         const {characterSeqModel ,movieSeqModel } = await getSequelizeModels();
         const characterInDB = await characterSeqModel.findOne({ where: { id } });
