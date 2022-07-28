@@ -9,15 +9,19 @@ const router = require("express").Router();
 
 function charactersHandler() {
   /**
-   * -------------------------- CHARACTERS ROUTE -------------------------------
+   * --------------------------GET /characters -------------------------------
    */
   router.get("", function (req, res, next) {
     res.status(200).json("koakka");
   });
+   /**
+   * -------------------------- GET /characters/:characterId -------------------------------
+   * Returns the searched element by ID
+   */
   router.get(
     "/:characterId",
+    passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("parammmmssss", req.params);
       const { characterId } = req.params;
       const cu = useCasesFactory.cuSearchElement();
       const character = await cu.find({
@@ -25,7 +29,6 @@ function charactersHandler() {
         field: "id",
         value: characterId,
       });
-      console.log("charactrerr", character);
       res.status(200).json({
         success: true,
         msg: "You successfully request Character",
@@ -33,14 +36,15 @@ function charactersHandler() {
       });
     })
   );
-
+ /**
+     * --------------------------POST /characters -------------------------------
+     * Creates a character and store it in database 
+     */
   router.post(
     "",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async (req, res, next) => {
       const character = req.body;
-      console.log("charactere3e3", req.body);
-
       const cu = useCasesFactory.cuSaveElement();
       const newCharacter = await cu.saveElement({
         type: "character",
@@ -54,27 +58,30 @@ function charactersHandler() {
       });
     })
   );
-
+/**
+     * --------------------------POST /characters/:characterId/movies ---------------------
+     * Creates a new movie and asociate to a especific character Id 
+     */
   router.post(
     "/:characterId/movies",
+    passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
       console.log("paraMMMMMMM", req.params);
       const { characterId } = req.params;
       const movie = req.body
       console.log("bodyEnviadooo", req.body);
       const cu = useCasesFactory.cuUpdateElement()
-      const characterUpdated = await cu.update({
+      const movieAdded = await cu.update({
         type: "character",
         id: characterId,
         action: "add",
         field: "movie",
         value: movie,
       });
-      console.log("charactrerrAtualizado", characterUpdated);
       res.status(200).json({
         success: true,
         msg: "You successfully add Movie to a Character",
-        character: characterUpdated,
+        movie: movieAdded,
       });
     })
   );

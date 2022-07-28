@@ -13,7 +13,6 @@ const genRandValue = (len) => {
 };
 const {  baseGenero, baseMovie } = require("../models/examples");
 
-const { buildMovieGenreModel } = require("../../src/models/movieGenreModel");
 
 describe("Server APIs for Movie Genres", async () => {
   const emptyObject = {};
@@ -71,7 +70,6 @@ describe("Server APIs for Movie Genres", async () => {
       const response2 = await clienteRest.addMovieToMovieGenre(token,idMovieGenreSavedInDB,baseMovie);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
-
     }
   });
 

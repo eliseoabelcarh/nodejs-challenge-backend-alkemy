@@ -45,11 +45,9 @@ let daoElementsSequelize = (function () {
           throw crearErrorRecursoNoEncontrado("movieGenre", id);
         }
         const movieInDB = await movieSeqModel.create(value);
-        console.log("nueva mocvie creada: ", movieInDB)
         await movieGenreInDB.addPeliculas(movieInDB)//returns movieGenresMovies Element
-        const movieGenreUpdated = await movieGenreSeqModel.findOne({ where: { id },include:["peliculas"] });
-        console.log("update movieGenre:moviesincludes////*****????? ", movieGenreUpdated)
-        const result = recoverMovieGenreModel(movieGenreUpdated)
+        const movieUpdated = await movieSeqModel.findOne({ where: { id:movieInDB.id },include:["personajes"] });
+        const result = recoverMovieModel(movieUpdated)
         return result;
       },
 
@@ -57,16 +55,13 @@ let daoElementsSequelize = (function () {
       addMovieToCharacter: async ({id,value}) => {
         const {characterSeqModel ,movieSeqModel } = await getSequelizeModels();
         const characterInDB = await characterSeqModel.findOne({ where: { id } });
-        console.log("encontrado en DBBB", characterInDB);
         if (!characterInDB) {
           throw crearErrorRecursoNoEncontrado("character", id);
         }
         const movieInDB = await movieSeqModel.create(value);
-        console.log("nueva mocvie creada: ", movieInDB)
         await characterInDB.addPeliculas(movieInDB)//returns CharactersMovies Element
-        const characterUpdated = await characterSeqModel.findOne({ where: { id },include:["peliculas"] });
-        console.log("update character:moviesincludes????? ", characterUpdated)
-        const result = recoverCharacterModel(characterUpdated)
+        const movieUpdated = await movieSeqModel.findOne({ where: { id:movieInDB.id },include:["personajes"] });
+        const result = recoverMovieModel(movieUpdated)
         return result;
       },
       addCharacterToMovie: async ({id,value}) => {
@@ -79,9 +74,11 @@ let daoElementsSequelize = (function () {
         const characterInDB = await characterSeqModel.create(value);
         console.log("nueva characterInDB creada: ", characterInDB)
         await movieInDB.addPersonajes(characterInDB)//returns CharactersMovies Element
-        const movieUpdated = await movieSeqModel.findOne({ where: { id },include:["personajes"] });
-        console.log("update ------  includes????? ", movieUpdated)
-        const result = recoverMovieModel(movieUpdated)
+        //const movieUpdated = await movieSeqModel.findOne({ where: { id },include:["personajes"] });
+        const characterUpdated = await characterSeqModel.findOne({ where: { id:characterInDB.id },include:["peliculas"] });
+        const result = recoverCharacterModel(characterUpdated)
+        console.log("upd includes????? ", result)
+        //const result = recoverMovieModel(movieUpdated)
         return result;
       },
 

@@ -9,45 +9,49 @@ const router = require("express").Router();
 
 function moviesHandler() {
   /**
-   * -------------------------- /MOVIES ROUTE -------------------------------
+   * --------------------------GET /movies -------------------------------
+   * TODO TODO TODO
    */
   router.get("", function (req, res, next) {
-    res.status(200).json("koakka");
+    res.status(200).json("ok");
   });
+
+  /**
+   * -------------------------- GET /movies/:movieId -------------------------------
+   * Returns the searched element by ID
+   */
   router.get(
     "/:movieId",
+    passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("parammmmssss", req.params);
       const { movieId } = req.params;
       const cu = useCasesFactory.cuSearchElement();
-      const movie = await cu.find({
+      const movieInDB = await cu.find({
         type: "movie",
         field: "id",
         value: movieId,
       });
-      console.log("moviesss", movie);
       res.status(200).json({
         success: true,
-        msg: "You successfully request movie",
-        movie: "resultado",
+        msg: "You successfully request movie by Id",
+        movie: movieInDB,
       });
     })
   );
-
+  /**
+     * --------------------------POST /movies -------------------------------
+     * Creates a movie and store it in database 
+     */
   router.post(
     "",
     passport.authenticate("jwt-token", { session: false }),
-
     wrap(async (req, res, next) => {
       const movie = req.body;
-      console.log("moviee3e3", req.body);
-
       const cu = useCasesFactory.cuSaveElement();
       const newMovie = await cu.saveElement({
         type: "movie",
         value: movie,
       });
-      console.log("-----------ANTES DE ENVIAR", newMovie);
       res.status(200).json({
         success: true,
         msg: "You successfully add a new movie",
@@ -55,30 +59,55 @@ function moviesHandler() {
       });
     })
   );
-
+  /**
+       * --------------------------POST /movies/:movieId/characters ---------------------
+       * Creates a new character and asociate to a especific movie Id 
+       */
   router.post(
     "/:movieId/characters",
+    passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
       console.log("paraMMMMMMMooooo", req.params);
       const { movieId } = req.params;
       const character = req.body
       console.log("bodyEnviadooo", req.body);
       const cu = useCasesFactory.cuUpdateElement()
-      const movieUpdated = await cu.update({
+      const characterAdded = await cu.update({
         type: "movie",
         id: movieId,
         action: "add",
         field: "character",
         value: character,
       });
-      console.log("movieerreeAtualizado", movieUpdated);
+      console.log("ACCCACAÑSSSLSLSLLSLS", characterAdded);
       res.status(200).json({
         success: true,
         msg: "You successfully add character to a Movie",
-        movie: movieUpdated,
+        character: characterAdded,
       });
     })
   );
+
+  /**
+   * --------------------------GET /movies/:movieId/characters?characterId=xxxx -------------------------------
+   * Remove Character From Especific Movie (Id was provided)
+   */
+  router.delete("/:movieId/characters", 
+  passport.authenticate("jwt-token", { session: false }),
+  wrap(async function (req, res, next) {
+    console.log("paramsss", req.params)
+    console.log("query", req.query)
+    const {movieId} = req.params
+    const {characterId} = req.query
+
+    res.status(200).json({
+      success: true,
+      msg: "You successfully remove character from Movie",
+      movie: "movieUpdated",
+    });
+  }));
+
+
   /**
    * ------------------------ TESTING ROUTE --------------------------
    */
@@ -98,5 +127,5 @@ module.exports = { moviesHandler };
  */
 let wrap =
   (fn) =>
-  (...args) =>
-    fn(...args).catch(args[2]);
+    (...args) =>
+      fn(...args).catch(args[2]);
