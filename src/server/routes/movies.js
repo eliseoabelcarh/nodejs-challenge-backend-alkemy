@@ -70,7 +70,7 @@ function moviesHandler() {
       console.log("paraMMMMMMMooooo", req.params);
       const { movieId } = req.params;
       const character = req.body
-      console.log("bodyEnviadooo", req.body);
+
       const cu = useCasesFactory.cuUpdateElement()
       const characterAdded = await cu.update({
         type: "movie",
@@ -79,7 +79,7 @@ function moviesHandler() {
         field: "character",
         value: character,
       });
-      console.log("ACCCACAÑSSSLSLSLLSLS", characterAdded);
+
       res.status(200).json({
         success: true,
         msg: "You successfully add character to a Movie",
@@ -89,23 +89,30 @@ function moviesHandler() {
   );
 
   /**
-   * --------------------------GET /movies/:movieId/characters?characterId=xxxx -------------------------------
+   * --------------------------DELETE /movies/:movieId/characters?characterId=xxxx -------------------------------
    * Remove Character From Especific Movie (Id was provided)
    */
-  router.delete("/:movieId/characters", 
-  passport.authenticate("jwt-token", { session: false }),
-  wrap(async function (req, res, next) {
-    console.log("paramsss", req.params)
-    console.log("query", req.query)
-    const {movieId} = req.params
-    const {characterId} = req.query
-
-    res.status(200).json({
-      success: true,
-      msg: "You successfully remove character from Movie",
-      movie: "movieUpdated",
-    });
-  }));
+  router.delete("/:movieId/characters",
+    passport.authenticate("jwt-token", { session: false }),
+    wrap(async function (req, res, next) {
+      console.log("paramsss", req.params)
+      console.log("query", req.query)
+      const { movieId } = req.params
+      const { characterId } = req.query
+      const cu = useCasesFactory.cuUpdateElement()
+      const movieUpdated = await cu.update({
+        type: "movie",
+        id: movieId,
+        action: "remove",
+        field: "character",
+        value: characterId,
+      });
+      res.status(200).json({
+        success: true,
+        msg: "You successfully remove character from Movie",
+        movie: movieUpdated,
+      });
+    }));
 
 
   /**

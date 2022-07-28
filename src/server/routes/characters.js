@@ -85,7 +85,31 @@ function charactersHandler() {
       });
     })
   );
-
+ /**
+   * --------------------------DELETE /characters/:characterId/movies?movieId=xxxx -------------------------------
+   * Remove Movie From Especific Character (Id was provided)
+   */
+  router.delete("/:characterId/movies",
+    passport.authenticate("jwt-token", { session: false }),
+    wrap(async function (req, res, next) {
+      console.log("paramsss", req.params)
+      console.log("query", req.query)
+      const { characterId } = req.params
+      const { movieId } = req.query
+      const cu = useCasesFactory.cuUpdateElement()
+      const characterUpdated = await cu.update({
+        type: "character",
+        id: characterId,
+        action: "remove",
+        field: "movie",
+        value: movieId,
+      });
+      res.status(200).json({
+        success: true,
+        msg: "You successfully remove character from Movie",
+        character: characterUpdated,
+      });
+    }));
   /**
    * ------------------------ TESTING ROUTE --------------------------
    */

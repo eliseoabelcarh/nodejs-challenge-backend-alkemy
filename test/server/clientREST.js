@@ -46,8 +46,13 @@ function crearclienteREST(port) {
         removeCharacterFromMovie: async (bearerJwtToken,parentID,elementToRemoveID) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies/${parentID}/characters?characterId=${elementToRemoveID}`, method: 'delete', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
-
-       
+        removeMovieFromCharacter: async (bearerJwtToken,parentID,elementToRemoveID) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters/${parentID}/movies?movieId=${elementToRemoveID}`, method: 'delete', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        removeMovieFromMovieGenre: async (bearerJwtToken,parentID,elementToRemoveID) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movieGenres/${parentID}/movies?movieId=${elementToRemoveID}`, method: 'delete', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        
        
     }
 }

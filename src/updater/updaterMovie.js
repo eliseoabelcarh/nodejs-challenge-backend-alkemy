@@ -12,6 +12,10 @@ const updaterMovie = (function () {
             const characterModel = buildCharacterModel(value)
             return await dao.addCharacterToMovie({id,value:characterModel});
           }
+          if (action === "remove" && field === "character") {
+            //id = MovieID -- value = characterID
+            return await dao.removeCharacterFromMovie({id,value});
+          }
           else{
             throw crearErrorEnModulo("updater: action or field invalid")
           }

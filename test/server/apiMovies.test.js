@@ -56,7 +56,7 @@ describe("Server APIs for Movies", async () => {
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idMovieSavedInDB = response.data.movie.id
-      const response2 = await clienteRest.getMovieWithId(token,idMovieSavedInDB);
+      const response2 = await clienteRest.getMovieWithId(token, idMovieSavedInDB);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
     }
@@ -68,29 +68,34 @@ describe("Server APIs for Movies", async () => {
       assert.deepStrictEqual(response.data.success, true);
       const idMovieSavedInDB = response.data.movie.id
       // POST /movies/:idMovie/characters   body = personaje
-      const response2 = await clienteRest.addCharacterToMovie(token,idMovieSavedInDB,baseCharacter);
+      const response2 = await clienteRest.addCharacterToMovie(token, idMovieSavedInDB, baseCharacter);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
-  it("DELETE request to delete Character from Movie - Success on (PROTECTED JWT ROUTE)", async () => {
+
+  it("DELETE request to remove Character from Movie - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovie(token, baseMovie);
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
+
       const idMovieSavedInDB = response.data.movie.id
+
       // POST /movies/:idMovie/characters   body = personaje
-      const response2 = await clienteRest.addCharacterToMovie(token,idMovieSavedInDB,baseCharacter);
-      const characterCreatedInDB = response2.data.character
-      console.log("Rspta2222:", characterCreatedInDB);
+      const response2 = await clienteRest.addCharacterToMovie(token, idMovieSavedInDB, baseCharacter);
+      console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
+
+      const characterCreatedInDB = response2.data.character
+
       const parentID = idMovieSavedInDB
       const elementToRemoveID = characterCreatedInDB.id
-      const response3 = await clienteRest.removeCharacterFromMovie(token,parentID,elementToRemoveID);
+
+      //   DELETE /movies/:movieId/characters?characterId=xxxx
+      const response3 = await clienteRest.removeCharacterFromMovie(token, parentID, elementToRemoveID);
       console.log("Rspta33333:", response3.data);
       assert.deepStrictEqual(response3.data.success, true);
-
-
     }
   });
 

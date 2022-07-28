@@ -11,7 +11,7 @@ const genRandValue = (len) => {
     .toString(36)
     .substring(2, len + 2);
 };
-const {  baseGenero, baseMovie } = require("../models/examples");
+const { baseGenero, baseMovie } = require("../models/examples");
 
 
 describe("Server APIs for Movie Genres", async () => {
@@ -55,7 +55,7 @@ describe("Server APIs for Movie Genres", async () => {
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idMovieGenreSavedInDB = response.data.movieGenre.id
-      const response2 = await clienteRest.getMovieGenreWithId(token,idMovieGenreSavedInDB);
+      const response2 = await clienteRest.getMovieGenreWithId(token, idMovieGenreSavedInDB);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
     }
@@ -65,11 +65,37 @@ describe("Server APIs for Movie Genres", async () => {
       const response = await clienteRest.addMovieGenre(token, baseGenero);
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
+
       const idMovieGenreSavedInDB = response.data.movieGenre.id
+
       // POST /movieGenres/:idMovieGenre/movies   body = pelicula
-      const response2 = await clienteRest.addMovieToMovieGenre(token,idMovieGenreSavedInDB,baseMovie);
+      const response2 = await clienteRest.addMovieToMovieGenre(token, idMovieGenreSavedInDB, baseMovie);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("DELETE request to remove Movie from MovieGenre - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovieGenre(token, baseGenero);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+
+      const idMovieGenreSavedInDB = response.data.movieGenre.id
+
+      // POST /movieGenres/:idMovieGenre/movies   body = pelicula
+      const response2 = await clienteRest.addMovieToMovieGenre(token, idMovieGenreSavedInDB, baseMovie);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+
+      const movieCreatedInDB = response2.data.movie
+
+      const parentID = idMovieGenreSavedInDB
+      const elementToRemoveID = movieCreatedInDB.id
+
+      //   DELETE /movieGenres/:movieGenreId/movies?movieId=xxxx
+      const response3 = await clienteRest.removeMovieFromMovieGenre(token, parentID, elementToRemoveID);
+      console.log("Rspta33333:", response3.data);
+      assert.deepStrictEqual(response3.data.success, true);
     }
   });
 

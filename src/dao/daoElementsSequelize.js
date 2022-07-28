@@ -37,8 +37,8 @@ let daoElementsSequelize = (function () {
         const result = recoverMovieModel(dbMovie);
         return result;
       },
-      addMovieToMovieGenre: async ({id,value}) => {
-        const {movieSeqModel ,movieGenreSeqModel } = await getSequelizeModels();
+      addMovieToMovieGenre: async ({ id, value }) => {
+        const { movieSeqModel, movieGenreSeqModel } = await getSequelizeModels();
         const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } });
         console.log("encontrado en DBBB", movieGenreInDB);
         if (!movieGenreInDB) {
@@ -46,26 +46,26 @@ let daoElementsSequelize = (function () {
         }
         const movieInDB = await movieSeqModel.create(value);
         await movieGenreInDB.addPeliculas(movieInDB)//returns movieGenresMovies Element
-        const movieUpdated = await movieSeqModel.findOne({ where: { id:movieInDB.id },include:["personajes"] });
+        const movieUpdated = await movieSeqModel.findOne({ where: { id: movieInDB.id }, include: ["personajes"] });
         const result = recoverMovieModel(movieUpdated)
         return result;
       },
 
 
-      addMovieToCharacter: async ({id,value}) => {
-        const {characterSeqModel ,movieSeqModel } = await getSequelizeModels();
+      addMovieToCharacter: async ({ id, value }) => {
+        const { characterSeqModel, movieSeqModel } = await getSequelizeModels();
         const characterInDB = await characterSeqModel.findOne({ where: { id } });
         if (!characterInDB) {
           throw crearErrorRecursoNoEncontrado("character", id);
         }
         const movieInDB = await movieSeqModel.create(value);
         await characterInDB.addPeliculas(movieInDB)//returns CharactersMovies Element
-        const movieUpdated = await movieSeqModel.findOne({ where: { id:movieInDB.id },include:["personajes"] });
+        const movieUpdated = await movieSeqModel.findOne({ where: { id: movieInDB.id }, include: ["personajes"] });
         const result = recoverMovieModel(movieUpdated)
         return result;
       },
-      addCharacterToMovie: async ({id,value}) => {
-        const {characterSeqModel ,movieSeqModel } = await getSequelizeModels();
+      addCharacterToMovie: async ({ id, value }) => {
+        const { characterSeqModel, movieSeqModel } = await getSequelizeModels();
         const movieInDB = await movieSeqModel.findOne({ where: { id } });
         console.log("encontrado en DBBB", movieInDB);
         if (!movieInDB) {
@@ -75,12 +75,70 @@ let daoElementsSequelize = (function () {
         console.log("nueva characterInDB creada: ", characterInDB)
         await movieInDB.addPersonajes(characterInDB)//returns CharactersMovies Element
         //const movieUpdated = await movieSeqModel.findOne({ where: { id },include:["personajes"] });
-        const characterUpdated = await characterSeqModel.findOne({ where: { id:characterInDB.id },include:["peliculas"] });
+        const characterUpdated = await characterSeqModel.findOne({ where: { id: characterInDB.id }, include: ["peliculas"] });
         const result = recoverCharacterModel(characterUpdated)
         console.log("upd includes????? ", result)
         //const result = recoverMovieModel(movieUpdated)
         return result;
       },
+
+      removeCharacterFromMovie: async ({ id, value }) => {
+        const { characterSeqModel, movieSeqModel } = await getSequelizeModels();
+        const movieInDB = await movieSeqModel.findOne({ where: { id } });
+        if (!movieInDB) {
+          throw crearErrorRecursoNoEncontrado("movie", id);
+        }
+        const characterInDB = await characterSeqModel.findOne({ where: { id: value } });
+        if (!characterInDB) {
+          throw crearErrorRecursoNoEncontrado("character", id);
+        }
+        const resultante = await movieInDB.removePersonajes(characterInDB)
+        console.log("resultantee-e--e-e-e-e--e-", resultante)
+        const movieUpdated = await movieSeqModel.findOne({ where: { id: movieInDB.id }, include: ["personajes"] });
+        const result = recoverMovieModel(movieUpdated)
+        return result;
+      },
+      removeMovieFromMovieGenre: async ({ id, value }) => {
+        const { movieSeqModel, movieGenreSeqModel } = await getSequelizeModels();
+
+        const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } });
+        if (!movieGenreInDB) {
+          throw crearErrorRecursoNoEncontrado("movieGenre", id);
+        }
+
+        const movieInDB = await movieSeqModel.findOne({ where: { id: value } });
+        if (!movieInDB) {
+          throw crearErrorRecursoNoEncontrado("movie", id);
+        }
+
+        const resultante = await movieGenreInDB.removePeliculas(movieInDB)//returns 1 if success
+        console.log("resultantee-e--e-e-e-e--e-", resultante)
+
+        const movieGenreUpdated = await movieGenreSeqModel.findOne({ where: { id:movieGenreInDB.id } , include: ["peliculas"]});
+        const result = recoverMovieGenreModel(movieGenreUpdated)
+        return result;
+      },
+
+      removeMovieFromCharacter: async ({ id, value }) => {
+        const { characterSeqModel, movieSeqModel } = await getSequelizeModels();
+
+        const characterInDB = await characterSeqModel.findOne({ where: { id } });
+        if (!characterInDB) {
+          throw crearErrorRecursoNoEncontrado("character", id);
+        }
+        const movieInDB = await movieSeqModel.findOne({ where: { id:value } });
+        if (!movieInDB) {
+          throw crearErrorRecursoNoEncontrado("movie", id);
+        }
+
+        const resultante = await characterInDB.removePeliculas(movieInDB)//return 1 if success
+        console.log("resultantc-c-c-c-c-c-c-css-s-s-", resultante)
+
+        const characterUpdated = await characterSeqModel.findOne({ where: { id: characterInDB.id }, include: ["peliculas"] });
+        const result = recoverCharacterModel(characterUpdated)
+        return result;
+      },
+
 
       addMovieGenre: async (movieGenre) => {
         console.log("-------------ENTRANTEEEEEEE:", movieGenre);
@@ -92,7 +150,7 @@ let daoElementsSequelize = (function () {
         const result = recoverMovieGenreModel(dbMovieGenre);
         return result;
       },
-      
+
       addCharacter: async (character) => {
         //const sequelize = await (await connectSequelize).getInstance()
         const {
@@ -163,14 +221,14 @@ let daoElementsSequelize = (function () {
           characterMovieSeqModel,
         } = await getSequelizeModels();
 
-      
 
 
- /**
-         * --------- WAY TO READ MOVIES FROM ESPECIFIC CHARACTER --------------
-         * This way we can get movies include in query call
-         */
-        const characterInDB = await characterSeqModel.findOne({ where: { id },include:["peliculas"] });
+
+        /**
+                * --------- WAY TO READ MOVIES FROM ESPECIFIC CHARACTER --------------
+                * This way we can get movies include in query call
+                */
+        const characterInDB = await characterSeqModel.findOne({ where: { id }, include: ["peliculas"] });
         // console.log("**********resullllCharcterrr", characterInDB)
 
 
@@ -183,7 +241,7 @@ let daoElementsSequelize = (function () {
         console.log("characterrr enDao:", characterInDB);
 
 
-        if(characterInDB.peliculas.length != 0){
+        if (characterInDB.peliculas.length != 0) {
           console.log("mapppppp  a pelicuuuuassss")
         }
 
@@ -200,19 +258,19 @@ let daoElementsSequelize = (function () {
           movieGenreSeqModel,
           characterMovieSeqModel,
         } = await getSequelizeModels();
-      
-        
 
 
-/**
-         * --------- WAY TO READ CHARACTERS FROM ESPECIFIC MOVIE --------------
-         * This way we can get personajes include in query call
-         */
-         const movieInDB = await movieSeqModel.findOne({ where: { id },include:["personajes"] });
+
+
+        /**
+                 * --------- WAY TO READ CHARACTERS FROM ESPECIFIC MOVIE --------------
+                 * This way we can get personajes include in query call
+                 */
+        const movieInDB = await movieSeqModel.findOne({ where: { id }, include: ["personajes"] });
         // console.log("**********resullllMovieeee", movieInDB)
 
 
-       // movieInDB = await movieSeqModel.findOne({ where: { id } });
+        // movieInDB = await movieSeqModel.findOne({ where: { id } });
         console.log("CCAAAssssssss333335555S", movieInDB);
 
 
@@ -225,7 +283,7 @@ let daoElementsSequelize = (function () {
 
 
 
-        if(movieInDB.personajes.length != 0){
+        if (movieInDB.personajes.length != 0) {
           console.log("mappppppeooo peersnoajes")
         }
 
@@ -236,28 +294,28 @@ let daoElementsSequelize = (function () {
         return result;
       },
       getMovieGenreById: async (id) => {
-        console.log("h555555555555555555555555555- ahaha",id);
+        console.log("h555555555555555555555555555- ahaha", id);
         const {
           characterSeqModel,
           movieSeqModel,
           movieGenreSeqModel,
           characterMovieSeqModel,
         } = await getSequelizeModels();
-      
-        
 
 
-/**
-         * --------- WAY TO READ CHARACTERS FROM ESPECIFIC MOVIE --------------
-         * This way we can get personajes include in query call
-         */
+
+
+        /**
+                 * --------- WAY TO READ CHARACTERS FROM ESPECIFIC MOVIE --------------
+                 * This way we can get personajes include in query call
+                 */
         //TODOOOOO PROBARRRR???????? talvez es solo "movies"
-         //const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id },include:["personajes"] });
+        //const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id },include:["personajes"] });
         // console.log("**********resullllMovieeee", movieGenreInDB)
 
 
         //TODO TRAER CON LAS PELICULASSSSS
-       const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } ,include:["peliculas"]});
+        const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id }, include: ["peliculas"] });
         console.log("CCAAeeeeeeeeeeS", movieGenreInDB);
         //chekar si ahora es addPeliculas()
 
@@ -270,7 +328,7 @@ let daoElementsSequelize = (function () {
         }
 
 
-          //VERIFIVCAR COMO SE LLAMA 
+        //VERIFIVCAR COMO SE LLAMA 
         // if(movieGenreInDB.personajes.length != 0){
         //   console.log("mappppppeooo peersnoajes")
         // }
