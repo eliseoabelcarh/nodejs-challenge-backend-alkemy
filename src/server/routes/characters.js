@@ -19,13 +19,13 @@ function charactersHandler() {
       const cu = useCasesFactory.cuGetList();
       const charactersList = await cu.get({
         type: "character",
-        visibleFields: "all",
+        visibleFields:  [],//empty array => list all
         queries: req.query,
       })
 
       res.status(200).json({
         success: true,
-        msg: "You successfully request Character",
+        msg: "You successfully request characters list",
         list: charactersList
       });
     })

@@ -142,7 +142,7 @@ describe("Server APIs for Movies", async () => {
       // UPDATE /movies/:idmovie   body= {field, value}
       // for Reference: const {imagen,titulo,fechaCreacion,calificacion} = basemovie
       const changes = {
-        imagen: "newUrlLocation",
+        titulo: "newUrlLocation",
         calificacion:5,
         //... you can add other fields
       }
@@ -172,6 +172,29 @@ describe("Server APIs for Movies", async () => {
       )
     }
   });
+  it("GET request to get All Movies - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      //We add one Movie
+      const response = await clienteRest.addMovie(token, baseMovie);
+     // console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
+      //We add another movie
+      const response2 = await clienteRest.addMovie(token, baseMovie);
+     // console.log("Rspta111:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      const idMovieSavedInDB2 = response2.data.movie.id
 
+      const response3 = await clienteRest.getAllMovies(token);
+     // console.log("Rspta3:", response3.data);
+      assert.deepStrictEqual(response3.data.success, true);
+
+      const listDB = response3.data.list
+      const addedElementsIDs = [idMovieSavedInDB,idMovieSavedInDB2] 
+      const isFoundFirst = listDB.some(element => addedElementsIDs[0] === element.id)
+      const isFoundSecond = listDB.some(element => addedElementsIDs[1] === element.id)
+      assert.deepStrictEqual(isFoundFirst&&isFoundSecond, true);
+    }
+  });
 
 });

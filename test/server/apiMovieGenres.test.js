@@ -143,7 +143,7 @@ describe("Server APIs for Movie Genres", async () => {
       // UPDATE /movieGenres/:idmovieGenre   body= {field, value}
       // for Reference: const {nombre,imagen} = baseGenero
       const changes = {
-        imagen: "newUrlLocation",
+        nombre: "newUrlLocation",
         //... you can add other fields
       }
       const response2 = await clienteRest.updateMovieGenre(token,idMovieGenreSavedInDB, changes);
@@ -172,6 +172,29 @@ describe("Server APIs for Movie Genres", async () => {
       )
     }
   });
+  it.only("GET request to get All MovieGenres - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      //We add one MovieGenre
+      const response = await clienteRest.addMovieGenre(token, baseGenero);
+     // console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieGenreSavedInDB = response.data.movieGenre.id
+      //We add another movieGenre
+      const response2 = await clienteRest.addMovieGenre(token, baseGenero);
+     // console.log("Rspta111:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      const idMovieGenreSavedInDB2 = response2.data.movieGenre.id
 
+      const response3 = await clienteRest.getAllMovieGenres(token);
+     // console.log("Rspta3:", response3.data);
+      assert.deepStrictEqual(response3.data.success, true);
+
+      const listDB = response3.data.list
+      const addedElementsIDs = [idMovieGenreSavedInDB,idMovieGenreSavedInDB2] 
+      const isFoundFirst = listDB.some(element => addedElementsIDs[0] === element.id)
+      const isFoundSecond = listDB.some(element => addedElementsIDs[1] === element.id)
+      assert.deepStrictEqual(isFoundFirst&&isFoundSecond, true);
+    }
+  });
 
 });

@@ -1,12 +1,12 @@
-const strainerCharacter = (function () {
+const strainerMovie = (function () {
     let instance;
   
     function create(dao) {
       return {
         getData: async ({ visibleFields, queries }) => {
             //TODO aca no...pero modelar un objeto WHERE en DAOOO  para sequelize reconozca
-            console.log("ENNNNNN STRAINERR ",{ visibleFields, queries } )
-            return await dao.getCharacterList({ visibleFields, queries });
+            console.log("Eddcsnn STRAINERR ",{ visibleFields, queries } )
+            return await dao.getMovieList({ visibleFields, queries });
         },
       };
     }
@@ -21,5 +21,5 @@ const strainerCharacter = (function () {
     };
   })();
   
-  module.exports = strainerCharacter;
+  module.exports = strainerMovie;
   

@@ -31,7 +31,13 @@ function crearclienteREST(port) {
             /// VALID TO USE LATER ON FUTURE VERSIONS: api/characters?name=equal&name=abel&age=between&age=30&age=50
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
-
+        getAllMovies: async (bearerJwtToken) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        getAllMovieGenres: async (bearerJwtToken) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movieGenres`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+   
 
         
 

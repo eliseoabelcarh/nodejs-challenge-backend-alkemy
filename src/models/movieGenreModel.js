@@ -55,11 +55,15 @@ function recoverMovieGenreModel(data) {
       getMyMoviesPretty(movieDB)
     );
     data.peliculas = newArray;
-    console.log("peliaasass-------", data.peliculas);
   }
   return new MovieGenreModel(data);
 }
 
+function recoverMovieGenreList(list){
+  return list.map(movieGenre => {
+    return recoverMovieGenreModel(movieGenre)
+  });
+ }
 
 
 function validRequiredFields(data) {
@@ -94,5 +98,6 @@ function prepareFieldsToModifyInMovieGenreModel(input) {
 module.exports = {
   buildMovieGenreModel, 
   recoverMovieGenreModel,
-  prepareFieldsToModifyInMovieGenreModel
+  prepareFieldsToModifyInMovieGenreModel,
+  recoverMovieGenreList
 };

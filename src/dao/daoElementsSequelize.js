@@ -11,8 +11,8 @@ const {
   recoverCharacterModel,
   recoverCharactersList,
 } = require("../models/characterModel");
-const { buildMovieGenreModel, recoverMovieGenreModel } = require("../models/movieGenreModel");
-const { buildMovieModel, recoverMovieModel } = require("../models/movieModel");
+const { buildMovieGenreModel, recoverMovieGenreModel, recoverMovieGenreList } = require("../models/movieGenreModel");
+const { buildMovieModel, recoverMovieModel, recoverMoviesList } = require("../models/movieModel");
 const { createUserModel, recoverUserModel } = require("../models/userModel");
 const {
   characterMovieSequelizeModel,
@@ -33,12 +33,11 @@ let daoElementsSequelize = (function () {
       getCharacterList: async ({visibleFields, queries}) => {
         const { characterSeqModel } = await getSequelizeModels();
         const { movieSeqModel } = await getSequelizeModels();
-        const { characterMovieSeqModel } = await getSequelizeModels();
         const elements = await characterSeqModel.findAll({ 
           include:  [{
             model: movieSeqModel,
             as:"peliculas",
-            attributes: ["imagen","titulo"],
+            attributes: ["id","imagen","titulo"],
             through: {//referes to table MovieCharacters
               attributes: []
             }
@@ -46,6 +45,39 @@ let daoElementsSequelize = (function () {
       });
         console.log("----ss-s-s-s-s-ss--------",elements[0])
         const result = recoverCharactersList(elements)
+        return result
+      },
+      getMovieList: async ({visibleFields, queries}) => {
+        const { characterSeqModel } = await getSequelizeModels();
+        const { movieSeqModel } = await getSequelizeModels();
+        const elements = await movieSeqModel.findAll({ 
+          include:  [{
+            model: characterSeqModel,
+            as:"personajes",
+            attributes: ["id","imagen","nombre"],
+            through: {//referes to table MovieCharacters
+              attributes: []
+            }
+          }]
+      });
+        console.log("----zzzzzzzzzss--------",elements[0])
+        const result = recoverMoviesList(elements)
+        return result
+      },
+      getMovieGenreList: async ({visibleFields, queries}) => {
+        console.log("----zcHEEEEEEEEEEEEEEEEEEEEEEEEEEE***********************************************")
+        const { movieGenreSeqModel } = await getSequelizeModels();
+        const { movieSeqModel } = await getSequelizeModels();
+        const elements = await movieGenreSeqModel.findAll({ 
+          include:  [{
+            model: movieSeqModel,
+            as:"peliculas",
+            attributes: ["id","imagen","titulo","fechaCreacion"],
+          }]
+      });
+        console.log("----zcgtgttgttttttttzzzzzss--------",elements[0])
+        
+        const result = recoverMovieGenreList(elements)
         return result
       },
       updateMovieGenre: async ({id, value}) => {
@@ -134,7 +166,6 @@ let daoElementsSequelize = (function () {
         const result = recoverMovieModel(movieUpdated)
         return result;
       },
-
 
       addMovieToCharacter: async ({ id, value }) => {
         const { characterSeqModel, movieSeqModel } = await getSequelizeModels();

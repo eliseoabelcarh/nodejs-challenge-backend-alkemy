@@ -10,11 +10,26 @@ const router = require("express").Router();
 function moviesHandler() {
   /**
    * --------------------------GET /movies -------------------------------
-   * TODO TODO TODO
    */
-  router.get("", function (req, res, next) {
-    res.status(200).json("ok");
-  });
+   router.get("",
+   passport.authenticate("jwt-token", { session: false }),
+     wrap(async function (req, res, next) {
+       console.log("QUERYS", req.query)
+ 
+       const cu = useCasesFactory.cuGetList();
+       const moviesList = await cu.get({
+         type: "movie",
+         visibleFields: [],//empty array => list all
+         queries: req.query,
+       })
+ 
+       res.status(200).json({
+         success: true,
+         msg: "You successfully request movies list",
+         list: moviesList
+       });
+     })
+     );
 
   /**
    * -------------------------- GET /movies/:movieId -------------------------------
@@ -87,7 +102,6 @@ function moviesHandler() {
     "/:movieId/characters",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("paraMMMMMMMooooo", req.params);
       const { movieId } = req.params;
       const character = req.body
 

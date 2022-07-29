@@ -30,6 +30,51 @@ function validatePersonaje(personaje) {
     throw crearErrorArgumentosInvalidos("Personaje", "required field");
   }
 }
+
+function buildMovieModel(data) {
+  validRequiredFields(data);
+  data.id = uuidv4();
+  if (!data.personajes) {
+    data.personajes = [];
+    return new MovieModel(data);
+  } else {
+    return new MovieModel(data);
+  }
+}
+
+function getMyCharactersPretty(characterDB) {
+  const {id, nombre,imagen} = characterDB
+  return {id, nombre,imagen}
+}
+
+function recoverMovieModel(data) {
+  validRequiredFields(data);
+  if (!data.id) {
+    throw crearErrorArgumentosInvalidos("id", "required field");
+  }
+  if (!data.personajes) {
+    data.personajes = [];
+  }
+
+  else {
+    console.log("DSFFSdfd99999999999999999999999999999", data)
+
+   const newArray = data.personajes.map((characterDB) =>
+    getMyCharactersPretty(characterDB)
+    )
+    data.personajes = newArray
+    console.log("personajes::-------", data.personajes);
+  }
+  return new MovieModel(data);
+}
+
+function recoverMoviesList(list){
+  return list.map(movie => {
+    return recoverMovieModel(movie)
+  });
+ }
+
+
 function validRequiredFields(data) {
   if (!data) {
     throw crearErrorArgumentosInvalidos("empty data", "no arguments provided");
@@ -57,43 +102,6 @@ function validRequiredFields(data) {
   }
 }
 
-function recoverMovieModel(data) {
-  validRequiredFields(data);
-  if (!data.id) {
-    throw crearErrorArgumentosInvalidos("id", "required field");
-  }
-  if (!data.personajes) {
-    data.personajes = [];
-  }
-
-  else {
-    console.log("DSFFSdfd99999999999999999999999999999", data)
-
-   const newArray = data.personajes.map((characterDB) =>
-    getMyCharactersPretty(characterDB)
-    )
-    data.personajes = newArray
-    console.log("personajes::-------", data.personajes);
-  }
-  return new MovieModel(data);
-}
-
-function getMyCharactersPretty(characterDB) {
-  const {id, nombre,imagen} = characterDB
-  return {id, nombre,imagen}
-}
-
-function buildMovieModel(data) {
-  validRequiredFields(data);
-  data.id = uuidv4();
-  if (!data.personajes) {
-    data.personajes = [];
-    return new MovieModel(data);
-  } else {
-    return new MovieModel(data);
-  }
-}
-
 function prepareFieldsToModifyInMovieModel(input) {
   if(Object.keys(input).length < 1 ){
     throw crearErrorArgumentosInvalidos("changes","empty object")
@@ -113,5 +121,6 @@ function prepareFieldsToModifyInMovieModel(input) {
 module.exports = {
   buildMovieModel,
   recoverMovieModel,
-  prepareFieldsToModifyInMovieModel
+  prepareFieldsToModifyInMovieModel,
+  recoverMoviesList
 };

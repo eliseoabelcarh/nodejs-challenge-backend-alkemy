@@ -8,12 +8,28 @@ const useCasesFactory = require("../../useCases/useCasesFactory");
 const router = require("express").Router();
 
 function movieGenresHandler() {
-  /**
+   /**
    * --------------------------GET /movieGenres -------------------------------
    */
-  router.get("", function (req, res, next) {
-    res.status(200).json("koakka");
-  });
+    router.get("",
+    passport.authenticate("jwt-token", { session: false }),
+      wrap(async function (req, res, next) {
+        console.log("QUERYS", req.query)
+  
+        const cu = useCasesFactory.cuGetList();
+        const movieGenresList = await cu.get({
+          type: "movieGenre",
+          visibleFields: [],//empty array => list all
+          queries: req.query,
+        })
+  
+        res.status(200).json({
+          success: true,
+          msg: "You successfully request movieGenres list",
+          list: movieGenresList
+        });
+      })
+      );
   /**
   * -------------------------- GET /movieGenres/:movieGenreId -------------------------------
   * Returns the searched element by ID

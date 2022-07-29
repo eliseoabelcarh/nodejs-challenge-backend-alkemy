@@ -41,10 +41,6 @@ function buildCharacterModel(data) {
   }
 }
 
-
-
-
-
 function getMyMoviesPretty(data) {
   const { id, imagen, titulo, fechaCreacion } = data;
   return { id, imagen, titulo, fechaCreacion };

@@ -147,7 +147,7 @@ describe("Server APIs for Character", async () => {
       // UPDATE /characters/:idCharacter   body= {field, value}
       // for Reference: const {imagen,nombre,edad,peso,historia} = baseCharacter
       const changes = {
-        imagen: "newUrlLocation",
+        peso: "newUrlLocation",
         nombre: "newName",
         //... you can add other fields
       }
@@ -178,26 +178,28 @@ describe("Server APIs for Character", async () => {
       )
     }
   });
-  it.only("GET request to get All Characters - Success on (PROTECTED JWT ROUTE)", async () => {
+  it("GET request to get All Characters - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       //We add one character
       const response = await clienteRest.addCharacter(token, baseCharacter);
-      console.log("Rspta111:", response.data);
+     // console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idCharacterSavedInDB = response.data.character.id
       //We add another character
       const response2 = await clienteRest.addCharacter(token, baseCharacter);
-      console.log("Rspta111:", response2.data);
+     // console.log("Rspta111:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
       const idCharacterSavedInDB2 = response2.data.character.id
 
       const response3 = await clienteRest.getAllCharacters(token);
-      console.log("Rspta3:", response3.data);
+     // console.log("Rspta3:", response3.data);
       assert.deepStrictEqual(response3.data.success, true);
 
-      const addedElements = [idCharacterSavedInDB,idCharacterSavedInDB2] 
-      const incluidoEnAddedElements = addedElements.includes()
-
+      const listDB = response3.data.list
+      const addedElementsIDs = [idCharacterSavedInDB,idCharacterSavedInDB2] 
+      const isFoundFirst = listDB.some(element => addedElementsIDs[0] === element.id)
+      const isFoundSecond = listDB.some(element => addedElementsIDs[1] === element.id)
+      assert.deepStrictEqual(isFoundFirst&&isFoundSecond, true);
     }
   });
 
