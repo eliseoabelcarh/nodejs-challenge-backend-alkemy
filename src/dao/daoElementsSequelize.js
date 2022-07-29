@@ -9,6 +9,7 @@ const { getSequelizeModels } = require("../database/sequelizeModels");
 const {
   buildCharacterModel,
   recoverCharacterModel,
+  recoverCharactersList,
 } = require("../models/characterModel");
 const { buildMovieGenreModel, recoverMovieGenreModel } = require("../models/movieGenreModel");
 const { buildMovieModel, recoverMovieModel } = require("../models/movieModel");
@@ -22,11 +23,31 @@ const {
 const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
 const { userSequelizeModel } = require("./daoModels/userSequelizeModel");
 
+const Sequelize = require("sequelize")
+
 let daoElementsSequelize = (function () {
   let instance;
 
   function create() {
     return {
+      getCharacterList: async ({visibleFields, queries}) => {
+        const { characterSeqModel } = await getSequelizeModels();
+        const { movieSeqModel } = await getSequelizeModels();
+        const { characterMovieSeqModel } = await getSequelizeModels();
+        const elements = await characterSeqModel.findAll({ 
+          include:  [{
+            model: movieSeqModel,
+            as:"peliculas",
+            attributes: ["imagen","titulo"],
+            through: {//referes to table MovieCharacters
+              attributes: []
+            }
+          }]
+      });
+        console.log("----ss-s-s-s-s-ss--------",elements[0])
+        const result = recoverCharactersList(elements)
+        return result
+      },
       updateMovieGenre: async ({id, value}) => {
         const { movieGenreSeqModel } = await getSequelizeModels();
         const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } });

@@ -63,11 +63,16 @@ function recoverCharacterModel(data) {
       getMyMoviesPretty(movieDB)
     );
     data.peliculas = newArray;
-    console.log("peliculallalalalalalass-------", data.peliculas);
   }
-
   return new CharacterModel(data);
 }
+
+
+ function recoverCharactersList(list){
+  return list.map(character => {
+    return recoverCharacterModel(character)
+  });
+ }
 
 
 function validRequiredFields(data) {
@@ -110,5 +115,6 @@ function prepareFieldsToModifyInCharacterModel(input) {
 module.exports = {
   buildCharacterModel,
   recoverCharacterModel,
-  prepareFieldsToModifyInCharacterModel
+  prepareFieldsToModifyInCharacterModel,
+  recoverCharactersList
 };

@@ -3,17 +3,19 @@ const { crearStorer } = require("../storer/index")
 const { crearUpdater } = require("../updater")
 const { crearRemover } = require("../remover")
 const { crearEmailSender } = require("../emailSender/emailSender")
+const { crearStrainer } = require("../strainer")
 const useCaseLoginUser = require("./useCaseLoginUser")
 const useCaseSaveElement = require("./useCaseSaveElement")
 const useCaseFindElement = require("./useCaseFindElement")
 const useCaseSendEmail = require("./useCaseSendEmail")
 const useCaseUpdateElement = require("./useCaseUpdateElement")
 const useCaseDeleteElement = require("./useCaseDeleteElement")
-
+const useCaseGetList = require("./useCaseGetList")
 const storer = crearStorer()
 const finder = crearFinder()
 const updater = crearUpdater()
 const remover = crearRemover()
+const strainer = crearStrainer()
 
 const useCasesFactory = {
 
@@ -35,6 +37,9 @@ const useCasesFactory = {
     },
     cuDeleteElement: () => {
         return useCaseDeleteElement.getInstance(remover)
+    },
+    cuGetList:() => {
+        return useCaseGetList.getInstance(strainer)
     },
  
     

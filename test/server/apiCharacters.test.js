@@ -178,7 +178,7 @@ describe("Server APIs for Character", async () => {
       )
     }
   });
-  it("GET request to get All Characters - Success on (PROTECTED JWT ROUTE)", async () => {
+  it.only("GET request to get All Characters - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       //We add one character
       const response = await clienteRest.addCharacter(token, baseCharacter);

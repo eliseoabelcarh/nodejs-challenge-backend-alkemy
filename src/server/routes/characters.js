@@ -14,19 +14,19 @@ function charactersHandler() {
   router.get("",
   passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
+      console.log("QUERYS", req.query)
 
-
-      // const cu = useCasesFactory.cuFindElement();
-      // const character = await cu.find({
-      //   type: "character",
-      //   field: "id",
-      //   value: characterId,
-      // });
+      const cu = useCasesFactory.cuGetList();
+      const charactersList = await cu.get({
+        type: "character",
+        visibleFields: "all",
+        queries: req.query,
+      })
 
       res.status(200).json({
         success: true,
         msg: "You successfully request Character",
-        list: "lsita",
+        list: charactersList
       });
     })
     );

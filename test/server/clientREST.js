@@ -26,6 +26,9 @@ function crearclienteREST(port) {
 
 
         getAllCharacters: async (bearerJwtToken) => {
+            ///OPTION1: api/characters?1[name,contains,string]=foo&2[id,gte,number]=123
+            ///OPTION2: api/characters?age[]=equal&age[]=25&name[]=jose
+            /// VALID TO USE LATER ON FUTURE VERSIONS: api/characters?name=equal&name=abel&age=between&age=30&age=50
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
 
