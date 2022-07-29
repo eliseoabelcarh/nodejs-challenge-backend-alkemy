@@ -73,7 +73,41 @@ describe("Server APIs for Movies", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
+  it("DELETE request to delete Movie from DB- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
 
+      // DELETE /movies/:idMovie
+      const response2 = await clienteRest.deleteMovie(token, idMovieSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("trying DELETE Movie alredy deleted from DB- throws error (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
+
+      // DELETE /movies/:idMovie
+      const response2 = await clienteRest.deleteMovie(token, idMovieSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      await assert.rejects(
+        async () => {
+          await clienteRest.deleteMovie(token, idMovieSavedInDB);
+        },
+        (err) => {
+          assert.strictEqual(err.status, 404);
+          return true;
+        }
+      )
+    }
+  });
   it("DELETE request to remove Character from Movie - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovie(token, baseMovie);
@@ -98,5 +132,46 @@ describe("Server APIs for Movies", async () => {
       assert.deepStrictEqual(response3.data.success, true);
     }
   });
+  it("UPDATE request to update Field from Movie in DB- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
+
+      // UPDATE /movies/:idmovie   body= {field, value}
+      // for Reference: const {imagen,titulo,fechaCreacion,calificacion} = basemovie
+      const changes = {
+        imagen: "newUrlLocation",
+        calificacion:5,
+        //... you can add other fields
+      }
+      const response2 = await clienteRest.updateMovie(token,idMovieSavedInDB, changes);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("UPDATE request to update Movie field/s with Empty object changes throws error (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
+      // UPDATE /movies/:idmovie   body= {field, value}
+      // for Reference: const {imagen,titulo,fechaCreacion,calificacion} = basemovie
+      const changes = {}
+      await assert.rejects(
+        async () => {
+          await clienteRest.updateMovie(token,idMovieSavedInDB, changes);
+        },
+        (err) => {
+          assert.strictEqual(err.status, 400);
+          assert.strictEqual(err.message, 'changes: empty object');
+          return true;
+        }
+      )
+    }
+  });
+
 
 });

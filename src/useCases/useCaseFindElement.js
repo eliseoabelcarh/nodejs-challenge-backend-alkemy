@@ -1,4 +1,4 @@
-const useCaseSearchElement = (function () {
+const useCaseFindElement = (function () {
   let instance;
 
   function create(finder) {
@@ -20,4 +20,4 @@ const useCaseSearchElement = (function () {
   };
 })();
 
-module.exports = useCaseSearchElement;
+module.exports = useCaseFindElement;

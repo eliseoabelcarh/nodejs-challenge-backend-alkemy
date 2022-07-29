@@ -11,19 +11,35 @@ function charactersHandler() {
   /**
    * --------------------------GET /characters -------------------------------
    */
-  router.get("", function (req, res, next) {
-    res.status(200).json("koakka");
-  });
-   /**
-   * -------------------------- GET /characters/:characterId -------------------------------
-   * Returns the searched element by ID
-   */
+  router.get("",
+  passport.authenticate("jwt-token", { session: false }),
+    wrap(async function (req, res, next) {
+
+
+      // const cu = useCasesFactory.cuFindElement();
+      // const character = await cu.find({
+      //   type: "character",
+      //   field: "id",
+      //   value: characterId,
+      // });
+
+      res.status(200).json({
+        success: true,
+        msg: "You successfully request Character",
+        list: "lsita",
+      });
+    })
+    );
+  /**
+  * -------------------------- GET /characters/:characterId -------------------------------
+  * Returns the searched element by ID
+  */
   router.get(
     "/:characterId",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
       const { characterId } = req.params;
-      const cu = useCasesFactory.cuSearchElement();
+      const cu = useCasesFactory.cuFindElement();
       const character = await cu.find({
         type: "character",
         field: "id",
@@ -36,10 +52,10 @@ function charactersHandler() {
       });
     })
   );
- /**
-     * --------------------------POST /characters -------------------------------
-     * Creates a character and store it in database 
-     */
+  /**
+      * --------------------------POST /characters -------------------------------
+      * Creates a character and store it in database 
+      */
   router.post(
     "",
     passport.authenticate("jwt-token", { session: false }),
@@ -58,18 +74,36 @@ function charactersHandler() {
       });
     })
   );
-/**
-     * --------------------------POST /characters/:characterId/movies ---------------------
-     * Creates a new movie and asociate to a especific character Id 
-     */
+  /**
+    * --------------------------DELETE /characters/:characterId -------------------------------
+    * Delete a character from database 
+    */
+  router.delete(
+    "/:characterId",
+    passport.authenticate("jwt-token", { session: false }),
+    wrap(async (req, res, next) => {
+      const { characterId } = req.params;
+      const cu = useCasesFactory.cuDeleteElement()
+      await cu.deleteElement({
+        type: "character",
+        value: characterId,
+      });
+      res.status(200).json({
+        success: true,
+        msg: "You successfully remove Character from db"
+      });
+    })
+  );
+  /**
+       * --------------------------POST /characters/:characterId/movies ---------------------
+       * Creates a new movie and asociate to a especific character Id 
+       */
   router.post(
     "/:characterId/movies",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("paraMMMMMMM", req.params);
       const { characterId } = req.params;
       const movie = req.body
-      console.log("bodyEnviadooo", req.body);
       const cu = useCasesFactory.cuUpdateElement()
       const movieAdded = await cu.update({
         type: "character",
@@ -85,10 +119,10 @@ function charactersHandler() {
       });
     })
   );
- /**
-   * --------------------------DELETE /characters/:characterId/movies?movieId=xxxx -------------------------------
-   * Remove Movie From Especific Character (Id was provided)
-   */
+  /**
+    * --------------------------DELETE /characters/:characterId/movies?movieId=xxxx -------------------------------
+    * Remove Movie From Especific Character (Id was provided)
+    */
   router.delete("/:characterId/movies",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
@@ -111,6 +145,31 @@ function charactersHandler() {
       });
     }));
   /**
+   * --------------------------PUT /characters/:characterId ---------------------
+   * Updates a character Field/s 
+   */
+  router.put(
+    "/:characterId",
+    passport.authenticate("jwt-token", { session: false }),
+    wrap(async function (req, res, next) {
+      const { characterId } = req.params;
+      const changes = req.body
+      const cu = useCasesFactory.cuUpdateElement()
+      const characterUpdated = await cu.update({
+        type: "character",
+        id: characterId,
+        action: "modify",
+        field: "element",
+        value: changes,
+      });
+      res.status(200).json({
+        success: true,
+        msg: "You successfully update character",
+        movie: characterUpdated,
+      });
+    })
+  );
+  /**
    * ------------------------ TESTING ROUTE --------------------------
    */
   router.get(
@@ -129,5 +188,5 @@ module.exports = { charactersHandler };
  */
 let wrap =
   (fn) =>
-  (...args) =>
-    fn(...args).catch(args[2]);
+    (...args) =>
+      fn(...args).catch(args[2]);

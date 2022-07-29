@@ -94,8 +94,24 @@ function buildMovieModel(data) {
   }
 }
 
+function prepareFieldsToModifyInMovieModel(input) {
+  if(Object.keys(input).length < 1 ){
+    throw crearErrorArgumentosInvalidos("changes","empty object")
+  }
+  const modificables = ["imagen", "titulo", "fechaCreacion", "calificacion"]
+  let result = {}
+  for (const key in input) {
+    if (!modificables.includes(key)) {
+      throw crearErrorArgumentosInvalidos(key, "is not a valid field");
+    } else {
+      result[key] = input[key]
+    }
+  }
+  return result
+}
 
 module.exports = {
   buildMovieModel,
-  recoverMovieModel
+  recoverMovieModel,
+  prepareFieldsToModifyInMovieModel
 };

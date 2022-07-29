@@ -21,6 +21,29 @@ function crearclienteREST(port) {
         getCharacterWithId: async (bearerJwtToken, characterId) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters/${characterId}`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
+
+
+
+
+        getAllCharacters: async (bearerJwtToken) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters`, method: 'get', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+
+
+        
+
+        updateCharacter: async (bearerJwtToken, characterId, changes) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters/${characterId}`, method: 'put',data:changes, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        updateMovie: async (bearerJwtToken, movieId, changes) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies/${movieId}`, method: 'put',data:changes, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        updateMovieGenre: async (bearerJwtToken, movieGenreId, changes) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movieGenres/${movieGenreId}`, method: 'put',data:changes, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+
+        
+
         addMovie: async (bearerJwtToken, movie) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies`, method: 'post', data: movie, headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
@@ -51,6 +74,15 @@ function crearclienteREST(port) {
         },
         removeMovieFromMovieGenre: async (bearerJwtToken,parentID,elementToRemoveID) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movieGenres/${parentID}/movies?movieId=${elementToRemoveID}`, method: 'delete', headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        deleteCharacter: async (bearerJwtToken,characterId) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters/${characterId}`, method: 'delete',headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        deleteMovie: async (bearerJwtToken,movieId) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies/${movieId}`, method: 'delete',headers:{ Authorization: bearerJwtToken },withCredentials:true,})
+        },
+        deleteMovieGenre: async (bearerJwtToken,movieGenreId) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movieGenres/${movieGenreId}`, method: 'delete',headers:{ Authorization: bearerJwtToken },withCredentials:true,})
         },
         
        

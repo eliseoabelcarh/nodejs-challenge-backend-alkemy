@@ -1,14 +1,16 @@
-const daoFactory = require("../dao/daoFactory");
+
 const storerNewUser = require("./storerNewUser");
 const storerNewCharacter = require("./storerNewCharacter");
 const storerNewMovie = require("./storerNewMovie");
 const storerNewMovieGenre = require("./storerNewMovieGenre");
 
+const daoFactory = require("../dao/daoFactory");
 const daoUsers = daoFactory.getDao("users");
+const daoElements = daoFactory.getDao("elements");
 
 const storerFactory = {
   getInstance: function (type) {
-    const daoElements = daoFactory.getDao("elements");
+    
     if (type === "newUser") {
       return storerNewUser.getInstance(daoUsers);
     }

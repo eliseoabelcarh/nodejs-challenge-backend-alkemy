@@ -45,7 +45,7 @@ const jwtCallback = async (payload, done) => {
   console.log("IN JWT Strategy ...");
   const userId = payload.sub;
   try {
-    const cu = useCasesFactory.cuSearchElement();
+    const cu = useCasesFactory.cuFindElement();
     const user = await cu.find({ type: "user", field: "id", value: userId });
     console.log("userrr ene JWTTT", user)
     if (user) {
@@ -81,7 +81,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (userId, done) => {
   console.log("IN DESEARILZEUSER:", userId);
   try {
-    const cu = useCasesFactory.cuSearchElement();
+    const cu = useCasesFactory.cuFindElement();
     const user = await cu.find({ type: "user", field: "id", value: userId });
     if (user) {
       console.log("IN DESEARILZEUSER user encontrado");

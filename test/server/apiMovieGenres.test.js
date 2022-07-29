@@ -74,6 +74,41 @@ describe("Server APIs for Movie Genres", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
+  it("DELETE request to delete Movie from DB- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovieGenre(token, baseGenero);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieGenreSavedInDB = response.data.movieGenre.id
+
+      // DELETE /movieGenres/:idMovieGenre
+      const response2 = await clienteRest.deleteMovieGenre(token, idMovieGenreSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("trying DELETE MovieGenre alredy deleted from DB- throws error (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovieGenre(token, baseGenero);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieGenreSavedInDB = response.data.movieGenre.id
+
+      // DELETE /movieGenres/:idMovieGenre
+      const response2 = await clienteRest.deleteMovieGenre(token, idMovieGenreSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      await assert.rejects(
+        async () => {
+          await clienteRest.deleteMovieGenre(token, idMovieGenreSavedInDB);
+        },
+        (err) => {
+          assert.strictEqual(err.status, 404);
+          return true;
+        }
+      )
+    }
+  });
   it("DELETE request to remove Movie from MovieGenre - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovieGenre(token, baseGenero);
@@ -98,5 +133,45 @@ describe("Server APIs for Movie Genres", async () => {
       assert.deepStrictEqual(response3.data.success, true);
     }
   });
+  it("UPDATE request to update Field from MovieGenre in DB- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovieGenre(token, baseGenero);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieGenreSavedInDB = response.data.movieGenre.id
+
+      // UPDATE /movieGenres/:idmovieGenre   body= {field, value}
+      // for Reference: const {nombre,imagen} = baseGenero
+      const changes = {
+        imagen: "newUrlLocation",
+        //... you can add other fields
+      }
+      const response2 = await clienteRest.updateMovieGenre(token,idMovieGenreSavedInDB, changes);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("UPDATE request to update MovieGenre field/s with Empty object changes throws error (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addMovieGenre(token, baseGenero);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieGenreSavedInDB = response.data.movieGenre.id
+      // UPDATE /movieGenres/:idmovieGenre   body= {field, value}
+      // for Reference: const {nombre,imagen} = baseGenero
+      const changes = {}
+      await assert.rejects(
+        async () => {
+          await clienteRest.updateMovieGenre(token,idMovieGenreSavedInDB, changes);
+        },
+        (err) => {
+          assert.strictEqual(err.status, 400);
+          assert.strictEqual(err.message, 'changes: empty object');
+          return true;
+        }
+      )
+    }
+  });
+
 
 });

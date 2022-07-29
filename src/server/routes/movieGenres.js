@@ -22,7 +22,7 @@ function movieGenresHandler() {
   passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
       const { movieGenreId } = req.params
-      const cu = useCasesFactory.cuSearchElement()
+      const cu = useCasesFactory.cuFindElement()
       const movieGenre = await cu.find({ type: "movieGenre", field: "id", value: movieGenreId })
       res.status(200).json({
         success: true,
@@ -53,6 +53,26 @@ function movieGenresHandler() {
       });
     })
   );
+   /**
+     * --------------------------DELETE /movieGenres/:movieGenreId -------------------------------
+     * Delete a movieGenre from database 
+     */
+    router.delete(
+      "/:movieGenreId",
+      passport.authenticate("jwt-token", { session: false }),
+      wrap(async (req, res, next) => {
+        const { movieGenreId } = req.params;
+        const cu = useCasesFactory.cuDeleteElement()
+        await cu.deleteElement({
+          type: "movieGenre",
+          value: movieGenreId,
+        });
+        res.status(200).json({
+          success: true,
+          msg: "You successfully remove movieGenre from db"
+        });
+      })
+    );
   /**
        * --------------------------POST /movieGenres/::movieGenreId/movies ---------------------
        * Creates a new movie and asociate to a especific movieGenre Id 
@@ -103,6 +123,31 @@ function movieGenresHandler() {
         movie: movieGenreUpdated,
       });
     }));
+/**
+   * --------------------------PUT /movieGenres/:movieGenreId ---------------------
+   * Updates a movieGenre Field/s 
+   */
+ router.put(
+  "/:movieGenreId",
+  passport.authenticate("jwt-token", { session: false }),
+  wrap(async function (req, res, next) {
+    const { movieGenreId } = req.params;
+    const changes = req.body
+    const cu = useCasesFactory.cuUpdateElement()
+    const movieGenreUpdated = await cu.update({
+    type: "movieGenre",
+    id: movieGenreId,
+    action: "modify",
+    field: "element",
+    value: changes,
+  });
+    res.status(200).json({
+      success: true,
+      msg: "You successfully update movieGenre",
+      movieGenre: movieGenreUpdated,
+    });
+  })
+);
 
   /**
    * ------------------------ TESTING ROUTE --------------------------

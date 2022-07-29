@@ -3,6 +3,7 @@ var chai = require("chai"),
   chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 const assert = require("assert");
+const { expect } = require("chai");
 require("dotenv").config();
 const { crearclienteREST } = require("./clientREST");
 const { configurations } = require("../../src/configurations/configs");
@@ -75,13 +76,49 @@ describe("Server APIs for Character", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
+  it("DELETE request to delete Character from DB- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+
+      // DELETE /characters/:idCharacter
+      const response2 = await clienteRest.deleteCharacter(token, idCharacterSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("trying DELETE Character alredy deleted from DB- throws error (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+
+      // DELETE /characters/:idCharacter
+      const response2 = await clienteRest.deleteCharacter(token, idCharacterSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      await assert.rejects(
+        async () => {
+          await clienteRest.deleteCharacter(token, idCharacterSavedInDB)
+        },
+        (err) => {
+          assert.strictEqual(err.status, 404);
+          return true;
+        }
+      );
+
+    }
+  });
 
   it("DELETE request to remove Movie from Character - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addCharacter(token, baseCharacter);
       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
-  
+
       const idCharacterSavedInDB = response.data.character.id
 
       // POST /characters/:idCharacter/movies   body = pelicula
@@ -94,14 +131,75 @@ describe("Server APIs for Character", async () => {
       const parentID = idCharacterSavedInDB
       const elementToRemoveID = movieCreatedInDB.id
 
-       // DELETE /characters/:characterId/movies?movieId=xxxxx
-      const response3 = await clienteRest.removeMovieFromCharacter(token,parentID,elementToRemoveID);
+      // DELETE /characters/:characterId/movies?movieId=xxxxx
+      const response3 = await clienteRest.removeMovieFromCharacter(token, parentID, elementToRemoveID);
       console.log("Rspta33333:", response3.data);
       assert.deepStrictEqual(response3.data.success, true);
+    }
+  });
+  it("UPDATE request to update Field from Character in DB- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+
+      // UPDATE /characters/:idCharacter   body= {field, value}
+      // for Reference: const {imagen,nombre,edad,peso,historia} = baseCharacter
+      const changes = {
+        imagen: "newUrlLocation",
+        nombre: "newName",
+        //... you can add other fields
+      }
+      const response2 = await clienteRest.updateCharacter(token, idCharacterSavedInDB, changes);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+  it("UPDATE request to update Character field/s with Empty object changes throws error (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const response = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+
+      // UPDATE /characters/:idCharacter   body= {field, value}
+      // for Reference: const {imagen,nombre,edad,peso,historia} = baseCharacter
+      const changes = {}
+      await assert.rejects(
+        async () => {
+          await clienteRest.updateCharacter(token, idCharacterSavedInDB, changes);
+        },
+        (err) => {
+          assert.strictEqual(err.status, 400);
+          assert.strictEqual(err.message, 'changes: empty object');
+          return true;
+        }
+      )
+    }
+  });
+  it("GET request to get All Characters - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      //We add one character
+      const response = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+      //We add another character
+      const response2 = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      const idCharacterSavedInDB2 = response2.data.character.id
+
+      const response3 = await clienteRest.getAllCharacters(token);
+      console.log("Rspta3:", response3.data);
+      assert.deepStrictEqual(response3.data.success, true);
+
+      const addedElements = [idCharacterSavedInDB,idCharacterSavedInDB2] 
+      const incluidoEnAddedElements = addedElements.includes()
+
     }
   });
 
 });
 
-const validToken =
-  "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYWJkNWMzMy1mNjM1LTQwMTAtOTNkNy1hZGJjZDY4ZDdjYzQiLCJpYXQiOjE2NTg2OTYzMTA5NDUsImV4cCI6MTY1ODY5NjM5NzM0NX0.I43cjHUzSoJ-Y1k7lSueJjvo4-8waMg1UDYHFM2KL7G7owK2Lbs-leZgf08Dpe4242EIDOeRmBpUTJatMGdouzrZ8zYl4x-_wlxRfjDuYBRKJcQiRtQvdQ_RmaWiJ2GeGKySWiPCjqyBbSdrTF3kNjBX-yOxOOXelAbm8xKk8bnmvwrfGn6ycH7jAiFWudpSGqZm9h6i8HbV5WoSNFs13qKZCFZuMcmsftonpo3_B_BeC1vVggWcAwhmAZgRUKQnH0HhSYFv0wkhwcTMN869qgK0IO-c9BJt3uJdn_4ZZsJaHs9htkV5LEueHSBf_zsk1VIUY9-5ummr0sTR5ihT__FxikAwcNnu5NRndaPfMd1U5cCPJxSZqUZFhzot96Bwe4kfii-EfYMJhD2hLkj83vjspfANXv3gNNntVQsOhPjzUo8H4OabRiZPClBQIWi6SEAQhLlE1k3bhw4DvQ3MvQIjhZuTC2zuX2eXKT6az3sM6yosT-Z-RFqICXzaPAc_HVnWGPwf_0WR4zb5vjttFYNLiSNBNXp1Du8Ghnqi28AEEoMKdNpyjC9jCm61bpsQQz0e-Wg-gwXWNWrtJf6X9s1yTFJSBUb-WcI1fEAEyVGdMkip3sl5WEWQPiLN2n0o4EIJSBjNqaRLpPx4OBwyLku43N6w0aOHYKdRYjw41nk";

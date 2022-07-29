@@ -25,7 +25,7 @@ function moviesHandler() {
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
       const { movieId } = req.params;
-      const cu = useCasesFactory.cuSearchElement();
+      const cu = useCasesFactory.cuFindElement();
       const movieInDB = await cu.find({
         type: "movie",
         field: "id",
@@ -56,6 +56,26 @@ function moviesHandler() {
         success: true,
         msg: "You successfully add a new movie",
         movie: newMovie,
+      });
+    })
+  );
+  /**
+     * --------------------------DELETE /movies/:movieId -------------------------------
+     * Delete a movie from database 
+     */
+   router.delete(
+    "/:movieId",
+    passport.authenticate("jwt-token", { session: false }),
+    wrap(async (req, res, next) => {
+      const { movieId } = req.params;
+      const cu = useCasesFactory.cuDeleteElement()
+      await cu.deleteElement({
+        type: "movie",
+        value: movieId,
+      });
+      res.status(200).json({
+        success: true,
+        msg: "You successfully remove movie from db"
       });
     })
   );
@@ -114,7 +134,31 @@ function moviesHandler() {
       });
     }));
 
-
+/**
+   * --------------------------PUT /movies/:movieId ---------------------
+   * Updates a movie Field/s 
+   */
+ router.put(
+  "/:movieId",
+  passport.authenticate("jwt-token", { session: false }),
+  wrap(async function (req, res, next) {
+    const { movieId } = req.params;
+    const changes = req.body
+    const cu = useCasesFactory.cuUpdateElement()
+    const movieUpdated = await cu.update({
+    type: "movie",
+    id: movieId,
+    action: "modify",
+    field: "element",
+    value: changes,
+  });
+    res.status(200).json({
+      success: true,
+      msg: "You successfully update movie",
+      movie: movieUpdated,
+    });
+  })
+);
   /**
    * ------------------------ TESTING ROUTE --------------------------
    */

@@ -57,7 +57,7 @@ function recoverCharacterModel(data) {
   }
   if (!data.peliculas) {
     data.peliculas = [];
-  } 
+  }
   else {
     const newArray = data.peliculas.map((movieDB) =>
       getMyMoviesPretty(movieDB)
@@ -91,7 +91,24 @@ function validRequiredFields(data) {
   }
 }
 
+function prepareFieldsToModifyInCharacterModel(input) {
+  if(Object.keys(input).length < 1 ){
+    throw crearErrorArgumentosInvalidos("changes","empty object")
+  }
+  const modificables = ["imagen", "nombre", "edad", "peso", "historia"]
+  let result = {}
+  for (const key in input) {
+    if (!modificables.includes(key)) {
+      throw crearErrorArgumentosInvalidos(key, "is not a valid field");
+    } else {
+      result[key] = input[key]
+    }
+  }
+  return result
+}
+
 module.exports = {
   buildCharacterModel,
-  recoverCharacterModel
+  recoverCharacterModel,
+  prepareFieldsToModifyInCharacterModel
 };

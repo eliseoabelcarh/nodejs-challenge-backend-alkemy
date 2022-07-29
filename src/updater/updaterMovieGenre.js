@@ -1,4 +1,5 @@
 const { crearErrorEnModulo } = require("../errors/errorsHandler");
+const { prepareFieldsToModifyInMovieGenreModel } = require("../models/movieGenreModel");
 const { buildMovieModel } = require("../models/movieModel");
 
 
@@ -16,6 +17,10 @@ const updaterMovieGenre = (function () {
           if (action === "remove" && field === "movie") {
             //id = MovieGenreID value = movieID
             return await dao.removeMovieFromMovieGenre({id,value});
+          }
+          if (action === "modify" && field === "element") {
+            const prepared = prepareFieldsToModifyInMovieGenreModel(value)
+            return await dao.updateMovieGenre({ id, value:prepared });
           }
           else{
             throw crearErrorEnModulo("updater: action or field invalid")
