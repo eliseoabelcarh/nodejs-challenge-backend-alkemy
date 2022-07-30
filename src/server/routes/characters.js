@@ -14,7 +14,7 @@ function charactersHandler() {
   router.get("",
   passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("QUERYS", req.query)
+      console.log("QUERYYYYYYYS", req.query)
 
       const cu = useCasesFactory.cuGetList();
       const charactersList = await cu.get({
@@ -104,6 +104,8 @@ function charactersHandler() {
     wrap(async function (req, res, next) {
       const { characterId } = req.params;
       const movie = req.body
+      //option 2 also could be sent:
+      //{ movieId: 'a5f15175-7d27-4fe7-94dc-30b6db861150' } 
       const cu = useCasesFactory.cuUpdateElement()
       const movieAdded = await cu.update({
         type: "character",

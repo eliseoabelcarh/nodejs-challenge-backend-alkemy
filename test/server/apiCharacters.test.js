@@ -76,6 +76,26 @@ describe("Server APIs for Character", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
+  it("POST request to add Movie to Character with MovieID- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      // we add a movie to get ID
+      const response = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta000:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
+
+      const response1 = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response1.data);
+      assert.deepStrictEqual(response1.data.success, true);
+
+      const idCharacterSavedInDB = response1.data.character.id
+
+      // POST /characters/:idCharacter/movies   body = movieId
+      const response2 = await clienteRest.addMovieToCharacterWithIds(token, idCharacterSavedInDB, idMovieSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
   it("DELETE request to delete Character from DB- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addCharacter(token, baseCharacter);
@@ -147,7 +167,7 @@ describe("Server APIs for Character", async () => {
       // UPDATE /characters/:idCharacter   body= {field, value}
       // for Reference: const {imagen,nombre,edad,peso,historia} = baseCharacter
       const changes = {
-        peso: "newUrlLocation",
+        peso: 75.25,
         nombre: "newName",
         //... you can add other fields
       }
@@ -182,26 +202,153 @@ describe("Server APIs for Character", async () => {
     if (strategyAuth === "jwt") {
       //We add one character
       const response = await clienteRest.addCharacter(token, baseCharacter);
-     // console.log("Rspta111:", response.data);
+       console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idCharacterSavedInDB = response.data.character.id
       //We add another character
       const response2 = await clienteRest.addCharacter(token, baseCharacter);
-     // console.log("Rspta111:", response2.data);
+       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
       const idCharacterSavedInDB2 = response2.data.character.id
 
       const response3 = await clienteRest.getAllCharacters(token);
-     // console.log("Rspta3:", response3.data);
+      console.log("Rspta333333333x3:", response3.data);
       assert.deepStrictEqual(response3.data.success, true);
 
       const listDB = response3.data.list
-      const addedElementsIDs = [idCharacterSavedInDB,idCharacterSavedInDB2] 
+      const addedElementsIDs = [idCharacterSavedInDB, idCharacterSavedInDB2]
       const isFoundFirst = listDB.some(element => addedElementsIDs[0] === element.id)
       const isFoundSecond = listDB.some(element => addedElementsIDs[1] === element.id)
-      assert.deepStrictEqual(isFoundFirst&&isFoundSecond, true);
+      assert.deepStrictEqual(isFoundFirst && isFoundSecond, true);
+
     }
   });
+
+  it("GET request to get All Characters WITH name equals to something - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const character1 = {
+        imagen: "AAAAAA",
+        nombre: "Paracleto",
+        edad: 35,
+        peso: 65.25,
+        historia: "some",
+      }
+      const character2 = {
+        imagen: "BBBBBB",
+        nombre: "Paracleto",
+        edad: 45,
+        peso: 75,
+        historia: "some",
+      }
+      //We add one character
+      const response = await clienteRest.addCharacter(token, character1);
+      // console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+      //We add another character
+      const response2 = await clienteRest.addCharacter(token, character2);
+      // console.log("Rspta111:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      const idCharacterSavedInDB2 = response2.data.character.id
+
+      //GET all characters with name "Paracleto", we should get at least 2 characters
+      const field = "name"//also works with "nombre"
+      const value = "Paracleto"
+      const response3 = await clienteRest.getCharactersMatchWith(token, field, value);
+      console.log("Rspta3:", response3.data.list);
+      assert.deepStrictEqual(response3.data.success, true);
+      assert.deepStrictEqual(response3.data.list.length >= 2, true);
+    }
+  });
+  it("GET request to get All Characters WITH age equals to something - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      const character1 = {
+        imagen: "AAAAAA",
+        nombre: "Jose",
+        edad: 77,
+        peso: 65.25,
+        historia: "some",
+      }
+      const character2 = {
+        imagen: "BBBBBB",
+        nombre: "Tomas",
+        edad: 77,
+        peso: 75,
+        historia: "some",
+      }
+      //We add one character
+      const response = await clienteRest.addCharacter(token, character1);
+      // console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB = response.data.character.id
+      //We add another character
+      const response2 = await clienteRest.addCharacter(token, character2);
+      // console.log("Rspta111:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+      const idCharacterSavedInDB2 = response2.data.character.id
+
+      //GET all characters with age 77, we should get at least 2 characters
+      const field = "age" //also works with "edad"
+      const value = 77
+      const response3 = await clienteRest.getCharactersMatchWith(token, field, value);
+      console.log("Rspta3:", response3.data.list);
+      assert.deepStrictEqual(response3.data.success, true);
+      assert.deepStrictEqual(response3.data.list.length >= 2, true);
+    }
+  });
+
+  it("GET request to get All Characters WITH movieId equals to something - Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      //We add one character
+      const response = await clienteRest.addCharacter(token, baseCharacter);
+      // console.log("Rspta111:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idCharacterSavedInDB1 = response.data.character.id
+
+      // We add a movie to database
+      const response3 = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta3:", response3.data);
+      assert.deepStrictEqual(response3.data.success, true);
+      const idMovieSavedInDB = response3.data.movie.id
+
+      //We associate both IDs in database
+      const response2 = await clienteRest.addMovieToCharacterWithIds(token, idCharacterSavedInDB1, idMovieSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+
+      //We add another character
+      const response5 = await clienteRest.addCharacter(token, baseCharacter);
+      // console.log("Rspta5:", response5.data);
+      assert.deepStrictEqual(response5.data.success, true);
+      const idCharacterSavedInDB2 = response5.data.character.id
+
+      //We associate new characer ID with movie already created in database
+      const response6 = await clienteRest.addMovieToCharacterWithIds(token, idCharacterSavedInDB2, idMovieSavedInDB);
+      console.log("Rspta6:", response6.data);
+      assert.deepStrictEqual(response6.data.success, true);
+
+      //GET all characters with specific movieId, we should get at least 2 result
+      const field = "movieId"
+      const value = idMovieSavedInDB
+      const response4 = await clienteRest.getCharactersMatchWith(token, field, value);
+      //console.log("Rspta4:", response4.data.list);
+      assert.deepStrictEqual(response4.data.success, true);
+      assert.deepStrictEqual(response4.data.list.length >= 2, true);
+
+      const listDB = response4.data.list
+
+      //All characters must have a movie with movieId sent
+      console.log("LISTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", listDB)
+      const isFound = listDB.every(element => {
+        const character = buildCharacterModel(element)
+        return character.hasMovie(idMovieSavedInDB)
+      })
+      console.log("sifoundddddddd", isFound)
+      assert.deepStrictEqual(isFound, true);
+    }
+  });
+
+
 
 });
 

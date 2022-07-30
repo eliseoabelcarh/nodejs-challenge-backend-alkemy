@@ -73,6 +73,27 @@ describe("Server APIs for Movies", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
+  it("POST request to add Character to Movie with CharacterID- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      // we add a movie to get ID
+      const response = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta000:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
+
+      // we add a character to get ID
+      const response1 = await clienteRest.addCharacter(token, baseCharacter);
+      console.log("Rspta111:", response1.data);
+      assert.deepStrictEqual(response1.data.success, true);
+
+      const idCharacterSavedInDB = response1.data.character.id
+
+      // POST /movies/:idMovie/characters   body = characterId
+      const response2 = await clienteRest.addCharacterToMovieWithIds(token, idMovieSavedInDB, idCharacterSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
   it("DELETE request to delete Movie from DB- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovie(token, baseMovie);

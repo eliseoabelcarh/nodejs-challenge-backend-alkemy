@@ -10,8 +10,12 @@ const updaterMovie = (function () {
       return {
         updateElement: async ({id, action, field, value}) => {
           if (action === "add" && field === "character") {
-            const characterModel = buildCharacterModel(value)
+            if(value.hasOwnProperty('characterId')){
+              return await dao.addCharacterToMovieWithIds({ id, value: value.characterId });
+            }else{
+              const characterModel = buildCharacterModel(value)
             return await dao.addCharacterToMovie({id,value:characterModel});
+            }
           }
           if (action === "remove" && field === "character") {
             //id = MovieID -- value = characterID

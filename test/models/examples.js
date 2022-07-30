@@ -4,8 +4,8 @@ const baseCharacter = {
     //  id:uuidv4(),
     imagen: "A",
     nombre: "W",
-    edad: "W",
-    peso: "W",
+    edad: 30,
+    peso: 85.50,
     historia: "W",
   };
 const baseMovie = {

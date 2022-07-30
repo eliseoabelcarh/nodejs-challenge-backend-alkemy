@@ -16,7 +16,48 @@ class CharacterModel {
     validateMovie(pelicula);
     this.peliculas.push(pelicula);
   }
+  hasMovie(movieId) {
+    let i = 0
+    let founded = null
+    while (i < this.peliculas.length && !founded) {
+      if (this.peliculas[i].id === movieId) {
+        founded = this.peliculas[i]
+      }
+      i++
+    }
+    return founded
+  }
 }
+
+function isAValidCharacterField(field) {
+  const atributtes = ["id", "imagen", "nombre", "edad", "peso", "historia", "peliculas", "name", "age", "movies"]
+  return atributtes.includes(field)
+}
+function getAValidCharacterFieldIfExists(field) {
+  if (isAValidCharacterField(field)) {
+    switch (field) {
+      case "name":
+        return "nombre"
+      case "age":
+        return "edad"
+      case "movies":
+        return "peliculas"
+
+      default:
+        return field
+    }
+  }
+  else {
+    throw crearErrorArgumentosInvalidos("query field", "doesnt exist in character")
+  }
+
+}
+
+function isAssociationCharacterField(field) {
+  const associateQueries = ["movieId", "peliculaId"]
+  return associateQueries.includes(field)
+}
+
 function validateMovie(pelicula) {
   const argumentReceived = arguments[0];
   if (argumentReceived === undefined) {
@@ -64,11 +105,11 @@ function recoverCharacterModel(data) {
 }
 
 
- function recoverCharactersList(list){
+function recoverCharactersList(list) {
   return list.map(character => {
     return recoverCharacterModel(character)
   });
- }
+}
 
 
 function validRequiredFields(data) {
@@ -93,8 +134,8 @@ function validRequiredFields(data) {
 }
 
 function prepareFieldsToModifyInCharacterModel(input) {
-  if(Object.keys(input).length < 1 ){
-    throw crearErrorArgumentosInvalidos("changes","empty object")
+  if (Object.keys(input).length < 1) {
+    throw crearErrorArgumentosInvalidos("changes", "empty object")
   }
   const modificables = ["imagen", "nombre", "edad", "peso", "historia"]
   let result = {}
@@ -112,5 +153,8 @@ module.exports = {
   buildCharacterModel,
   recoverCharacterModel,
   prepareFieldsToModifyInCharacterModel,
-  recoverCharactersList
+  recoverCharactersList,
+  getAValidCharacterFieldIfExists,
+  isAssociationCharacterField,
+  isAValidCharacterField,
 };

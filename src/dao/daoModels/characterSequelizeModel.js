@@ -10,8 +10,8 @@ const Sequelize = require("sequelize");
     id: { type: Sequelize.STRING, primaryKey: true },
     imagen: Sequelize.STRING,
     nombre: Sequelize.STRING,
-    edad: Sequelize.STRING,
-    peso:Sequelize.STRING,
+    edad: Sequelize.INTEGER,
+    peso:Sequelize.DECIMAL,
     historia:Sequelize.STRING,
     //peliculas:Sequelize.ARRAY(Sequelize.STRING)
   });

@@ -6,6 +6,7 @@ const strainerCharacter = (function () {
         getData: async ({ visibleFields, queries }) => {
             //TODO aca no...pero modelar un objeto WHERE en DAOOO  para sequelize reconozca
             console.log("ENNNNNN STRAINERR ",{ visibleFields, queries } )
+            
             return await dao.getCharacterList({ visibleFields, queries });
         },
       };

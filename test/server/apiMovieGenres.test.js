@@ -74,6 +74,33 @@ describe("Server APIs for Movie Genres", async () => {
       assert.deepStrictEqual(response2.data.success, true);
     }
   });
+
+  
+
+  it("POST request to add Movie to MovieGenre with MovieID- Success on (PROTECTED JWT ROUTE)", async () => {
+    if (strategyAuth === "jwt") {
+      // we add a movie to get ID
+      const response = await clienteRest.addMovie(token, baseMovie);
+      console.log("Rspta000:", response.data);
+      assert.deepStrictEqual(response.data.success, true);
+      const idMovieSavedInDB = response.data.movie.id
+
+      const response1 = await clienteRest.addMovieGenre(token, baseGenero);
+      console.log("Rspta111:", response1.data);
+      assert.deepStrictEqual(response1.data.success, true);
+
+      const idMovieGenreSavedInDB = response1.data.movieGenre.id
+
+      // POST /movieGenres/:idMovieGenre/movies   body = movieId
+      const response2 = await clienteRest.addMovieToMovieGenreWithIds(token, idMovieGenreSavedInDB, idMovieSavedInDB);
+      console.log("Rspta2222:", response2.data);
+      assert.deepStrictEqual(response2.data.success, true);
+    }
+  });
+
+
+
+
   it("DELETE request to delete Movie from DB- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addMovieGenre(token, baseGenero);
@@ -172,7 +199,7 @@ describe("Server APIs for Movie Genres", async () => {
       )
     }
   });
-  it.only("GET request to get All MovieGenres - Success on (PROTECTED JWT ROUTE)", async () => {
+  it("GET request to get All MovieGenres - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       //We add one MovieGenre
       const response = await clienteRest.addMovieGenre(token, baseGenero);

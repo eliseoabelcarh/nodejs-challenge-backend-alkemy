@@ -1,86 +1,78 @@
-const {
-  crearErrorRecursoNoEncontrado,
-  crearErrorDeBaseDeDatos,
-  crearErrorArgumentosInvalidos,
-} = require("../../src/errors/errorsHandler");
-const { baseMovie, baseGenero } = require("../../test/models/examples");
-const connectSequelize = require("../database/connectionSequelize");
+const { crearErrorRecursoNoEncontrado, crearErrorArgumentosInvalidos } = require("../../src/errors/errorsHandler");
 const { getSequelizeModels } = require("../database/sequelizeModels");
-const {
-  buildCharacterModel,
-  recoverCharacterModel,
-  recoverCharactersList,
-} = require("../models/characterModel");
+const { buildCharacterModel, recoverCharacterModel, recoverCharactersList } = require("../models/characterModel");
 const { buildMovieGenreModel, recoverMovieGenreModel, recoverMovieGenreList } = require("../models/movieGenreModel");
 const { buildMovieModel, recoverMovieModel, recoverMoviesList } = require("../models/movieModel");
-const { createUserModel, recoverUserModel } = require("../models/userModel");
-const {
-  characterMovieSequelizeModel,
-} = require("./daoModels/characterMovieSequelize");
-const {
-  characterSequelizeModel,
-} = require("./daoModels/characterSequelizeModel");
-const { movieSequelizeModel } = require("./daoModels/movieSequelizeModel");
-const { userSequelizeModel } = require("./daoModels/userSequelizeModel");
+const { modelWhereCharacterModel, modelWhereAssociatedCharacterModel, getModelOrderQuery } = require("./daoModels/queriesSequelizeModel");
 
-const Sequelize = require("sequelize")
 
 let daoElementsSequelize = (function () {
   let instance;
 
   function create() {
     return {
-      getCharacterList: async ({visibleFields, queries}) => {
+      getCharacterList: async ({ visibleFields, queries }) => {
+        const associationModelVisibleFields = ["id", "imagen", "titulo"]
+        const whereCharacterModel = modelWhereCharacterModel(queries)
+        const whereAssociatedCharacterModel = modelWhereAssociatedCharacterModel(queries)
+        const orderArrayQueries = getModelOrderQuery(queries)
+        console.log("where CHARACTER----------///////////", whereCharacterModel)
+        console.log("where ASSOCIATE CHARACTER----------///////////", whereAssociatedCharacterModel)
+        console.log("where orderArrayQueries-------///////////", orderArrayQueries)
         const { characterSeqModel } = await getSequelizeModels();
         const { movieSeqModel } = await getSequelizeModels();
-        const elements = await characterSeqModel.findAll({ 
-          include:  [{
+        const elements = await characterSeqModel.findAll({
+          where: whereCharacterModel,
+          include: [{
+            required:Object.keys(whereAssociatedCharacterModel).length > 0 ?  true: false,//important!!! for inner join
             model: movieSeqModel,
-            as:"peliculas",
-            attributes: ["id","imagen","titulo"],
+            as: "peliculas",
+            attributes: associationModelVisibleFields,//example:["id", "imagen"]     
             through: {//referes to table MovieCharacters
-              attributes: []
+              where: whereAssociatedCharacterModel,//example: {movieId: "45XFD"}
             }
-          }]
-      });
-        console.log("----ss-s-s-s-s-ss--------",elements[0])
+          }],
+          order: [
+            orderArrayQueries// example:['id', 'ASC']
+          ]
+        });
         const result = recoverCharactersList(elements)
         return result
       },
-      getMovieList: async ({visibleFields, queries}) => {
+      getMovieList: async ({ visibleFields, queries }) => {
         const { characterSeqModel } = await getSequelizeModels();
         const { movieSeqModel } = await getSequelizeModels();
-        const elements = await movieSeqModel.findAll({ 
-          include:  [{
+        const elements = await movieSeqModel.findAll({
+          include: [{
             model: characterSeqModel,
-            as:"personajes",
-            attributes: ["id","imagen","nombre"],
+            as: "personajes",
+            attributes: ["id", "imagen", "nombre"],
             through: {//referes to table MovieCharacters
               attributes: []
             }
           }]
-      });
-        console.log("----zzzzzzzzzss--------",elements[0])
+        });
+        console.log("----zzzzzzzzzss--------", elements[0])
         const result = recoverMoviesList(elements)
         return result
       },
-      getMovieGenreList: async ({visibleFields, queries}) => {
+      getMovieGenreList: async ({ visibleFields, queries }) => {
         console.log("----zcHEEEEEEEEEEEEEEEEEEEEEEEEEEE***********************************************")
         const { movieGenreSeqModel } = await getSequelizeModels();
         const { movieSeqModel } = await getSequelizeModels();
-        const elements = await movieGenreSeqModel.findAll({ 
-          include:  [{
+        const elements = await movieGenreSeqModel.findAll({
+          include: [{
             model: movieSeqModel,
-            as:"peliculas",
-            attributes: ["id","imagen","titulo","fechaCreacion"],
+            as: "peliculas",
+            attributes: ["id", "imagen", "titulo", "fechaCreacion"],
           }]
-      });
-        console.log("----zcgtgttgttttttttzzzzzss--------",elements[0])
-        
+        });
+        console.log("----zcgtgttgttttttttzzzzzss--------", elements[0])
+
         const result = recoverMovieGenreList(elements)
         return result
       },
-      updateMovieGenre: async ({id, value}) => {
+      updateMovieGenre: async ({ id, value }) => {
         const { movieGenreSeqModel } = await getSequelizeModels();
         const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } });
         if (!movieGenreInDB) {
@@ -91,7 +83,7 @@ let daoElementsSequelize = (function () {
         const result = recoverMovieGenreModel(movieGenreUpdated)
         return result;
       },
-      updateMovie: async ({id, value}) => {
+      updateMovie: async ({ id, value }) => {
         const { movieSeqModel } = await getSequelizeModels();
         const movieInDB = await movieSeqModel.findOne({ where: { id } });
         if (!movieInDB) {
@@ -102,7 +94,7 @@ let daoElementsSequelize = (function () {
         const result = recoverMovieModel(movieUpdated)
         return result;
       },
-      updateCharacter: async ({id, value}) => {
+      updateCharacter: async ({ id, value }) => {
         const { characterSeqModel } = await getSequelizeModels();
         const characterInDB = await characterSeqModel.findOne({ where: { id } });
         if (!characterInDB) {
@@ -179,6 +171,60 @@ let daoElementsSequelize = (function () {
         const result = recoverMovieModel(movieUpdated)
         return result;
       },
+      addMovieToCharacterWithIds: async ({ id, value }) => {
+        //id is character id
+        //value is a string with movie Id
+        const { characterSeqModel, movieSeqModel } = await getSequelizeModels();
+        const characterInDB = await characterSeqModel.findOne({ where: { id } });
+        if (!characterInDB) {
+          throw crearErrorRecursoNoEncontrado("character", id);
+        }
+        const movieInDB = await movieSeqModel.findOne({ where: { id:value } });
+        if (!movieInDB) {
+          throw crearErrorRecursoNoEncontrado("movie", id);
+        }
+        await characterInDB.addPeliculas(movieInDB)//returns CharactersMovies Element
+        const movieUpdated = await movieSeqModel.findOne({ where: { id: movieInDB.id }, include: ["personajes"] });
+        const result = recoverMovieModel(movieUpdated)
+        return result;
+      },
+      addCharacterToMovieWithIds: async ({ id, value }) => {
+        //id is movie id
+        //value is a string with character Id
+        const { characterSeqModel, movieSeqModel } = await getSequelizeModels();
+        const characterInDB = await characterSeqModel.findOne({ where: { id:value } });
+        if (!characterInDB) {
+          throw crearErrorRecursoNoEncontrado("character", id);
+        }
+        const movieInDB = await movieSeqModel.findOne({ where: { id } });
+        if (!movieInDB) {
+          throw crearErrorRecursoNoEncontrado("movie", id);
+        }
+        await movieInDB.addPersonajes(characterInDB)//returns CharactersMovies Element
+
+        const characterUpdated = await characterSeqModel.findOne({ where: { id: characterInDB.id }, include: ["peliculas"] });
+        const result = recoverCharacterModel(characterUpdated)
+        return result;
+      },
+      addMovieToMovieGenreWithIds: async ({ id, value }) => {
+        //id is movieGenre id
+        //value is a string with movie Id
+        const { movieSeqModel, movieGenreSeqModel } = await getSequelizeModels();
+        const movieInDB = await movieSeqModel.findOne({ where: { id:value } });
+        if (!movieInDB) {
+          throw crearErrorRecursoNoEncontrado("movie", id);
+        }
+        const movieGenreInDB = await movieGenreSeqModel.findOne({ where: { id } });
+        if (!movieGenreInDB) {
+          throw crearErrorRecursoNoEncontrado("movieGenre", id);
+        }
+
+        await movieGenreInDB.addPeliculas(movieInDB)//returns moviesMovieGenres Element
+
+        const movieUpdated = await movieSeqModel.findOne({ where: { id: movieInDB.id }, include: ["personajes"] });
+        const result = recoverMovieModel(movieUpdated)
+        return result;
+      },
       addCharacterToMovie: async ({ id, value }) => {
         const { characterSeqModel, movieSeqModel } = await getSequelizeModels();
         const movieInDB = await movieSeqModel.findOne({ where: { id } });
@@ -229,7 +275,7 @@ let daoElementsSequelize = (function () {
         const resultante = await movieGenreInDB.removePeliculas(movieInDB)//returns 1 if success
         console.log("resultantee-e--e-e-e-e--e-", resultante)
 
-        const movieGenreUpdated = await movieGenreSeqModel.findOne({ where: { id:movieGenreInDB.id } , include: ["peliculas"]});
+        const movieGenreUpdated = await movieGenreSeqModel.findOne({ where: { id: movieGenreInDB.id }, include: ["peliculas"] });
         const result = recoverMovieGenreModel(movieGenreUpdated)
         return result;
       },
@@ -241,7 +287,7 @@ let daoElementsSequelize = (function () {
         if (!characterInDB) {
           throw crearErrorRecursoNoEncontrado("character", id);
         }
-        const movieInDB = await movieSeqModel.findOne({ where: { id:value } });
+        const movieInDB = await movieSeqModel.findOne({ where: { id: value } });
         if (!movieInDB) {
           throw crearErrorRecursoNoEncontrado("movie", id);
         }
