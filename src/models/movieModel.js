@@ -17,7 +17,48 @@ class MovieModel {
     validatePersonaje(personaje);
     this.personajes.push(personaje);
   }
+  hasCharacter(characterId) {
+    let i = 0
+    let founded = null
+    while (i < this.personajes.length && !founded) {
+      if (this.personajes[i].id === characterId) {
+        founded = this.personajes[i]
+      }
+      i++
+    }
+    return founded
+  }
 }
+
+function isAValidMovieField(field) {
+  const atributtes = ["id", "imagen", "titulo", "fechaCreacion", "calificacion", "personajes", "name", "genre", "movieGenre","movieGenreId"]
+  return atributtes.includes(field)
+}
+
+function getAValidMovieFieldIfExists(field) {
+  if (isAValidMovieField(field)) {
+    switch (field) {
+      case "name":
+        return "titulo"
+      case "genre":
+        return "movieGenreId"
+      case "movieGenre":
+        return "movieGenreId"
+
+      default:
+        return field
+    }
+  }
+  else {
+    throw crearErrorArgumentosInvalidos("query field", "doesnt exist in character")
+  }
+}
+
+function isAssociationMovieField(field) {
+  const associateQueries = ["characterId", "personajeId"]
+  return associateQueries.includes(field)
+}
+
 function validatePersonaje(personaje) {
   const argumentReceived = arguments[0];
   if (argumentReceived === undefined) {
@@ -122,5 +163,8 @@ module.exports = {
   buildMovieModel,
   recoverMovieModel,
   prepareFieldsToModifyInMovieModel,
-  recoverMoviesList
+  recoverMoviesList,
+  getAValidMovieFieldIfExists,
+  isAssociationMovieField,
+  isAValidMovieField
 };

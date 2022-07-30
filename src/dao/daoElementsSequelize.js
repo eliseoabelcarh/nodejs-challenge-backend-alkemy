@@ -3,7 +3,7 @@ const { getSequelizeModels } = require("../database/sequelizeModels");
 const { buildCharacterModel, recoverCharacterModel, recoverCharactersList } = require("../models/characterModel");
 const { buildMovieGenreModel, recoverMovieGenreModel, recoverMovieGenreList } = require("../models/movieGenreModel");
 const { buildMovieModel, recoverMovieModel, recoverMoviesList } = require("../models/movieModel");
-const { modelWhereCharacterModel, modelWhereAssociatedCharacterModel, getModelOrderQuery } = require("./daoModels/queriesSequelizeModel");
+const { modelWhereCharacterModel, modelWhereAssociatedCharacterModel, getModelOrderQuery, modelWhereMovieModel, modelWhereAssociatedMovieModel } = require("./daoModels/queriesSequelizeModel");
 
 
 let daoElementsSequelize = (function () {
@@ -19,8 +19,7 @@ let daoElementsSequelize = (function () {
         console.log("where CHARACTER----------///////////", whereCharacterModel)
         console.log("where ASSOCIATE CHARACTER----------///////////", whereAssociatedCharacterModel)
         console.log("where orderArrayQueries-------///////////", orderArrayQueries)
-        const { characterSeqModel } = await getSequelizeModels();
-        const { movieSeqModel } = await getSequelizeModels();
+        const { characterSeqModel,movieSeqModel  } = await getSequelizeModels();
         const elements = await characterSeqModel.findAll({
           where: whereCharacterModel,
           include: [{
@@ -40,19 +39,29 @@ let daoElementsSequelize = (function () {
         return result
       },
       getMovieList: async ({ visibleFields, queries }) => {
-        const { characterSeqModel } = await getSequelizeModels();
-        const { movieSeqModel } = await getSequelizeModels();
+        const associationModelVisibleFields = ["id", "imagen", "nombre"]
+        const whereMovieModel = modelWhereMovieModel(queries)
+        const whereAssociatedMovieModel = modelWhereAssociatedMovieModel(queries)
+        const orderArrayQueries = getModelOrderQuery(queries)
+        console.log("where Movie----------///////////", whereMovieModel)
+        console.log("where ASSOCIATE Movie----------///////////", whereAssociatedMovieModel)
+        console.log("where orderArrayQueries-------///////////", orderArrayQueries)
+        const { characterSeqModel,movieSeqModel,movieGenreSeqModel } = await getSequelizeModels();
         const elements = await movieSeqModel.findAll({
+          where: whereMovieModel,
           include: [{
+            required:Object.keys(whereAssociatedMovieModel).length > 0 ?  true: false,//important!!! for inner join
             model: characterSeqModel,
             as: "personajes",
-            attributes: ["id", "imagen", "nombre"],
+            attributes: associationModelVisibleFields,//example:["id", "imagen"]     
             through: {//referes to table MovieCharacters
-              attributes: []
+              where: whereAssociatedMovieModel,//example: {movieId: "45XFD"}
             }
-          }]
+          }],
+          order: [
+            orderArrayQueries// example:['id', 'ASC']
+          ]
         });
-        console.log("----zzzzzzzzzss--------", elements[0])
         const result = recoverMoviesList(elements)
         return result
       },

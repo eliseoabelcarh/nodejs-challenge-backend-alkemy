@@ -50,7 +50,6 @@ function getAValidCharacterFieldIfExists(field) {
   else {
     throw crearErrorArgumentosInvalidos("query field", "doesnt exist in character")
   }
-
 }
 
 function isAssociationCharacterField(field) {
@@ -156,5 +155,5 @@ module.exports = {
   recoverCharactersList,
   getAValidCharacterFieldIfExists,
   isAssociationCharacterField,
-  isAValidCharacterField,
+  isAValidCharacterField
 };

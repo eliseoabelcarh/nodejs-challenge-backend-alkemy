@@ -32,9 +32,12 @@ function crearclienteREST(port) {
             /// we can send operator AND OR (ordered) in body
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters`, method: 'get', headers: { Authorization: bearerJwtToken }, withCredentials: true, })
         },
-        
+
         getCharactersMatchWith: async (bearerJwtToken, field, value) => {
             return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/characters?${field}=${value}`, method: 'get', headers: { Authorization: bearerJwtToken }, withCredentials: true, })
+        },
+        getMoviesMatchWith: async (bearerJwtToken, field, value) => {
+            return await sendRequest({ url: crearURLBaseWithoutAPI(port) + `/api/movies?${field}=${value}`, method: 'get', headers: { Authorization: bearerJwtToken }, withCredentials: true, })
         },
 
         getAllMovies: async (bearerJwtToken) => {
