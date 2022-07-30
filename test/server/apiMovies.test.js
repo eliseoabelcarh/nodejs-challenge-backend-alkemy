@@ -75,13 +75,13 @@ describe("Server APIs for Movies", async () => {
   });
   it("POST request to add Character to Movie with CharacterID- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      // we add a movie to get ID
+      // I add a movie to get ID
       const response = await clienteRest.addMovie(token, baseMovie);
       console.log("Rspta000:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idMovieSavedInDB = response.data.movie.id
 
-      // we add a character to get ID
+      // I add a character to get ID
       const response1 = await clienteRest.addCharacter(token, baseCharacter);
       console.log("Rspta111:", response1.data);
       assert.deepStrictEqual(response1.data.success, true);
@@ -195,12 +195,12 @@ describe("Server APIs for Movies", async () => {
   });
   it("GET request to get All Movies - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      //We add one Movie
+      //I add one Movie
       const response = await clienteRest.addMovie(token, baseMovie);
       // console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idMovieSavedInDB = response.data.movie.id
-      //We add another movie
+      //I add another movie
       const response2 = await clienteRest.addMovie(token, baseMovie);
       // console.log("Rspta111:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
@@ -227,13 +227,13 @@ describe("Server APIs for Movies", async () => {
         calificacion: 3,
       }
 
-      //We add one Movie
+      //I add one Movie
       const response = await clienteRest.addMovie(token, movie1);
       // console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idMovieSavedInDB = response.data.movie.id
 
-      //GET all movies with name "Anaconda", we should get at least 1 characters
+      //GET all movies with name "Anaconda", I should get at least 1 characters
       const field = "name"//also works with "titulo"
       const value = "Anaconda"
       const response3 = await clienteRest.getMoviesMatchWith(token, field, value);
@@ -244,13 +244,13 @@ describe("Server APIs for Movies", async () => {
   });
   it("GET request to get All Movies WITH genre/movieGenreID equals to something - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      // we add a movie to get ID
+      // I add a movie to get ID
       const response1 = await clienteRest.addMovie(token, baseMovie);
       console.log("response1:", response1.data);
       assert.deepStrictEqual(response1.data.success, true);
       const idMovieSavedInDB1 = response1.data.movie.id
 
-      // we add another movie to get ID
+      // I add another movie to get ID
       const response2 = await clienteRest.addMovie(token, baseMovie);
       console.log("response2:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
@@ -261,17 +261,17 @@ describe("Server APIs for Movies", async () => {
       assert.deepStrictEqual(response3.data.success, true);
       const idMovieGenreSavedInDB = response3.data.movieGenre.id
 
-      // we add first movie created to a especific movieGenre
+      // I add first movie created to a specific movieGenre
       const response4 = await clienteRest.addMovieToMovieGenreWithIds(token, idMovieGenreSavedInDB, idMovieSavedInDB1);
       console.log("response4:", response4.data);
       assert.deepStrictEqual(response4.data.success, true);
 
-      // we add second movie created to a especific movieGenre
+      // I add second movie created to a specific movieGenre
       const response5 = await clienteRest.addMovieToMovieGenreWithIds(token, idMovieGenreSavedInDB, idMovieSavedInDB2);
       console.log("response5:", response5.data);
       assert.deepStrictEqual(response5.data.success, true);
 
-      //GET all movies with name "Anaconda", we should get at least 1 characters
+      //GET all movies with name "Anaconda", I should get at least 1 characters
       const field = "genre"//also works with "genre" or "movieGenre" or "movieGenreId"
       const value = idMovieGenreSavedInDB
       const response6 = await clienteRest.getMoviesMatchWith(token, field, value);
@@ -283,15 +283,15 @@ describe("Server APIs for Movies", async () => {
 
   it("GET request to get All Movies WITH order=ASC|DESC - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      // we add a movie to get ID
+      // I add a movie to get ID
       const response1 = await clienteRest.addMovie(token, baseMovie);
       console.log("response1:", response1.data);
       assert.deepStrictEqual(response1.data.success, true);
       const idMovieSavedInDB1 = response1.data.movie.id
 
       //GET all movies WITH order=ASC
-      //we should get in first place the last movie we add before
-      const field = "order"//required this especific word
+      //I should get in first place the last movie I add before
+      const field = "order"//required this specific word
       //DESC más nuevo primero
       //ASC más antiguo primero
       const value = "DESC"//by Default is order by id (createdAt)
@@ -306,15 +306,15 @@ describe("Server APIs for Movies", async () => {
   });
   it("GET request to get All Movies WITH order=ASC|DESC - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      // we add a movie to get ID
+      // I add a movie to get ID
       const response1 = await clienteRest.addMovie(token, baseMovie);
       console.log("response1:", response1.data);
       assert.deepStrictEqual(response1.data.success, true);
       const idMovieSavedInDB1 = response1.data.movie.id
 
       //GET all movies WITH order=ASC
-      //we should get in first place the last movie we add before
-      const field = "order"//required this especific word
+      //I should get in first place the last movie I add before
+      const field = "order"//required this specific word
       //DESC más nuevo primero
       //ASC más antiguo primero
       const value = "ASC"//by Default: order by ASC(createdAt)

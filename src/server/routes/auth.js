@@ -124,26 +124,20 @@ function authHandler() {
      */
     if (strategy === "jwt") {
       return wrap(async function (req, res, next) {
-        console.log("en registerrrrr post");
         // register user in DB
         try {
           const { username, password } = req.body;
-          console.log(` recibidos body : ${req.body.username} ${password}`);
           const cu = useCasesFactory.cuSaveElement();
           const newUser = await cu.saveElement({type: "newUser",value: {username, password} });
-          console.log("USERCREAADO", newUser)
           if (newUser) {
             //generate JWT Token and send it to new user
             const { token, expiresIn } = issueJWT(newUser);
             console.log("tokeeeen", token)
             /**
              * ------------ SEND EMAIL TO USER ---------------------------
-             * we send a email with Token
+             * I send a email with Token
              */
-           // await sendEmailOnJWTAuthenticationSuccess(newUser.username,token);
-            //
-            //
-            console.log("emaillllllll")
+            await sendEmailOnJWTAuthenticationSuccess(newUser.username,token);
             res.json({ success: true, user: newUser, token, expiresIn });
           }
         } catch (error) {
@@ -211,9 +205,9 @@ function authHandler() {
             const { token, expiresIn } = issueJWT(newUser);
              /**
              * ------------ SEND EMAIL TO USER ---------------------------
-             * we send a email with Token
+             * I send a email with Token
              */
-             // await sendEmailOnJWTAuthenticationSuccess(newUser.username,token);
+             await sendEmailOnJWTAuthenticationSuccess(newUser.username,token);
               //
               //
             res.json({ success: true, user: newUser, token, expiresIn });

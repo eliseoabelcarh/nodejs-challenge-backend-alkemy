@@ -2,7 +2,7 @@ const { createServer } = require('./src/server/server')
 
 async function main() {
     try {
-        server = await createServer({})
+        server = await createServer({port:9000})
     } catch (e) {
         console.log(e.message)
     }

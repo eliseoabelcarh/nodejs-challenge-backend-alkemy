@@ -1,25 +1,19 @@
 const Sequelize = require("sequelize");
-const connectSequelize = require("../../database/connectionSequelize");
 
-
-
-
+/**
+ *  * ---------------------------- USER SEQUELIZE MODEL --------------------------------------
+ * Schema/Model required for Sequelize to save user in database
+ * This is used only for JWT Authentication Strategy
+ * For Local strategy we use other schemas/models using Mongoose
+ */
 function userSequelizeModel(sequelize) {
-    
-  //const sequelize = await (await connectionSequelize).getInstance()
-//   const seq = await connectSequelize
-//  const sequelize = await seq.getInstance()
-  //Define model
   const userSequelizeModel = sequelize.define("user", {
     id: { type: Sequelize.STRING, primaryKey: true },
     username: Sequelize.STRING,
     password: Sequelize.STRING,
     salt: Sequelize.STRING,
   });
-  //The call to userSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
-  //await userSequelizeModel.sync();
   return userSequelizeModel;
-
 }
 
 module.exports = { userSequelizeModel };

@@ -3,38 +3,27 @@ var LocalStrategy = require("passport-local");
 var JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const useCasesFactory = require("../useCases/useCasesFactory");
+
+
+/**
+ * -------------- REQUIRED FOR CREATE PUBLIC ENCRYPTED KEY ----------------------
+ */
 const path = require("path");
 const fs = require("fs");
-
 const pathTokey = path.join(__dirname, "..", "/utils/id_rsa_pub.pem");
 const PUB_KEY = fs.readFileSync(pathTokey, "utf8");
 
 
 /**
  * 
- * STARTS JWT PASSPORT STRATEGY
+ *  ----------------------------  STARTS JWT PASSPORT STRATEGY --------------------------
+ * You can use only one Strategy for Authentication (configurations Folder)
+ * You have to choose between Local with session cookies or JWT Token
+ * This API is complete using JWT Strategy, some function are useless for Local Authentication
  *   
  */
-
-/**
- * OPTIONS AVAILABLE IN CASE YOU NEED IT
- */
-// const passportJWTOptions = {
-//     jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
-//     secretOrKey:PUB_KEY || "secret phrase",
-//     audience:"entre audience here",
-//     algorithms:["RS256"],
-//     ignoreExpiration:false,
-//     passReqToCallback: false,
-//     jsonWebTokenOptions:{
-//         complete:false,
-//         clockTolerance:"",
-//         maxAge:"2d",
-//         clockTimestamp:"100",
-//         nonce:"string here for OpenID"
-//     }
-// }
-
+// WARNING!!! You have to create a new pair of Keys running generateKeyPair.js
+// The already keys pair created are for TESTING PURPOSING ONLY
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: PUB_KEY,
@@ -42,55 +31,47 @@ const options = {
 };
 
 const jwtCallback = async (payload, done) => {
-  console.log("IN JWT Strategy ...");
   const userId = payload.sub;
   try {
     const cu = useCasesFactory.cuFindElement();
     const user = await cu.find({ type: "user", field: "id", value: userId });
-    console.log("userrr ene JWTTT", user)
     if (user) {
-      console.log("IN JWT Strategy user encontrado");
       return done(null, user);
     } else {
       return done(null, false);
     }
   } catch (error) {
-    console.log("N JWT Strategy  error:", error);
     return done(error);
   }
 };
 
-
-
 /**
  * 
- * STARTS LOCAL PASSPORT STRATEGY
- *   
+ * -----------------------------  STARTS LOCAL PASSPORT STRATEGY -----------------------------------
+ * You can use only one Strategy for Authentication (configurations Folder)
+ * You have to choose between Local with session cookies or JWT Token
+ * This API is complete using JWT Strategy, some function are useless for Local Authentication
  */
 
 /**
- * ------------------ PASSPORT SERIALIZE -------------------
+ * ------------------ PASSPORT LOCAL SERIALIZE -------------------
  */
 passport.serializeUser((user, done) => {
-  console.log("IN SEARILZeee:", user);
   return done(null, user.id);
 });
 /**
- * ------------------ PASSPORT DEserialize -------------------
+ * ------------------ PASSPORT LOCAL DEserialize -------------------
  */
 passport.deserializeUser(async (userId, done) => {
-  console.log("IN DESEARILZEUSER:", userId);
   try {
     const cu = useCasesFactory.cuFindElement();
     const user = await cu.find({ type: "user", field: "id", value: userId });
     if (user) {
-      console.log("IN DESEARILZEUSER user encontrado");
       return done(null, user);
     } else {
       return done(null, false);
     }
   } catch (error) {
-    console.log("IN DESEARILZEUSER error:", error);
     return done(error);
   }
 });
@@ -100,10 +81,9 @@ passport.deserializeUser(async (userId, done) => {
  */
 const registerCallBack = async (req, username, password, done) => {
   try {
-    console.log("EN registerCallBack...username Recibido:", username);
-    console.log("EN registerCallBack...password Recibido:", password);
+    // This part is for save user in database, a specific "storer" object handle it
     const cu = useCasesFactory.cuSaveElement();
-    const newUser = await cu.saveElement({type: "newUser",value: {username, password} });
+    const newUser = await cu.saveElement({ type: "newUser", value: { username, password } });
     if (!newUser) {
       return done(null, false, { message: "Couldnt register user" });
     }
@@ -118,11 +98,12 @@ const registerCallBack = async (req, username, password, done) => {
  */
 const loginCallBack = async (req, username, password, done) => {
   try {
-    console.log("EN LOGINCallBack...username Recibido:", username);
+    // This part is for find user in database, a specific "finder" object handle it
+    // internally useCaseLoginUser handle if is valid user or not
     const cu = useCasesFactory.cuLogin();
     const newUser = await cu.login({ username, password });
     if (!newUser) {
-      return done(null, false, { message: "Incorrect password." });
+      return done(null, false, { message: "Incorrect user or password." });
     }
     return done(null, newUser);
   } catch (error) {

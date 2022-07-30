@@ -1,12 +1,17 @@
 const {
   crearErrorRecursoNoEncontrado,
-  crearErrorDeBaseDeDatos,
   crearErrorArgumentosInvalidos,
 } = require("../../src/errors/errorsHandler");
-const connectSequelize = require("../database/connectionSequelize");
 const { getSequelizeModels } = require("../database/sequelizeModels");
-const { createUserModel, recoverUserModel } = require("../models/userModel");
-const { userSequelizeModel } = require("./daoModels/userSequelizeModel");
+const {  recoverUserModel } = require("../models/userModel");
+
+
+/**
+ * ------------------------------ DAO USERS: DATA ACCESS OBJECT PATTERN-------------------------------
+ * This pattern will provide an abstract interface for persistence mechanism
+ * I use SINGLETON PATTERN too: is a software design pattern that restricts
+ * the instantiation of a class to one "single" instance 
+ */
 
 let daoUsersSequelize = (function () {
   let instance;
@@ -31,7 +36,7 @@ let daoUsersSequelize = (function () {
             "username alredy exists"
           );
         }
-        //if everything is ok, we save it in db
+        //if everything is ok, I save it in db
         const newUser =await userSeqModel.create({
           id: user.id,
           username: user.username,

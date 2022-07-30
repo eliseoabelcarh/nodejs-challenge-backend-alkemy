@@ -4,6 +4,9 @@ const daoUsersMongo = require("./daoUsersMongo");
 const daoUsersSequelize = require("./daoUsersSequelize");
 const daoElementsSequelize = require("./daoElementsSequelize");
 
+/**
+ * -------------------------------  Get DAO configurations --------------------------
+ */
 const typeDaoConfig = configurations.daoConfig();
 
 let daoUsers;
@@ -14,50 +17,25 @@ if (typeDaoConfig === "mongo") {
 if (typeDaoConfig === "sequelize") {
   daoUsers = daoUsersSequelize;
   daoElements = daoElementsSequelize;
-  console.log("daolelelelelel", daoElements)
 } else {
   daoUsers = daoUsersMemory;
 }
-
-// let daoFactory = (function () {
-//   let daoInstance;
-//   //función que devuelve base de datos para usuarios
-//   function create(type) {
-//     if (type === "users") {
-//         console.log("tipooooooode DAOOOO", type)
-//       return daoUsers.getInstance();
-//     }
-//     if (type === "elements") {
-//         console.log("tipooooooode DAOOOO", type)
-//       return daoElements.getInstance();
-//     }
-//     throw new Error("tipo de DaoUsers no encontrado");
-//   }
-//   return {
-//     getDao: function (type) {
-//       if (!daoInstance) {
-//         daoInstance = create(type);
-//       }
-//       return daoInstance;
-//     },
-//   };
-// })();
-
-
-
-
+/**
+ * ----------------------------------- DAO FACTORY -------------------------------- 
+ * I use this pattern for creating DAO, is a creational pattern that uses 
+ * factory methods to deal with the problem of creating objects in this case database access
+ * 
+ */
 let daoFactory = {
-    getDao: function(type){
-        if (type === "users") {
-            console.log("tipooooooode DAOOOO", type)
-          return daoUsers.getInstance();
-        }
-        if (type === "elements") {
-            console.log("tipooooooode DAOOOO", type)
-          return daoElements.getInstance();
-        }
-        throw new Error("tipo de DaoUsers no encontrado");
+  getDao: function (type) {
+    if (type === "users") {
+      return daoUsers.getInstance();
     }
+    if (type === "elements") {
+      return daoElements.getInstance();
+    }
+    throw new Error("tipo de DaoUsers no encontrado");
+  }
 }
 
 module.exports = daoFactory;

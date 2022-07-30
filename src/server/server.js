@@ -11,14 +11,14 @@ const {
 } = require("../errors/errorsHandler");
 const { v4: uuidv4 } = require("uuid");
 const MongoStore = require("connect-mongo");
-const {connectMongoose} = require("../database/connectionMongoose");
-
+const { connectMongoose } = require("../database/connectionMongoose");
+const cors = require("cors");
 
 /**
  * ------------------- GET PASSPORT MODULE CONFIGURATION -------------------
  */
 //Need to require the entire Passport module configuration
-//so we can use it here as middleware
+//so I can use it here as middleware
 require("../auth/passport");
 
 /**
@@ -26,20 +26,22 @@ require("../auth/passport");
  *  ------------------ CREATE SERVER EXPRESS FUNCTION -------------------
  */
 async function createServer({ port = 0 }) {
-
-  console.log("porttttt", port)
+  console.log("porttttt", port);
   const app = express();
-  const cors = require("cors")
-  app.use(cors({
-    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-}));
+
+  app.use(
+    cors({
+      methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+    })
+  );
   //Getting arguments receive in CreateServer Function
   // and set custom port
   const received = arguments[0];
   setPort({ app, received, defaultPort: port });
 
   /**
-   *  ------------------ CONFIGURE TESTING VIEWS FRONTEND -------------------
+   *  ------------------ CONFIGURE TESTING VIEWS FRONTEND ------------------
+   * Only for local strategy authentication
    */
   app.engine("ejs", require("ejs-mate"));
   app.set("views", __dirname + "/views");
@@ -61,14 +63,8 @@ async function createServer({ port = 0 }) {
   app.use(require("morgan")("dev"));
   app.set("trust proxy", 1);
 
+  const mongooseConected = await connectMongoose();
 
-
-
-  
-
-
-  const mongooseConected = await connectMongoose()
- 
   const sessionStore = MongoStore.create({
     client: mongooseConected.connection.getClient(),
     collectionName: "sessions",
@@ -97,7 +93,6 @@ async function createServer({ port = 0 }) {
   app.use(passport.session());
 
   app.use(crearRouterHandler());
-  
 
   app.use(serverErrorHandler);
 

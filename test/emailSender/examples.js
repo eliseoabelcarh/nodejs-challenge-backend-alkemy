@@ -1,15 +1,16 @@
 
+require("dotenv").config();
 
 //remitente debe ser el mismo registrado en twilio
 const validoTextoPlano = {
     to: 'eliseoabelcarh1@gmail.com', // Change to your recipient
-    from: 'eliseoabelcarh2@gmail.com',
+    from: process.env.GMAIL_FOR_NODEMAILER_USER || process.env.SENDGRID_USER_EMAIL,
     subject: 'Enviadooo desde Modulo Email Sender Texto plano',
     text: 'easy to do anywhere, even with Node.js'
 }
 const validoTextoPlanoYHtml = {
     to: 'eliseoabelcarh1@gmail.com', // Change to your recipient
-    from: 'eliseoabelcarh2@gmail.com',
+    from: process.env.GMAIL_FOR_NODEMAILER_USER || process.env.SENDGRID_USER_EMAIL,
     subject: 'Enviadooo desde Modulo Email Sender texto plano y html',
     text: 'easy to do anywhere, even with Node.js',
     html: '<strong>and easy to do anywhere, even with Node.js</strong>',
@@ -18,7 +19,7 @@ const validoTextoPlanoYHtml = {
 const validoTextoPlanoYHtmlYAttachmentVacio = {
 
     to: 'eliseoabelcarh1@gmail.com', // Change to your recipient
-    from: 'eliseoabelcarh2@gmail.com',
+    from: process.env.GMAIL_FOR_NODEMAILER_USER || process.env.SENDGRID_USER_EMAIL,
     subject: 'Enviadooo desde Modulo Email Sender Con AdjuntoVacio',
     text: 'easy to do anywhere, even with Node.js',
     html: '<strong>Bestt anywhere, even with Node.js</strong>',
@@ -66,7 +67,7 @@ const sinAttachment = {
 const sinNingunFileObject = {
 
     to: 'eliseoabelcarh1@gmail.com',
-    from: 'eliseoabelcarh2@gmail.com',
+    from: process.env.GMAIL_FOR_NODEMAILER_USER || process.env.SENDGRID_USER_EMAIL,
     subject: 'Enviadoww desde Moduloooo',
     text: 'easy to do anywhere, even with Node.js',
     html: '<strong>and easy to do anywhere, even with Node.js</strong>',

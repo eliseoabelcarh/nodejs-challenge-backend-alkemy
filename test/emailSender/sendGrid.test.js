@@ -6,7 +6,7 @@ const {
 const emailExample = require("./examples");
 require("dotenv").config();
 
-describe("si no se tiene apiKey en objeto config o si no se tiene apiKey en archivo.env", () => {
+xdescribe("si no se tiene apiKey en objeto config o si no se tiene apiKey en archivo.env", () => {
   it("devuelve error", async () => {
     await assert.rejects(
       async () => {
@@ -22,7 +22,7 @@ describe("si no se tiene apiKey en objeto config o si no se tiene apiKey en arch
   });
 });
 
-describe("si no se envía Objeto de Configuracion", () => {
+xdescribe("si no se envía Objeto de Configuracion", () => {
   it("devuelve error", async () => {
     await assert.rejects(
       async () => {
@@ -37,7 +37,7 @@ describe("si no se envía Objeto de Configuracion", () => {
   });
 });
 
-describe("con ApiKey inválida", () => {
+xdescribe("con ApiKey inválida", () => {
   describe("se envía objeto de configuracion con objeto Email y algún campo inválido", () => {
     it("devuelve error de tipo INVALID_ARGS", async () => {
       const config = { apiKey: "SG.SENDGRID_API_KEY" };

@@ -79,7 +79,7 @@ describe("Server APIs for Movie Genres", async () => {
 
   it("POST request to add Movie to MovieGenre with MovieID- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      // we add a movie to get ID
+      // I add a movie to get ID
       const response = await clienteRest.addMovie(token, baseMovie);
       console.log("Rspta000:", response.data);
       assert.deepStrictEqual(response.data.success, true);
@@ -201,12 +201,12 @@ describe("Server APIs for Movie Genres", async () => {
   });
   it("GET request to get All MovieGenres - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      //We add one MovieGenre
+      //I add one MovieGenre
       const response = await clienteRest.addMovieGenre(token, baseGenero);
      // console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idMovieGenreSavedInDB = response.data.movieGenre.id
-      //We add another movieGenre
+      //I add another movieGenre
       const response2 = await clienteRest.addMovieGenre(token, baseGenero);
      // console.log("Rspta111:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);

@@ -1,24 +1,19 @@
 const Sequelize = require("sequelize");
 
- function characterSequelizeModel(sequelize) {
-    
-  //const sequelize = await (await connectionSequelize).getInstance()
-  // const seq = await connectSequelize
-  // const sequelize = await seq.getInstance()
-  //Define model
+function characterSequelizeModel(sequelize) {
+  /**
+   * ---------------------- CHARACTER SEQUELIZE MODEL --------------------------------------
+   * I Define model for doing later an association many-to-many between movie model and character model 
+   */
   const characterSequelizeModel = sequelize.define("character", {
     id: { type: Sequelize.STRING, primaryKey: true },
     imagen: Sequelize.STRING,
     nombre: Sequelize.STRING,
     edad: Sequelize.INTEGER,
-    peso:Sequelize.DECIMAL,
-    historia:Sequelize.STRING,
-    //peliculas:Sequelize.ARRAY(Sequelize.STRING)
+    peso: Sequelize.DECIMAL,
+    historia: Sequelize.STRING,
   });
-  //The call to characterSequelizeModel.sync() above will cause Sequelize to synchronize the model with the database.
-  //await characterSequelizeModel.sync();
   return characterSequelizeModel;
-
 }
 
 module.exports = { characterSequelizeModel };

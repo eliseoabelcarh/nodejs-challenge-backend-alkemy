@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { authHandler } = require("./routes/auth");
 const { charactersHandler } = require("./routes/characters");
+const { docsHandler } = require("./routes/docs");
 const { movieGenresHandler } = require("./routes/movieGenres");
 const { moviesHandler } = require("./routes/movies");
 
@@ -13,7 +14,7 @@ function crearRouterHandler() {
   router.use(`/api/characters`, charactersHandler());
   router.use(`/api/movies`, moviesHandler());
   router.use(`/api/movieGenres`, movieGenresHandler());
-  
+  router.use(`/api/docs`, docsHandler());
   /**
    * ------------------------------ ERROR ROUTE ----------------------------
    */
@@ -28,7 +29,6 @@ function crearRouterHandler() {
 
   return router;
 }
-
 module.exports = { crearRouterHandler };
 
 

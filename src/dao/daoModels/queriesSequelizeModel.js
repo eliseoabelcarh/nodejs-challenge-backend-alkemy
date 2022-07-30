@@ -2,8 +2,17 @@ const { crearErrorArgumentosInvalidos } = require("../../errors/errorsHandler");
 const { getAValidCharacterFieldIfExists, isAssociationCharacterField, isAValidCharacterField } = require("../../models/characterModel");
 const { isAssociationMovieField, isAValidMovieField, getAValidMovieFieldIfExists } = require("../../models/movieModel");
 
+/**
+ * ------------------------------------------ QUERIES MODELING ----------------------------------------
+ * I will use this functions for handle input queries requests
+ * Here I define what kind of queries are, according where is received I associated a
+ * specific model 
+ * I maintain errors handle code repeated on purpose, in case I need handle multiple queries later
+ */
 
-
+/**
+ * ------------------------------- for character model -------------------------------------
+ */
 function modelWhereCharacterModel(queries) {
     console.log("queries en Model Where", queries)
     if (Object.keys(queries).length === 0) {
@@ -15,7 +24,6 @@ function modelWhereCharacterModel(queries) {
     }
     const field = keys[0]
     const value = queries[keys[0]]
-
     if (isAssociationCharacterField(field)) {
         return {}
     }
@@ -35,6 +43,30 @@ function modelWhereCharacterModel(queries) {
         throw crearErrorArgumentosInvalidos("modelWhereCharacter", "unknowed field sent")
     }
 }
+
+function modelWhereAssociatedCharacterModel(queries) {
+    if (Object.keys(queries).length === 0) {
+        return {}
+    }
+    const keys = Object.keys(queries);
+    if (keys.length > 1) {
+        throw crearErrorArgumentosInvalidos("queries", "too much fields sended")
+    }
+    const field = keys[0]
+    const value = queries[field]
+    if (Array.isArray(value)) {
+        throw crearErrorArgumentosInvalidos("queries", "too much values sended")
+    }
+    if (!isAssociationCharacterField(field)) {
+        return {}
+    }
+    const whereModel = {}
+    whereModel[field] = value
+    return whereModel
+}
+/**
+ * ------------------------------- for movie model -------------------------------------
+ */
 function modelWhereMovieModel(queries) {
     console.log("queries en Model Where", queries)
     if (Object.keys(queries).length === 0) {
@@ -66,31 +98,7 @@ function modelWhereMovieModel(queries) {
     }
 }
 
-function modelWhereAssociatedCharacterModel(queries) {
-    console.log("queries en ModelAsscoiated Where", queries)
-    if (Object.keys(queries).length === 0) {
-        return {}
-    }
-    const keys = Object.keys(queries);
-    if (keys.length > 1) {
-        throw crearErrorArgumentosInvalidos("queries", "too much fields sended")
-    }
-    const field = keys[0]
-    const value = queries[field]
-
-    if (Array.isArray(value)) {
-        throw crearErrorArgumentosInvalidos("queries", "too much values sended")
-    }
-    if (!isAssociationCharacterField(field)) {
-        return {}
-    }
-    const whereModel = {}
-    whereModel[field] = value
-    return whereModel
-}
-
 function modelWhereAssociatedMovieModel(queries) {
-    console.log("queries en ModelAsscoiatedmovie Where", queries)
     if (Object.keys(queries).length === 0) {
         return {}
     }
@@ -112,9 +120,11 @@ function modelWhereAssociatedMovieModel(queries) {
     return whereModel
 }
 
+/**
+ * ------------------------------- SHARED MODELS FUNCTIONS -------------------------------------
+ */
 function getModelOrderQuery(queries) {
-     const defaultOrder = ["createdAt", "ASC"]
-    console.log("queries model ORDERRR ", queries)
+    const defaultOrder = ["createdAt", "ASC"]
     if (Object.keys(queries).length === 0) {
         return defaultOrder
     }

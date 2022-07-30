@@ -96,7 +96,7 @@ function moviesHandler() {
   );
   /**
        * --------------------------POST /movies/:movieId/characters ---------------------
-       * Creates a new character and asociate to a especific movie Id 
+       * Creates a new character and asociate to a specific movie Id 
        */
   router.post(
     "/:movieId/characters",
@@ -124,7 +124,7 @@ function moviesHandler() {
 
   /**
    * --------------------------DELETE /movies/:movieId/characters?characterId=xxxx -------------------------------
-   * Remove Character From Especific Movie (Id was provided)
+   * Remove Character From specific Movie (Id was provided)
    */
   router.delete("/:movieId/characters",
     passport.authenticate("jwt-token", { session: false }),
@@ -188,7 +188,7 @@ module.exports = { moviesHandler };
 
 /**
  * ------------------ EXPRESS ASYNC WRAPPER -------------------
- * We can capture errors and throw it up
+ * I can capture errors and throw it up
  */
 let wrap =
   (fn) =>

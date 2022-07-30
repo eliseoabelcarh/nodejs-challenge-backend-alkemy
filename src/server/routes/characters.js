@@ -6,11 +6,11 @@ const {
 } = require("../../errors/errorsHandler");
 const useCasesFactory = require("../../useCases/useCasesFactory");
 const router = require("express").Router();
+require("swagger-jsdoc")
+require("swagger-ui-express")
 
 function charactersHandler() {
-  /**
-   * --------------------------GET /characters -------------------------------
-   */
+ 
   router.get("",
   passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
@@ -96,7 +96,7 @@ function charactersHandler() {
   );
   /**
        * --------------------------POST /characters/:characterId/movies ---------------------
-       * Creates a new movie and asociate to a especific character Id 
+       * Creates a new movie and asociate to a specific character Id 
        */
   router.post(
     "/:characterId/movies",
@@ -123,7 +123,7 @@ function charactersHandler() {
   );
   /**
     * --------------------------DELETE /characters/:characterId/movies?movieId=xxxx -------------------------------
-    * Remove Movie From Especific Character (Id was provided)
+    * Remove Movie From specific Character (Id was provided)
     */
   router.delete("/:characterId/movies",
     passport.authenticate("jwt-token", { session: false }),
@@ -186,7 +186,7 @@ module.exports = { charactersHandler };
 
 /**
  * ------------------ EXPRESS ASYNC WRAPPER -------------------
- * We can capture errors and throw it up
+ * I can capture errors and throw it up
  */
 let wrap =
   (fn) =>

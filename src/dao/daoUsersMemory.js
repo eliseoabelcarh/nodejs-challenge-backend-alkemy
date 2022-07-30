@@ -1,28 +1,27 @@
-
+/**
+ * This DAO is NOT COMPLETE yet,i used at start for making tests adding users,
+ * you can add functions according interface in daoUsersSequelize file which already complete
+ * acccording the requirements
+ */
 let daoUsersMemory = (function () {
-
     let instance
-
     function create(config) {
 
         const collection = []
         return {
             addUser: async (user) => {
                 collection.push(user)
-                console.log("MEMORY-COLLECTION:",collection)
                 return user
             },
-            getUserById: async(id) =>{
+            getUserById: async (id) => {
                 let user = null
                 collection.forEach(element => {
-                    if(element.id === id){
+                    if (element.id === id) {
                         user = element
                     }
                 });
-                console.log("USER ENCONTRADO:",user)
                 return user
             }
-
         }
     }
 
@@ -36,8 +35,5 @@ let daoUsersMemory = (function () {
     }
 
 })()
-
-
-
 
 module.exports = daoUsersMemory

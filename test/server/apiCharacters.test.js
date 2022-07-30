@@ -1,45 +1,56 @@
-const { createServer } = require("../../src/server/server");
 var chai = require("chai"),
   chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 const assert = require("assert");
-const { expect } = require("chai");
-require("dotenv").config();
+const { createServer } = require("../../src/server/server");
 const { crearclienteREST } = require("./clientREST");
+const { buildCharacterModel } = require("../../src/models/characterModel");
 const { configurations } = require("../../src/configurations/configs");
+const { baseCharacter, baseMovie } = require("../models/examples");
+
+/**
+ *  --------------------  FUNCTION FOR CREATE RANDOM STRING ---------------------
+ * I use for generate different users or characters details
+ */
 const genRandValue = (len) => {
   return Math.random()
     .toString(36)
     .substring(2, len + 2);
 };
-const { baseCharacter, baseMovie } = require("../models/examples");
-const { buildCharacterModel } = require("../../src/models/characterModel");
-const { buildMovieModel } = require("../../src/models/movieModel");
 
-describe("Server APIs for Character", async () => {
-  const emptyObject = {};
+
+
+describe("Testing APIs for Character", async () => {
+  /**
+   * This tests works only if JWT strategy for authentication is configurated
+   * You can set configurations in Configurations folder
+   */
   let server;
   let clienteRest;
-  const strategyAuth = configurations.getStrategyAuth();
   let user;
   let token;
+  const emptyObject = {};
+  const strategyAuth = configurations.getStrategyAuth();
 
   beforeEach(async function () {
     if (strategyAuth === "jwt") {
       server = await createServer(emptyObject);
       port = server.address().port;
       clienteRest = crearclienteREST(port);
+      //I create a random user for test only
+      //email could be sent when you register a user
       const randString = genRandValue(8);
       user = { username: `username${randString}@test.com`, password: "daasf" };
-      const response = await clienteRest.register(user);
+      // Yoyu can use also LOGIN for get a Authentication Token 
       //const response = await clienteRest.login(user);
+      const response = await clienteRest.register(user);
       token = response.data.token;
-      console.log("token recibidoo en test::::: ", token);
     }
   });
 
   afterEach(async () => {
     if (strategyAuth === "jwt") {
+      //I close every server after testing to avoid busy ports
       await server.close();
     }
   });
@@ -47,14 +58,12 @@ describe("Server APIs for Character", async () => {
   it("POST request to create Character without movies - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addCharacter(token, baseCharacter);
-      console.log("Rspta2:", response.data);
       assert.deepStrictEqual(response.data.success, true);
     }
   });
   it("POST request to create Character and Recover with ID generated- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
       const response = await clienteRest.addCharacter(token, baseCharacter);
-      console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idCharacterSavedInDB = response.data.character.id
       const response2 = await clienteRest.getCharacterWithId(token, idCharacterSavedInDB);
@@ -78,7 +87,7 @@ describe("Server APIs for Character", async () => {
   });
   it("POST request to add Movie to Character with MovieID- Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      // we add a movie to get ID
+      // I add a movie to get ID
       const response = await clienteRest.addMovie(token, baseMovie);
       console.log("Rspta000:", response.data);
       assert.deepStrictEqual(response.data.success, true);
@@ -185,7 +194,7 @@ describe("Server APIs for Character", async () => {
 
       // UPDATE /characters/:idCharacter   body= {field, value}
       // for Reference: const {imagen,nombre,edad,peso,historia} = baseCharacter
-      const changes = {}
+      const changes = emptyObject
       await assert.rejects(
         async () => {
           await clienteRest.updateCharacter(token, idCharacterSavedInDB, changes);
@@ -200,14 +209,14 @@ describe("Server APIs for Character", async () => {
   });
   it("GET request to get All Characters - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      //We add one character
+      //I add one character
       const response = await clienteRest.addCharacter(token, baseCharacter);
-       console.log("Rspta111:", response.data);
+      console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idCharacterSavedInDB = response.data.character.id
-      //We add another character
+      //I add another character
       const response2 = await clienteRest.addCharacter(token, baseCharacter);
-       console.log("Rspta2222:", response2.data);
+      console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
       const idCharacterSavedInDB2 = response2.data.character.id
 
@@ -240,18 +249,18 @@ describe("Server APIs for Character", async () => {
         peso: 75,
         historia: "some",
       }
-      //We add one character
+      //I add one character
       const response = await clienteRest.addCharacter(token, character1);
       // console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idCharacterSavedInDB = response.data.character.id
-      //We add another character
+      //I add another character
       const response2 = await clienteRest.addCharacter(token, character2);
       // console.log("Rspta111:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
       const idCharacterSavedInDB2 = response2.data.character.id
 
-      //GET all characters with name "Paracleto", we should get at least 2 characters
+      //GET all characters with name "Paracleto", I should get at least 2 characters
       const field = "name"//also works with "nombre"
       const value = "Paracleto"
       const response3 = await clienteRest.getCharactersMatchWith(token, field, value);
@@ -276,18 +285,18 @@ describe("Server APIs for Character", async () => {
         peso: 75,
         historia: "some",
       }
-      //We add one character
+      //I add one character
       const response = await clienteRest.addCharacter(token, character1);
       // console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idCharacterSavedInDB = response.data.character.id
-      //We add another character
+      //I add another character
       const response2 = await clienteRest.addCharacter(token, character2);
       // console.log("Rspta111:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
       const idCharacterSavedInDB2 = response2.data.character.id
 
-      //GET all characters with age 77, we should get at least 2 characters
+      //GET all characters with age 77, I should get at least 2 characters
       const field = "age" //also works with "edad"
       const value = 77
       const response3 = await clienteRest.getCharactersMatchWith(token, field, value);
@@ -299,35 +308,35 @@ describe("Server APIs for Character", async () => {
 
   it("GET request to get All Characters WITH movieId equals to something - Success on (PROTECTED JWT ROUTE)", async () => {
     if (strategyAuth === "jwt") {
-      //We add one character
+      //I add one character
       const response = await clienteRest.addCharacter(token, baseCharacter);
       // console.log("Rspta111:", response.data);
       assert.deepStrictEqual(response.data.success, true);
       const idCharacterSavedInDB1 = response.data.character.id
 
-      // We add a movie to database
+      // I add a movie to database
       const response3 = await clienteRest.addMovie(token, baseMovie);
       console.log("Rspta3:", response3.data);
       assert.deepStrictEqual(response3.data.success, true);
       const idMovieSavedInDB = response3.data.movie.id
 
-      //We associate both IDs in database
+      //I associate both IDs in database
       const response2 = await clienteRest.addMovieToCharacterWithIds(token, idCharacterSavedInDB1, idMovieSavedInDB);
       console.log("Rspta2222:", response2.data);
       assert.deepStrictEqual(response2.data.success, true);
 
-      //We add another character
+      //I add another character
       const response5 = await clienteRest.addCharacter(token, baseCharacter);
       // console.log("Rspta5:", response5.data);
       assert.deepStrictEqual(response5.data.success, true);
       const idCharacterSavedInDB2 = response5.data.character.id
 
-      //We associate new characer ID with movie already created in database
+      //I associate new characer ID with movie already created in database
       const response6 = await clienteRest.addMovieToCharacterWithIds(token, idCharacterSavedInDB2, idMovieSavedInDB);
       console.log("Rspta6:", response6.data);
       assert.deepStrictEqual(response6.data.success, true);
 
-      //GET all characters with specific movieId, we should get at least 2 result
+      //GET all characters with specific movieId, I should get at least 2 result
       const field = "movieId"
       const value = idMovieSavedInDB
       const response4 = await clienteRest.getCharactersMatchWith(token, field, value);
