@@ -1,15 +1,17 @@
 const { buildMovieGenreModel } = require("../models/movieGenreModel");
 
-
+/**
+ * ------------------------------ STORER MOVIE GENRE ----------------------------------
+ * This object knows how STORE/SAVE MOVIE GENRES
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const storerNewMovieGenre = (function () {
   let instance;
   function create(dao) {
     return {
       save: async (data) => {
-        console.log("EN storerNewMovieGenre:", data);
         const newMovieGenre = buildMovieGenreModel(data);
-        console.log("NEW Movie --rr:", newMovieGenre);
-        console.log("EN storerNewMovieGenreGenreDAOOO:::", dao);
         return await dao.addMovieGenre(newMovieGenre);
       },
     };

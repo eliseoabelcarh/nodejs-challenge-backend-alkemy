@@ -1,3 +1,9 @@
+/**
+ * ------------------------------ FINDER MOVIE ----------------------------------
+ * This object knows how find MOVIES, using any parameter. 
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const finderMovie = (function () {
     let instance;
   
@@ -7,9 +13,6 @@ const finderMovie = (function () {
           if (field === "id") {
             return await dao.getMovieById(value);
           }
-          // if (field === "username") {
-          //   return await dao.getUserByUsername(value);
-          // }
         },
       };
     }

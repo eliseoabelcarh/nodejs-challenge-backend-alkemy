@@ -1,27 +1,29 @@
 const { buildCharacterModel } = require("../models/characterModel");
 
+/**
+ * ------------------------------ STORER CHARACTER ----------------------------------
+ * This object knows how STORE/SAVE CHARACTERS
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const storerNewCharacter = (function () {
-    let instance;
-    function create(dao) {
-      return {
-        save: async (data) => {
-          console.log("EN storerNewCharacter:", data);
-          const newCharacter = buildCharacterModel(data)
-          console.log("NEW Characterrr:", newCharacter);
-          console.log("EN storerNewCharacterDAOOO:::",dao)
-          return await dao.addCharacter(newCharacter);
-        },
-      };
-    }
+  let instance;
+  function create(dao) {
     return {
-      getInstance: function (dao) {
-        if (!instance) {
-          instance = create(dao);
-        }
-        return instance;
+      save: async (data) => {
+        const newCharacter = buildCharacterModel(data)
+        return await dao.addCharacter(newCharacter);
       },
     };
-  })();
-  
-  module.exports = storerNewCharacter;
-  
+  }
+  return {
+    getInstance: function (dao) {
+      if (!instance) {
+        instance = create(dao);
+      }
+      return instance;
+    },
+  };
+})();
+
+module.exports = storerNewCharacter;

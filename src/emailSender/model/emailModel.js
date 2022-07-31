@@ -7,6 +7,8 @@ const { generateFileObjectFromPath } = require("../sendGrid/fileObject");
  * -------------------- BASE EMAIL SENDGRID MODELS -----------------------
  *
  * Different options to create Email and field validations
+ * i will use crearEmailConCamposOpcionales function by default
+ * the rest functions are tested and you can use it if you need it
  */
 function crearEmailBase(objeto) {
   let email = {};
@@ -19,7 +21,7 @@ function crearEmailBase(objeto) {
   if (!objeto.subject) {
     throw crearErrorArgumentosInvalidos("subject", "required field");
   }
-  //VALIDATE IF TO AND FROM IS VALID EMAILS
+  //VALIDATE IF --- TO:email -- AND -- FROM:email --- ARE OR NOT VALID EMAILS
   const emailRegexp =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
@@ -29,7 +31,6 @@ function crearEmailBase(objeto) {
   if (!emailRegexp.test(objeto.to)) {
     throw crearErrorArgumentosInvalidos("email TO:", "invalid format");
   }
-
   email.from = objeto.from;
   email.to = objeto.to;
   email.subject = objeto.subject;
@@ -139,7 +140,7 @@ function crearObjetoEmail({ from, to, subject, text }) {
   if (!text) {
     throw crearErrorArgumentosInvalidos("html", "required field");
   }
-  //VALIDATE IF TO AND FROM IS VALID EMAILS
+  //VALIDATE IF --- TO:email -- AND -- FROM:email --- ARE OR NOT VALID EMAILS
   const emailRegexp =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   console.log("EMAIL FROM VALIDOOO?? ", emailRegexp.test(from));

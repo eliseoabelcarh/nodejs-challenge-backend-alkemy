@@ -1,18 +1,16 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const session = require("express-session");
-const passport = require("passport");
 const flash = require("connect-flash");
-const bodyParser = require("body-parser");
 const { crearRouterHandler } = require("./routerHandler");
 const { serverErrorHandler } = require("../errors/serverErrorHandler");
-const {
-  crearErrorAlConectarAServidorExpress,
-} = require("../errors/errorsHandler");
-const { v4: uuidv4 } = require("uuid");
-const MongoStore = require("connect-mongo");
 const { connectMongoose } = require("../database/connectionMongoose");
-const cors = require("cors");
+const {crearErrorAlConectarAServidorExpress} = require("../errors/errorsHandler");
+const { v4: uuidv4 } = require("uuid");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+const MongoStore = require("connect-mongo");
 
 /**
  * ------------------- GET PASSPORT MODULE CONFIGURATION -------------------
@@ -20,28 +18,31 @@ const cors = require("cors");
 //Need to require the entire Passport module configuration
 //so I can use it here as middleware
 require("../auth/passport");
-
 /**
  *
  *  ------------------ CREATE SERVER EXPRESS FUNCTION -------------------
  */
 async function createServer({ port = 0 }) {
-  console.log("porttttt", port);
+  //Creating APP
   const app = express();
 
+  // CORS enables controlled access to resources located outside of a given domain
+  // Necessary for some online client agents for consuming our apis
   app.use(
     cors({
       methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     })
   );
-  //Getting arguments receive in CreateServer Function
+  // Getting arguments received in CreateServer Function
   // and set custom port
-  const received = arguments[0];
-  setPort({ app, received, defaultPort: port });
+  setPort({ app, received: arguments[0], defaultPort: port });
 
   /**
-   *  ------------------ CONFIGURE TESTING VIEWS FRONTEND ------------------
-   * Only for local strategy authentication
+   *  ------------------ CONFIGURE VIEWS FRONTEND ------------------
+   * Only configurated for Local Strategy authentication and session cookies
+   * The views will show a form with username and password fields.
+   * For JWT Token is useless, because we use in that case POST request
+   * and send a json object with data.
    */
   app.engine("ejs", require("ejs-mate"));
   app.set("views", __dirname + "/views");
@@ -49,6 +50,9 @@ async function createServer({ port = 0 }) {
 
   /**
    *  ------------------ EXTRA SETTINGS FOR SERVER -------------------
+   * Some of this configurations covers more than neccesary, but i leave it here
+   * just in case, maybe some of it will neccesary if you want extra features like 
+   * receive files like images in your server, or receive data in console as developer.
    */
   app.use(bodyParser.json({ limit: "50mb" }));
   app.use(
@@ -63,6 +67,16 @@ async function createServer({ port = 0 }) {
   app.use(require("morgan")("dev"));
   app.set("trust proxy", 1);
 
+
+  /**
+   * ------------------------- SESSION FOR LOCAL STRATEGY AUTHENTICATION ONLY --------------------------------
+   * This part only works for you if Local Authentication Strategy is enabled
+   * This session store save a session in database, in this case mongoDB using mongoose,
+   * You have to configure if you want to use it. 
+   * For JWT Strategy is useless because we dont use sessions, and is made it strictly to
+   * use it with any database or ORM, in our case, we complete all requirements using
+   * a DAO called daoElementsSequelize and daoUsersSequelize.
+   */
   const mongooseConected = await connectMongoose();
 
   const sessionStore = MongoStore.create({
@@ -83,19 +97,29 @@ async function createServer({ port = 0 }) {
       resave: false,
       saveUninitialized: false,
       store: sessionStore,
-      //cookie: {secure:true}
-      //cookie: { maxAge: 24 * 60 * 60 * 1000, secure: true, sameSite: true },
     })
   );
+
+  //This middleware is optional, allows the developers to send a message
+  // whenever a user is redirecting to a specified web-page
   app.use(flash());
 
+  // Initialize Local Authentication Sessions (For Local Authentication Strategy only)
   app.use(passport.initialize());
   app.use(passport.session());
 
+  /**
+   * --------------------------------- ROUTER HANDLER -----------------------------------
+   */
   app.use(crearRouterHandler());
-
+  /**
+    * --------------------------------- SERVER ERRORS HANDLER -----------------------------------
+    */
   app.use(serverErrorHandler);
 
+  /**
+   * --------------------------------- RETURNING EXPRESS SERVER -----------------------------------
+   */
   return new Promise((resolve, reject) => {
     const server = app
       .listen(app.get("port"))
@@ -115,13 +139,10 @@ async function createServer({ port = 0 }) {
  */
 function setPort({ app, received, defaultPort }) {
   if (Object.keys(received).length === 0) {
-    console.log("port emptyobject");
     app.set("port", defaultPort);
   } else if (received.hasOwnProperty("port")) {
-    console.log("port con property port");
     app.set("port", received.port);
   } else if (process.env.PORT) {
-    console.log("port env");
     app.set("port", process.env.PORT);
   }
 }

@@ -1,3 +1,9 @@
+/**
+ * ------------------------------ FINDER USER ----------------------------------
+ * This object knows how find USERS, using any parameter. 
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const finderUser = (function () {
   let instance;
 

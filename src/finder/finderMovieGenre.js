@@ -1,3 +1,9 @@
+/**
+ * ------------------------------ FINDER MOVIE GENRE ----------------------------------
+ * This object knows how find MOVIE GENRES, using any parameter. 
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const finderMovieGenre = (function () {
     let instance;
   
@@ -7,9 +13,6 @@ const finderMovieGenre = (function () {
           if (field === "id") {
             return await dao.getMovieGenreById(value);
           }
-          // if (field === "username") {
-          //   return await dao.getUserByUsername(value);
-          // }
         },
       };
     }

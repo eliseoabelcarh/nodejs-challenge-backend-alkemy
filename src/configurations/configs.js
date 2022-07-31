@@ -28,6 +28,11 @@ module.exports.configurations = {
   emailSenderSendgridConfigs: () => configSendgrid,
   emailSenderNodemailerConfigs: () => configNodemailer,
   daoConfig: () => process.env.DAO_TYPE || 'memory',
-  getStrategyAuth: () => process.env.STRATEGY_AUTH || 'jwt'
-
+  getStrategyAuth: () => process.env.STRATEGY_AUTH || 'jwt',
+  /**
+   * TRUE: enables function to sendEmails in JWT Register and JWT Login
+   * FALSE: disable send emails
+   * Only works for server.js file, tests are independent of this configuration.
+   */
+  emailSenderIsEnable: () => false // 
 }

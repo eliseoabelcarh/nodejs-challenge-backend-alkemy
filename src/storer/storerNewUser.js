@@ -1,14 +1,18 @@
 const { createUserModel } = require("../models/userModel");
 
+/**
+ * ------------------------------ STORER USER ----------------------------------
+ * This object knows how STORE/SAVE USERS
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const storerNewUser = (function () {
   let instance;
   function create(dao) {
     return {
       save: async (data) => {
-        const {username, password} = data
-        console.log("EN storerNewUser:", {username, password});
+        const { username, password } = data
         const newUser = createUserModel(data);
-        console.log("NEW USER essssss:", newUser);
         return await dao.addUser(newUser);
       },
     };

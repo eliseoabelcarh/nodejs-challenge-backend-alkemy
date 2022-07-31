@@ -1,14 +1,17 @@
 const { buildMovieModel } = require("../models/movieModel");
 
+/**
+ * ------------------------------ STORER MOVIE ----------------------------------
+ * This object knows how STORE/SAVE MOVIES
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const storerNewMovie = (function () {
   let instance;
   function create(dao) {
     return {
       save: async (data) => {
-        console.log("EN storerNewMovie:", data);
         const newMovie = buildMovieModel(data);
-        console.log("NEW Movie --rr:", newMovie);
-        console.log("EN storerNewMovieDAOOO:::", dao);
         return await dao.addMovie(newMovie);
       },
     };

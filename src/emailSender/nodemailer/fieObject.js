@@ -4,8 +4,8 @@ const { crearErrorArgumentosInvalidos } = require('../../errors/errorsHandler');
 
 /**
  * 
- *------------------- ATACHMENT FILE --------------------------
- * 
+ *------------------- ATTACHMENT FILE --------------------------
+ * This is only for Nodemailer Option
  * @param {*} ruta Relative Path from file to attach in email 
  * @returns file - Prepared for email sender Service
  */

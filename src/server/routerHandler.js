@@ -9,6 +9,7 @@ function crearRouterHandler() {
 
   /**
    * ------------------------ SETTING HANDLE ROUTES --------------------------
+   * I use covention word "API" to define a endpoint base route. 
    */
   router.use(`/api/auth`, authHandler());
   router.use(`/api/characters`, charactersHandler());

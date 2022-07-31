@@ -1,25 +1,29 @@
+
+/**
+ * ------------------------------ STRAINER MOVIE GENRE ----------------------------------
+ * This object knows how FIND AND STRAIN/FILTER MOVIE GENRES
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const strainerMovieGenre = (function () {
-    let instance;
-  
-    function create(dao) {
-      return {
-        getData: async ({ visibleFields, queries }) => {
-            //TODO aca no...pero modelar un objeto WHERE en DAOOO  para sequelize reconozca
-            console.log("Edaaaadcsnn STRAINERR ",{ visibleFields, queries } )
-            return await dao.getMovieGenreList({ visibleFields, queries });
-        },
-      };
-    }
-  
+  let instance;
+
+  function create(dao) {
     return {
-      getInstance: function (dao) {
-        if (!instance) {
-          instance = create(dao);
-        }
-        return instance;
+      getData: async ({ visibleFields, queries }) => {
+        return await dao.getMovieGenreList({ visibleFields, queries });
       },
     };
-  })();
-  
-  module.exports = strainerMovieGenre;
-  
+  }
+
+  return {
+    getInstance: function (dao) {
+      if (!instance) {
+        instance = create(dao);
+      }
+      return instance;
+    },
+  };
+})();
+
+module.exports = strainerMovieGenre;

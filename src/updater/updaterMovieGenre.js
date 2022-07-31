@@ -3,45 +3,50 @@ const { prepareFieldsToModifyInMovieGenreModel } = require("../models/movieGenre
 const { buildMovieModel } = require("../models/movieModel");
 
 
-
+/**
+ * ------------------------------ UPDATER MOVIE GENRE ----------------------------------
+ * This object knows how UPDATE MOVIE GENRES and his elements
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const updaterMovieGenre = (function () {
-    let instance;
-  
-    function create(dao) {
-      return {
-        updateElement: async ({id, action, field, value}) => {
-          if (action === "add" && field === "movie") {
-            if(value.hasOwnProperty('movieId')){
-              return await dao.addMovieToMovieGenreWithIds({ id, value: value.movieId });
-            }else{
-              const movieModel = buildMovieModel(value)
-            return await dao.addMovieToMovieGenre({id,value:movieModel});
-            } 
-          }
-          if (action === "remove" && field === "movie") {
-            //id = MovieGenreID value = movieID
-            return await dao.removeMovieFromMovieGenre({id,value});
-          }
-          if (action === "modify" && field === "element") {
-            const prepared = prepareFieldsToModifyInMovieGenreModel(value)
-            return await dao.updateMovieGenre({ id, value:prepared });
-          }
-          else{
-            throw crearErrorEnModulo("updater: action or field invalid")
-          }
-          
-        },
-      };
-    }
-  
+  let instance;
+
+  function create(dao) {
     return {
-      getInstance: function (dao) {
-        if (!instance) {
-          instance = create(dao);
+      updateElement: async ({ id, action, field, value }) => {
+        if (action === "add" && field === "movie") {
+          if (value.hasOwnProperty('movieId')) {
+            return await dao.addMovieToMovieGenreWithIds({ id, value: value.movieId });
+          } else {
+            const movieModel = buildMovieModel(value)
+            return await dao.addMovieToMovieGenre({ id, value: movieModel });
+          }
         }
-        return instance;
+        if (action === "remove" && field === "movie") {
+          //id = MovieGenreID value = movieID
+          return await dao.removeMovieFromMovieGenre({ id, value });
+        }
+        if (action === "modify" && field === "element") {
+          const prepared = prepareFieldsToModifyInMovieGenreModel(value)
+          return await dao.updateMovieGenre({ id, value: prepared });
+        }
+        else {
+          throw crearErrorEnModulo("updater: action or field invalid")
+        }
+
       },
     };
-  })();
-  
-  module.exports = updaterMovieGenre;
+  }
+
+  return {
+    getInstance: function (dao) {
+      if (!instance) {
+        instance = create(dao);
+      }
+      return instance;
+    },
+  };
+})();
+
+module.exports = updaterMovieGenre;

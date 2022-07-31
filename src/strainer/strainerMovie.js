@@ -1,25 +1,29 @@
+
+/**
+ * ------------------------------ STRAINER MOVIE ----------------------------------
+ * This object knows how FIND AND STRAIN/FILTER MOVIES
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const strainerMovie = (function () {
-    let instance;
-  
-    function create(dao) {
-      return {
-        getData: async ({ visibleFields, queries }) => {
-            //TODO aca no...pero modelar un objeto WHERE en DAOOO  para sequelize reconozca
-            console.log("Eddcsnn STRAINERR ",{ visibleFields, queries } )
-            return await dao.getMovieList({ visibleFields, queries });
-        },
-      };
-    }
-  
+  let instance;
+
+  function create(dao) {
     return {
-      getInstance: function (dao) {
-        if (!instance) {
-          instance = create(dao);
-        }
-        return instance;
+      getData: async ({ visibleFields, queries }) => {
+        return await dao.getMovieList({ visibleFields, queries });
       },
     };
-  })();
-  
-  module.exports = strainerMovie;
-  
+  }
+
+  return {
+    getInstance: function (dao) {
+      if (!instance) {
+        instance = create(dao);
+      }
+      return instance;
+    },
+  };
+})();
+
+module.exports = strainerMovie;

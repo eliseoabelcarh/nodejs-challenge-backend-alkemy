@@ -10,16 +10,16 @@ require("swagger-jsdoc")
 require("swagger-ui-express")
 
 function charactersHandler() {
- 
+
   router.get("",
-  passport.authenticate("jwt-token", { session: false }),
+    passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
       console.log("QUERYYYYYYYS", req.query)
 
       const cu = useCasesFactory.cuGetList();
       const charactersList = await cu.get({
         type: "character",
-        visibleFields:  [],//empty array => list all
+        visibleFields: [],//empty array => list all
         queries: req.query,
       })
 
@@ -29,7 +29,7 @@ function charactersHandler() {
         list: charactersList
       });
     })
-    );
+  );
   /**
   * -------------------------- GET /characters/:characterId -------------------------------
   * Returns the searched element by ID
@@ -173,6 +173,11 @@ function charactersHandler() {
   );
   /**
    * ------------------------ TESTING ROUTE --------------------------
+   * This a Test endpoint and appears in every file with base routes (/movies .. /characters ../auth etc..)
+   * BUT ONLY ONE TEST USE CASE (in test file) was created for this kind of endpoint. 
+   * if you want to remove it.. you can do that, but you will have to FIND OUT what route
+   * and what file will be affected and then delete the test use case.(either way one test use case wont success)
+   * Remember, this part is created for testing purposes only, and of course... FOR MY OWN ENTERTAINMENT too =)
    */
   router.get(
     `/test`,
@@ -180,15 +185,21 @@ function charactersHandler() {
       res.status(200).send("okay");
     })
   );
+
+  /**
+   * ---------------------- DONT FORGET RETURN ROUTER -------------------------
+   */
   return router;
 }
-module.exports = { charactersHandler };
-
 /**
  * ------------------ EXPRESS ASYNC WRAPPER -------------------
- * I can capture errors and throw it up
+ * This function let us handle some error in server and catch them
  */
 let wrap =
   (fn) =>
     (...args) =>
       fn(...args).catch(args[2]);
+
+
+module.exports = { charactersHandler };
+

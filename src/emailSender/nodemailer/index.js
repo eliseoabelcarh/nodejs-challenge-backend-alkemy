@@ -2,7 +2,9 @@ const { crearEmailNodemailer } = require('../model/emailModel')
 const { crearErrorArgumentosInvalidos } = require('../../errors/errorsHandler')
 const nodemailer = require('nodemailer')
 
-
+/**
+ * --------------------------- ENTRY POINT FOR NODEMAILER EMAIL SENDER MODULE ----------------------
+ */
 const crearEmailSenderNodemailer = async (config) => {
     if (!config) {
         throw crearErrorArgumentosInvalidos("Nodemailer Config Object", "required object")

@@ -1,26 +1,29 @@
+
+/**
+ * ------------------------------ STRAINER CHARACTER ----------------------------------
+ * This object knows how FIND AND STRAIN/FILTER CHARACTERS
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const strainerCharacter = (function () {
-    let instance;
-  
-    function create(dao) {
-      return {
-        getData: async ({ visibleFields, queries }) => {
-            //TODO aca no...pero modelar un objeto WHERE en DAOOO  para sequelize reconozca
-            console.log("ENNNNNN STRAINERR ",{ visibleFields, queries } )
-            
-            return await dao.getCharacterList({ visibleFields, queries });
-        },
-      };
-    }
-  
+  let instance;
+
+  function create(dao) {
     return {
-      getInstance: function (dao) {
-        if (!instance) {
-          instance = create(dao);
-        }
-        return instance;
+      getData: async ({ visibleFields, queries }) => {
+        return await dao.getCharacterList({ visibleFields, queries });
       },
     };
-  })();
-  
-  module.exports = strainerCharacter;
-  
+  }
+
+  return {
+    getInstance: function (dao) {
+      if (!instance) {
+        instance = create(dao);
+      }
+      return instance;
+    },
+  };
+})();
+
+module.exports = strainerCharacter;

@@ -1,3 +1,9 @@
+/**
+ * ------------------------------ REMOVER MOVIE ----------------------------------
+ * This object knows how REMOVE MOVIES
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const removerMovie = (function () {
     let instance;
     function create(dao) {

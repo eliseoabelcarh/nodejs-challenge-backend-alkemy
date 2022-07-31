@@ -1,3 +1,11 @@
+/**
+ * 
+ * ---------------------------------- ERRORS HANDLER ---------------------------------------
+ * This module let you create errors according his type, i used it in all app.
+ * The One who captures these ones is ServerErrorHandler file.
+ * 
+ */
+
 function crearErrorAlConectarAServidorExpress(){
     const errMsg = 'error al conectar al servidor con Express'
     const err = new Error(errMsg)
@@ -43,10 +51,6 @@ function crearErrorAlEnviarEmail(operacion) {
     err.type = 'INTERNAL_ERROR'
     return err
 }
-
-
-
-
 
 module.exports = {
     crearErrorAlConectarAServidorExpress,

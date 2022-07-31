@@ -7,19 +7,18 @@ const { crearEmailConTextoPlano,
     crearEmailConCamposOpcionales
 } = require('../model/emailModel')
 
-
+/**
+ * --------------------------- ENTRY POINT FOR SENDGRID EMAIL SENDER MODULE ----------------------
+ */
 
 const crearEmailSenderSendgrid = async function (config) {
-    console.log("configgggg", config)
     if (!config) {
         throw crearErrorArgumentosInvalidos("Sendrgrid Config Object", "required object")
     }
     if (!config.apiKey) {
         throw crearErrorArgumentosInvalidos("SENDGRID_API_KEY", "required key")
     }
-
     sgMail.setApiKey(config.apiKey);
-
     let respuestaExitosa = false
     return {
         sendEmailConTextoPlano: async (email) => {
@@ -30,7 +29,6 @@ const crearEmailSenderSendgrid = async function (config) {
             } catch (error) {
                 throw error
             }
-
         },
         sendEmailConTextoPlanoYHtml: async (email) => {
             try {
@@ -40,7 +38,6 @@ const crearEmailSenderSendgrid = async function (config) {
             } catch (error) {
                 throw error
             }
-
         },
         sendEmailConTextoPlanoYHtmlYArchivosAdjuntos: async (email, arrayConPathDeArchivos) => {
             try {
@@ -50,7 +47,6 @@ const crearEmailSenderSendgrid = async function (config) {
             } catch (error) {
                 throw error
             }
-
         },
         sendEmail: async ({ from = config.user, to, subject, text, attachments }) => {
             try {
@@ -60,7 +56,6 @@ const crearEmailSenderSendgrid = async function (config) {
             } catch (error) {
                 throw error
             }
-
         }
     }
 

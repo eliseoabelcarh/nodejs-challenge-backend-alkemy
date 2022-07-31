@@ -1,3 +1,9 @@
+/**
+ * ------------------------------ REMOVER CHARACTER ----------------------------------
+ * This object knows how REMOVE CHARACTERS
+ * This model is flexible to add more functions and behavior for this object
+ * Pattern used: Singleton
+ */
 const removerCharacter = (function () {
     let instance;
     function create(dao) {

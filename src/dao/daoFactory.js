@@ -24,7 +24,7 @@ if (typeDaoConfig === "sequelize") {
  * ----------------------------------- DAO FACTORY -------------------------------- 
  * I use this pattern for creating DAO, is a creational pattern that uses 
  * factory methods to deal with the problem of creating objects in this case database access
- * 
+ * also used in useCases Folder
  */
 let daoFactory = {
   getDao: function (type) {
