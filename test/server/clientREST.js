@@ -138,7 +138,6 @@ async function sendRequest(req) {
         const result = await axios(req)
         return result
     } catch (error) {
-        console.log("ERRRRR:", error)
         if (error.response) {
             const NE = new Error(`error ${error.response.status} enviado desde el servidor: ${error.response.data.message}`)
             NE.status = error.response.status

@@ -10,7 +10,6 @@ describe("Create Server Function", async () => {
     try {
       await createServer();
     } catch (err) {
-      console.log(err.message);
       expect(err.message).to.equal("Cannot read properties of undefined (reading 'port')");
     }
   });

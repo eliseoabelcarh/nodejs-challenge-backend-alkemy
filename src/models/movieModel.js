@@ -45,7 +45,7 @@ class MovieModel {
  * or in objects for example in noSql databases cases for example. Some extra fields are:
  * createdAt, _id, uuid, etc
  */
- function recoverMovieModel(data) {
+function recoverMovieModel(data) {
   validRequiredFields(data);
   if (!data.id) {
     throw crearErrorArgumentosInvalidos("id", "required field");
@@ -53,15 +53,11 @@ class MovieModel {
   if (!data.personajes) {
     data.personajes = [];
   }
-
   else {
-    console.log("DSFFSdfd99999999999999999999999999999", data)
-
     const newArray = data.personajes.map((characterDB) =>
       getMyCharactersPretty(characterDB)
     )
     data.personajes = newArray
-    console.log("personajes::-------", data.personajes);
   }
   return new MovieModel(data);
 }

@@ -84,7 +84,7 @@ function getAValidCharacterFieldIfExists(field) {
 }
 
 function isAssociationCharacterField(field) {
-  const associateQueries = ["movieId", "peliculaId"]
+  const associateQueries = ["movieId", "peliculaId","movies"]
   return associateQueries.includes(field)
 }
 

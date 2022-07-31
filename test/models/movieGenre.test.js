@@ -6,7 +6,6 @@ describe("Movie Genre Model", () => {
   let movieGenreCreated;
 
   before(() => {
-    console.log("mnsbjdsads", baseGenero)
     movieGenreCreated = buildMovieGenreModel(baseGenero);
   });
 

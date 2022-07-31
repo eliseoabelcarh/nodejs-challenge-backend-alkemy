@@ -6,7 +6,6 @@ describe("Movie Model", () => {
   let movieCreated;
 
   before(() => {
-    console.log("mnsbjdsads", baseMovie)
     movieCreated = buildMovieModel(baseMovie);
   });
 

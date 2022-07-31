@@ -22,7 +22,6 @@ function crearRouterHandler() {
    router.get(
     "/error",
     wrap(async (req, res, next) => {
-      console.log("ERROR page");
       res.status(404).send("error page");
     })
   );

@@ -14,8 +14,6 @@ function charactersHandler() {
   router.get("",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("QUERYYYYYYYS", req.query)
-
       const cu = useCasesFactory.cuGetList();
       const charactersList = await cu.get({
         type: "character",
@@ -66,7 +64,6 @@ function charactersHandler() {
         type: "character",
         value: character,
       });
-      console.log("-----------ANTES DE ENVIAR", newCharacter);
       res.status(200).json({
         success: true,
         msg: "You successfully add a new Character",
@@ -128,8 +125,6 @@ function charactersHandler() {
   router.delete("/:characterId/movies",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("paramsss", req.params)
-      console.log("query", req.query)
       const { characterId } = req.params
       const { movieId } = req.query
       const cu = useCasesFactory.cuUpdateElement()

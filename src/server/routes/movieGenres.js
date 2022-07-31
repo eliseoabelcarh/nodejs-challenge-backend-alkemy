@@ -14,8 +14,6 @@ function movieGenresHandler() {
   router.get("",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("QUERYS", req.query)
-
       const cu = useCasesFactory.cuGetList();
       const movieGenresList = await cu.get({
         type: "movieGenre",
@@ -121,8 +119,6 @@ function movieGenresHandler() {
   router.delete("/:movieGenreId/movies",
     passport.authenticate("jwt-token", { session: false }),
     wrap(async function (req, res, next) {
-      console.log("paramsss", req.params)
-      console.log("query", req.query)
       const { movieGenreId } = req.params
       const { movieId } = req.query
       const cu = useCasesFactory.cuUpdateElement()

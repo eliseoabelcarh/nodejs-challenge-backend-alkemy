@@ -1,3 +1,4 @@
+const { crearErrorArgumentosInvalidos } = require("../errors/errorsHandler");
 const { createUserModel, passwordIsValid } = require("../models/userModel");
 
 /**
@@ -21,8 +22,10 @@ const useCaseLoginUser = (function () {
                 const userDB = await finder.findData({ type:"user", field:"username", value:username })
                 if(passwordIsValid({plainTextPassword:password, hashedPassword:userDB.password, salt:userDB.salt})){
                     return userDB
+                }else{
+                   throw crearErrorArgumentosInvalidos("password","is incorrect")
                 }
-                return null
+                //return null
             }
         }
     }

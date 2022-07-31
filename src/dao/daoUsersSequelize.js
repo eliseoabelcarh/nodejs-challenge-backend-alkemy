@@ -21,15 +21,12 @@ let daoUsersSequelize = (function () {
     return {
       addUser: async (user) => {
         const { userSeqModel } = await getSequelizeModels();
-       
         await userSeqModel.sync()
-        console.log("en AdduserSequelize", user);
         let userInDB;
-        // verifico que no existe username
+        // Check if username already exists in db
         userInDB = await userSeqModel.findOne({
           where: { username: user.username },
         });
-        console.log("userr n dbbbb", userInDB);
         if (userInDB != null) {
           throw crearErrorArgumentosInvalidos(
             "username",
@@ -43,7 +40,6 @@ let daoUsersSequelize = (function () {
           password: user.password,
           salt: user.salt,
         });
-        console.log("neww user", JSON.stringify(newUser));
         return newUser;
       },
       getUserById: async (id) => {
@@ -53,7 +49,6 @@ let daoUsersSequelize = (function () {
         if (!userInDB) {
           throw crearErrorRecursoNoEncontrado("usuario", id);
         }
-        console.log("user ennnn:",userInDB)
         const usuario = recoverUserModel(userInDB);
         return usuario
       },
@@ -65,7 +60,6 @@ let daoUsersSequelize = (function () {
             throw crearErrorRecursoNoEncontrado("usuario", username);
           }
           const usuario = recoverUserModel(userInDB);
-          //await desconectar()
           return usuario;
       },
     };

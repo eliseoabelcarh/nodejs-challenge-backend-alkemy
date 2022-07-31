@@ -14,7 +14,6 @@ const { isAssociationMovieField, isAValidMovieField, getAValidMovieFieldIfExists
  * ------------------------------- for character model -------------------------------------
  */
 function modelWhereCharacterModel(queries) {
-    console.log("queries en Model Where", queries)
     if (Object.keys(queries).length === 0) {
         return {}
     }
@@ -52,13 +51,16 @@ function modelWhereAssociatedCharacterModel(queries) {
     if (keys.length > 1) {
         throw crearErrorArgumentosInvalidos("queries", "too much fields sended")
     }
-    const field = keys[0]
+    let field = keys[0]
     const value = queries[field]
     if (Array.isArray(value)) {
         throw crearErrorArgumentosInvalidos("queries", "too much values sended")
     }
     if (!isAssociationCharacterField(field)) {
         return {}
+    }
+    if(field === "movies" || "peliculas"){
+        field = "movieId"
     }
     const whereModel = {}
     whereModel[field] = value
@@ -68,7 +70,6 @@ function modelWhereAssociatedCharacterModel(queries) {
  * ------------------------------- for movie model -------------------------------------
  */
 function modelWhereMovieModel(queries) {
-    console.log("queries en Model Where", queries)
     if (Object.keys(queries).length === 0) {
         return {}
     }

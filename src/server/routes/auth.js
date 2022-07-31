@@ -38,7 +38,6 @@ function authHandler() {
     onlyAuthenticatedUsers,
     wrap(async (req, res) => {
       req.session.visits = req.session.visits ? ++req.session.visits : 1;
-      console.log("is authenticated in profile: " + req.isAuthenticated());
       res.status(200).json({ visits: req.session.visits });
     })
   );

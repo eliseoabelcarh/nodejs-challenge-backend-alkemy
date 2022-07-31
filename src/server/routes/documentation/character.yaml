@@ -10,27 +10,27 @@ paths:
     post:
       tags:
         - character
-      summary: Add a new pet to the store
-      description: Add a new pet to the store
-      operationId: addPet
+      summary: Add a new character to the store
+      description: Add a new character to the store
+      operationId: addCharacter
       responses:
         '200':
           description: Successful operation
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/Character'
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
-        '405':
+                $ref: '#/components/schemas/Character'
+        '400':
           description: Invalid input
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
       requestBody:
-        description: Create a new pet in the store
+        description: Create a new character
         required: true
         content:
           application/json:
@@ -65,9 +65,9 @@ paths:
         '405':
           description: Validation exception
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
       requestBody:
         description: Update an existent pet in the store
         required: true
@@ -118,9 +118,9 @@ paths:
         '400':
           description: Invalid status value
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
   /pet/findByTags:
     get:
       tags:
@@ -157,20 +157,20 @@ paths:
         '400':
           description: Invalid tag value
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  '/pet/{petId}':
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
+  '/characters/{characterId}':
     get:
       tags:
-        - pet
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
+        - character
+      summary: Find character by ID
+      description: Returns a single character
+      operationId: getCharacterById
       parameters:
-        - name: petId
+        - name: characterId
           in: path
-          description: ID of pet to return
+          description: ID of character to return
           required: true
           schema:
             type: integer
@@ -181,50 +181,61 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/Character'
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/Character'
         '400':
           description: Invalid ID supplied
         '404':
-          description: Pet not found
+          description: Character not found
       security:
         - api_key: []
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
     post:
       tags:
-        - pet
-      summary: Updates a pet in the store with form data
+        - character
+      summary: Updates a character with form data
       description: ''
-      operationId: updatePetWithForm
+      operationId: updateCharacter
       parameters:
-        - name: petId
-          in: path
-          description: ID of pet that needs to be updated
-          required: true
+        - name: imagen
+          in: query
+          description: Imagen url of character that needs to be updated
+          schema:
+            type: string
+        - name: nombre
+          in: query
+          description: Name of character that needs to be updated
+          schema:
+            type: string
+        - name: edad
+          in: query
+          description: Age of character that needs to be updated
           schema:
             type: integer
             format: int64
-        - name: name
+        - name: peso
           in: query
-          description: Name of pet that needs to be updated
+          description: Weight of character that needs to be updated
+          schema:
+            type: number
+            multipleOf: 0.1
+        - name: historia
+          in: query
+          description: History of character that needs to be updated
           schema:
             type: string
-        - name: status
-          in: query
-          description: Status of pet that needs to be updated
-          schema:
-            type: string
+
       responses:
-        '405':
+        '400':
           description: Invalid input
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
     delete:
       tags:
         - pet
@@ -238,7 +249,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: petId
+        - name: characterId
           in: path
           description: Pet id to delete
           required: true
@@ -249,10 +260,10 @@ paths:
         '400':
           description: Invalid pet value
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  '/pet/{petId}/uploadImage':
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
+  '/pet/{characterId}/uploadImage':
     post:
       tags:
         - pet
@@ -260,7 +271,7 @@ paths:
       description: ''
       operationId: uploadFile
       parameters:
-        - name: petId
+        - name: characterId
           in: path
           description: ID of pet to update
           required: true
@@ -281,9 +292,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - characterstore_auth:
+            - 'write:characters'
+            - 'read:characters'
       requestBody:
         content:
           application/octet-stream:
@@ -589,7 +600,7 @@ components:
           type: integer
           format: int64
           example: 10
-        petId:
+        characterId:
           type: integer
           format: int64
           example: 198772
@@ -778,14 +789,14 @@ components:
               $ref: '#/components/schemas/User'
       description: List of user object
   securitySchemes:
-    petstore_auth:
+    characterstore_auth:
       type: oauth2
       flows:
         implicit:
           authorizationUrl: 'https://petstore.swagger.io/oauth/authorize'
           scopes:
-            'write:pets': modify pets in your account
-            'read:pets': read your pets
+            'write:characters': modify pets in your account
+            'read:characters': read your pets
     api_key:
       type: apiKey
       name: api_key

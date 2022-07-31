@@ -143,8 +143,6 @@ function crearObjetoEmail({ from, to, subject, text }) {
   //VALIDATE IF --- TO:email -- AND -- FROM:email --- ARE OR NOT VALID EMAILS
   const emailRegexp =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  console.log("EMAIL FROM VALIDOOO?? ", emailRegexp.test(from));
-  console.log("EMAIL TO VALIDOOO?? ", emailRegexp.test(to));
   if (!emailRegexp.test(from)) {
     throw crearErrorArgumentosInvalidos("email FROM:", "invalid format");
   }

@@ -82,7 +82,6 @@ describe("Server APIs", async () => {
     const randString = genRandValue(8);
     const user = { username: `username${randString}@test.com`, password: "daasf" };
     const response = await clienteRest.register(user);
-    console.log("Rspta POST register:", response.data);
     assert.strictEqual(response.status, 200);
     assert.strictEqual(response.data.success, true);
   });
@@ -110,7 +109,6 @@ describe("Server APIs", async () => {
     const user = { username: `username${randString}@test.com`, password: "daasf" };
     await clienteRest.register(user);
     const response = await clienteRest.login(user);
-    console.log("Rspta POST login:", response.data);
     assert.strictEqual(response.status, 200);
     assert.strictEqual(response.data.success, true);
   });
@@ -123,9 +121,7 @@ describe("Server APIs", async () => {
       await clienteRest.register(user);
       const response = await clienteRest.login(user);
       const token = response.data.token;
-      console.log("Rspta POST login:", response.data.token);
       const response2 = await clienteRest.testProtectedRoute(token);
-      console.log("Rspta2:", response2.data);
       assert.deepStrictEqual(response2.data.success, true)
     }
   });

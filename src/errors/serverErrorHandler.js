@@ -15,7 +15,6 @@
 * @property {'520'} STATUS undefined Otro error
 */
 function serverErrorHandler(error, req, res, next) {
-    console.log("en Servererrorhandler")
     if (error.type === 'INVALID_ARGS') {
         res.status(400)
     }
